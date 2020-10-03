@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <Windows.h>
-//#include "auxillary.h"
-//#pragma comment(lib, "user32")
 
 /*
  * Win32 functions return 0 on failure; my functions return 0 on success, as is the NORM. /endOutrage
@@ -12,10 +10,8 @@
 
 int main()
 {   
-    // The game screen as seen by the player.
-    HANDLE hMainBuffer ;
-    // The hidden screen used for double buffering.
-    HANDLE hBackBuffer ;
+    // The game screen and the hidden screen used for double buffering.
+    HANDLE hMainBuffer, hBackBuffer ;
 
     // The data for the Main Buffer, either the default when created or inherited from the invoking command line. Shared with Back Buffer.
     CONSOLE_SCREEN_BUFFER_INFO csbiMainBuffer ;
@@ -26,10 +22,11 @@ int main()
     // Has to be equal to, or larger than, the Main Buffer's screen.
     COORD coIntendedBuffer = { INTENDED_WIDTH, INTENDED_HEIGHT } ;
 
+    // Stores coords used in resizing console window.
+    COORD coTempBuff = { coIntendedBuffer.X, coIntendedBuffer.Y } ;
+
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
     SMALL_RECT srIntendedScreen = { 0, 0, coIntendedBuffer.X - 1, coIntendedBuffer.Y - 1 } ;
-
-    COORD coTempBuff = { coIntendedBuffer.X, coIntendedBuffer.Y } ;
 
     // Initialise the Main Buffer and the Back Buffer.
     hMainBuffer = CreateConsoleScreenBuffer( 
@@ -66,8 +63,8 @@ int main()
     }
 
     /*
-     * Checks that buffer large enough to encompass both current and intended screens.
-     * 
+     * Checks that the buffer is large enough to encompass both current and intended console window.
+     *  
      */
 
     if( INTENDED_WIDTH > csbiMainBuffer.srWindow.Right )
