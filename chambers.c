@@ -49,7 +49,7 @@ int main()
         return 1 ;
     }
 
-    // Fill cci struct with default values.
+    // Fill cci struct with default values. ...
 
     if( !GetConsoleCursorInfo( hMainBuffer, &cciMainBuffer ) )
     {
