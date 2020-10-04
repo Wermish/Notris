@@ -10,11 +10,11 @@
 
 int main()
 {   
-    // The game screen and the hidden screen used for double buffering.
+    // The game screen and the double buffer.
     HANDLE hMainBuffer, hBackBuffer ;
 
-    // The data for the Main Buffer, either the default when created or inherited from the invoking command line. Shared with Back Buffer.
-    CONSOLE_SCREEN_BUFFER_INFO csbiMainBuffer ;
+    // The initial console screen buffer settings, needed for correct resizing.
+    CONSOLE_SCREEN_BUFFER_INFO csbiConsole ;
 
     // Cursor data for the Main Buffer. Set to invisible. Shared with Back Buffer
     CONSOLE_CURSOR_INFO cciMainBuffer = { 1, FALSE } ;
@@ -22,7 +22,7 @@ int main()
     // Has to be equal to, or larger than, the Main Buffer's screen.
     COORD coIntendedBuffer = { INTENDED_WIDTH, INTENDED_HEIGHT } ;
 
-    // Stores coords used in resizing console window.
+    // Coordinates used in resizing console window.
     COORD coTempBuff = { coIntendedBuffer.X, coIntendedBuffer.Y } ;
 
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
@@ -41,25 +41,25 @@ int main()
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
 
-    // Fill csbi structs with default values.
-
-    if( !GetConsoleScreenBufferInfo( hMainBuffer, &csbiMainBuffer ) )
+    // Fill csbi structs.
+    if( !GetConsoleScreenBufferInfo( hMainBuffer, &csbiConsole ) )
     {
-        fprintf( stderr, "Failed: GetConsoleScreenBufferInfo( hMainBuffer, &csbiMainBuffer )\n" ) ;
+        fprintf( stderr, "Failed: GetConsoleScreenBufferInfo( hMainBuffer, &csbiConsole )\n" ) ;
         return 1 ;
     }
 
-    // Fill cci struct with default values. ...
-
+    // Fill cci struct.
     if( !GetConsoleCursorInfo( hMainBuffer, &cciMainBuffer ) )
     {
         fprintf( stderr, "Failed: GetConsoleCursorInfo( hMainBuffer, &cciMainBuffer )\n" ) ;
         return 1 ;
     }
 
+    // Set the Main Buffer as the game screen.
     if( !SetConsoleActiveScreenBuffer( hMainBuffer ) )
     {
         fprintf( stderr, "Failed: SetConsoleActiveScreenBuffer( hMainBuffer )\n" ) ;
+        return 1 ;
     }
 
     /*
@@ -67,28 +67,45 @@ int main()
      *  
      */
 
-    if( INTENDED_WIDTH > csbiMainBuffer.srWindow.Right )
+    if( INTENDED_WIDTH > csbiConsole.srWindow.Right )
     {
-        if( INTENDED_HEIGHT < csbiMainBuffer.srWindow.Bottom )
+        if( INTENDED_HEIGHT < csbiConsole.srWindow.Bottom )
         {
-            coTempBuff.Y = csbiMainBuffer.srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiConsole.srWindow.Bottom + 1 ;
         }
     }
     else
     {
-        coTempBuff.X = csbiMainBuffer.srWindow.Right + 1 ;
+        coTempBuff.X = csbiConsole.srWindow.Right + 1 ;
 
-        if( INTENDED_HEIGHT < csbiMainBuffer.srWindow.Bottom )
+        if( INTENDED_HEIGHT < csbiConsole.srWindow.Bottom )
         {
-            coTempBuff.Y = csbiMainBuffer.srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiConsole.srWindow.Bottom + 1 ;
         }
     }
 
-    SetConsoleScreenBufferSize( hMainBuffer, coTempBuff ) ;
-    SetConsoleWindowInfo( hMainBuffer, TRUE, &srIntendedScreen ) ;
-    SetConsoleScreenBufferSize( hMainBuffer, coIntendedBuffer ) ;
+    if( !SetConsoleScreenBufferSize( hMainBuffer, coTempBuff ) )
+    {
+        fprintf( stderr, "Failed: SetConsoleScreenBufferSize( hMainBuffer, coTempBuff )\n" ) ;
+        return 1 ;
+    }
+
+    if( !SetConsoleWindowInfo( hMainBuffer, TRUE, &srIntendedScreen ) )
+    {
+        fprintf( stderr, "Failed: SetConsoleWindowInfo( hMainBuffer, TRUE, &srIntendedScreen )\n" ) ;
+        return 1 ;
+    }
+
+    if( !SetConsoleScreenBufferSize( hMainBuffer, coIntendedBuffer ) )
+    {
+        fprintf( stderr,"Failed: SetConsoleScreenBufferSize( hMainBuffer, coIntendedBuffer )\n" ) ;
+        return 1 ;
+    }
 
     getchar() ;
+
+    CloseHandle( hMainBuffer ) ;
+    CloseHandle( hBackBuffer ) ;
 
     return 0;
 }
