@@ -5,12 +5,9 @@
 
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
-int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer )
+int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_width, SHORT intended_height )
 {  
     // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
-
-    int intended_width = 100 ;
-    int intended_height = 40 ;
 
     // The initial console screen buffer settings, needed for correct resizing.
     CONSOLE_SCREEN_BUFFER_INFO csbiConsole ;
@@ -26,7 +23,7 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer )
 
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
-
+    
     // Initialise the Main Buffer and the Back Buffer.
     *hMainBuffer = CreateConsoleScreenBuffer( 
                                             GENERIC_WRITE | GENERIC_READ, 
