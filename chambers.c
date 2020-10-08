@@ -14,6 +14,8 @@ int main( void )
 
     draw_rectangle( &hMainBuffer ) ;
 
+    fprintf( stderr, "Code Page: %i", GetConsoleOutputCP() ) ;
+
     getchar() ;
 
     CloseHandle( hMainBuffer ) ;

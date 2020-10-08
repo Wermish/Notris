@@ -96,6 +96,11 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
         report_error( "SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer )" ) ;
     }
 
+    if( !SetConsoleOutputCP( 437 ) )
+    {
+        report_error( "SetConsoleOutputCP( 437 )" ) ;
+    }
+
     return EXIT_SUCCESS ;
 }
 
