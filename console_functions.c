@@ -34,8 +34,7 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
     // Fill csbi struct.
     if( !GetConsoleScreenBufferInfo( *hMainBuffer, &csbiConsole ) )
     {
-        fprintf( stderr, "Failed: GetConsoleScreenBufferInfo( *hMainBuffer, &csbiConsole )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "GetConsoleScreenBufferInfo( *hMainBuffer, &csbiConsole )" ) ;
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.
@@ -58,38 +57,32 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
 
     if( !SetConsoleActiveScreenBuffer( *hMainBuffer ) )
     {
-        fprintf( stderr, "Failed: SetConsoleActiveScreenBuffer( *hMainBuffer )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "SetConsoleActiveScreenBuffer( *hMainBuffer )" ) ;
     }
     // Set buffer so that intended screen size can be set, then set intended buffer size so no scroll bar shows.
     if( !SetConsoleScreenBufferSize( *hMainBuffer, coTempBuff ) )
     {
-        fprintf( stderr, "Failed: SetConsoleScreenBufferSize( *hMainBuffer, coTempBuff )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "SetConsoleScreenBufferSize( *hMainBuffer, coTempBuff )" ) ;
     }
 
     if( !SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen ) )
     {
-        fprintf( stderr, "Failed: SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error("Failed: SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen )" ) ;
     }
 
     if( !SetConsoleScreenBufferSize( *hMainBuffer, coIntendedBuffer ) )
     {
-        fprintf( stderr,"Failed: SetConsoleScreenBufferSize( *hMainBuffer, coIntendedBuffer )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "Failed: SetConsoleScreenBufferSize( *hMainBuffer, coIntendedBuffer )" ) ;
     }
 
     if( !SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen ) )
     {
-        fprintf( stderr, "Failed: SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "Failed: SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen )" ) ;
     }
 
     if( !SetConsoleCursorInfo( *hMainBuffer, &cciMainBuffer ) )
     {
-        fprintf( stderr, "Failed: SetConsoleCursorInfo( *hMainBuffer, &cciMainBuffer )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "Failed: SetConsoleCursorInfo( *hMainBuffer, &cciMainBuffer )" ) ;
     }
     // Initialise Back Buffer now that Main Buffer and Console Window have been setup.
     *hBackBuffer = CreateConsoleScreenBuffer( 
@@ -100,9 +93,14 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
 
     if( !SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer ) )
     {
-        fprintf( stderr, "SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer )\n" ) ;
-        return EXIT_FAILURE ;
+        report_error( "SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer )" ) ;
     }
 
     return EXIT_SUCCESS ;
+}
+
+void report_error( char *msg )
+{
+    fprintf( stderr, "Failed: %s\nError Code: %i\n", msg, GetLastError() ) ;
+    exit( EXIT_FAILURE ) ;
 }
