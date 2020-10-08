@@ -5,12 +5,9 @@
 
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
-int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_width, SHORT intended_height )
+int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, SHORT intended_width, SHORT intended_height )
 {  
     // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
-
-    // The initial console screen buffer settings, needed for correct resizing.
-    CONSOLE_SCREEN_BUFFER_INFO csbiConsole ;
 
     // Cursor data, set to invisible.
     CONSOLE_CURSOR_INFO cciMainBuffer = { 1, FALSE } ;
@@ -32,26 +29,26 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
                                             ) ;
 
     // Fill csbi struct.
-    if( !GetConsoleScreenBufferInfo( *hMainBuffer, &csbiConsole ) )
+    if( !GetConsoleScreenBufferInfo( *hMainBuffer, csbiInfo ) )
     {
-        report_error( "GetConsoleScreenBufferInfo( *hMainBuffer, &csbiConsole )" ) ;
+        report_error( "GetConsoleScreenBufferInfo( *hMainBuffer, &csbiInfo )" ) ;
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.
-    if( intended_width > csbiConsole.srWindow.Right )
+    if( intended_width > csbiInfo->srWindow.Right )
     {
-        if( intended_height < csbiConsole.srWindow.Bottom )
+        if( intended_height < csbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = csbiConsole.srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
         }
     }
     else 
     {
-        coTempBuff.X = csbiConsole.srWindow.Right + 1 ;
+        coTempBuff.X = csbiInfo->srWindow.Right + 1 ;
 
-        if( intended_height < csbiConsole.srWindow.Bottom )
+        if( intended_height < csbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = csbiConsole.srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
         }
     }
 
@@ -95,7 +92,7 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, SHORT intended_widt
     {
         report_error( "SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer )" ) ;
     }
-
+    // Required for the box drawing characters.
     if( !SetConsoleOutputCP( 437 ) )
     {
         report_error( "SetConsoleOutputCP( 437 )" ) ;

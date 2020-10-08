@@ -3,18 +3,23 @@
 #include "console_functions.h"
 #include "graphics_functions.h"
 
-int draw_rectangle( HANDLE* hScreen )
+int draw_line( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
+{
+
+  return EXIT_SUCCESS ;
+}
+
+int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
 {
     // TODO: parameters for drawing coords, colour, character etc...
-    CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 
-    if( !GetConsoleScreenBufferInfo( *hScreen, &csbiInfo ) )
+    if( !GetConsoleScreenBufferInfo( *hScreen, csbiInfo ) )
     {
         report_error( "GetConsoleScreenBufferInfo( *hScreen, &csbiInfo )" ) ;
     }
 
-    SHORT bufferWidth = csbiInfo.dwSize.X ;
-    SHORT bufferHeight = csbiInfo.dwSize.Y ;
+    SHORT bufferWidth = csbiInfo->dwSize.X ;
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
     COORD characterPosition = { 0, 0 } ;
     COORD characterBufferSize = { bufferWidth, bufferHeight } ;

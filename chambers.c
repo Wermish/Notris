@@ -10,11 +10,9 @@ CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 
 int main( void )
 {   
-    initial_setup( &hMainBuffer, &hBackBuffer, 100, 40 ) ;
+    initial_setup( &hMainBuffer, &hBackBuffer, &csbiInfo, 100, 40 ) ;
 
-    draw_rectangle( &hMainBuffer ) ;
-
-    fprintf( stderr, "Code Page: %i", GetConsoleOutputCP() ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo ) ;
 
     getchar() ;
 
