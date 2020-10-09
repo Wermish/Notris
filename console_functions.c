@@ -5,12 +5,13 @@
 
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
-int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, SHORT intended_width, SHORT intended_height )
+int initial_setup( 
+                   HANDLE* hMainBuffer, HANDLE* hBackBuffer,
+                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CONSOLE_CURSOR_INFO* cciInfo, CONSOLE_FONT_INFOEX* cfiInfo,                                                                 
+                   SHORT intended_width, SHORT intended_height 
+                 ) 
 {  
     // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
-
-    // Cursor data, set to invisible.
-    CONSOLE_CURSOR_INFO cciMainBuffer = { 1, FALSE } ;
 
     // Has to be equal to, or larger than, the Main Buffer's screen.
     COORD coIntendedBuffer = { intended_width, intended_height } ;
@@ -20,6 +21,10 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, CONSOLE_SCREEN_BUFF
 
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
+
+    // Set cursor to invisible.
+    cciInfo->dwSize = 1 ;
+    cciInfo->bVisible = FALSE ;
     
     // Initialise the Main Buffer and the Back Buffer.
     *hMainBuffer = CreateConsoleScreenBuffer( 
@@ -77,9 +82,9 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, CONSOLE_SCREEN_BUFF
         report_error( "Failed: SetConsoleWindowInfo( *hMainBuffer, TRUE, &srIntendedScreen )" ) ;
     }
 
-    if( !SetConsoleCursorInfo( *hMainBuffer, &cciMainBuffer ) )
+    if( !SetConsoleCursorInfo( *hMainBuffer, cciInfo ) )
     {
-        report_error( "Failed: SetConsoleCursorInfo( *hMainBuffer, &cciMainBuffer )" ) ;
+        report_error( "Failed: SetConsoleCursorInfo( *hMainBuffer, cciInfo )" ) ;
     }
     // Initialise Back Buffer now that Main Buffer and Console Window have been setup.
     *hBackBuffer = CreateConsoleScreenBuffer( 
@@ -88,9 +93,9 @@ int initial_setup( HANDLE* hMainBuffer, HANDLE* hBackBuffer, CONSOLE_SCREEN_BUFF
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
 
-    if( !SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer ) )
+    if( !SetConsoleCursorInfo( *hBackBuffer, cciInfo ) )
     {
-        report_error( "SetConsoleCursorInfo( *hBackBuffer, &cciMainBuffer )" ) ;
+        report_error( "SetConsoleCursorInfo( *hBackBuffer, cciInfo )" ) ;
     }
     // Required for the box drawing characters.
     if( !SetConsoleOutputCP( 437 ) )

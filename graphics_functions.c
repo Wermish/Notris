@@ -3,13 +3,9 @@
 #include "console_functions.h"
 #include "graphics_functions.h"
 
-int draw_line( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
-{
+// To draw a line, the breadth of the line must increase by 1. E.g, startX = 0, startY = 0, endX = 10, endY = 1.
 
-  return EXIT_SUCCESS ;
-}
-
-int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
+int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, SHORT startX, SHORT startY, SHORT endX, SHORT endY )
 {
     // TODO: parameters for drawing coords, colour, character etc...
 
@@ -18,15 +14,15 @@ int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
         report_error( "GetConsoleScreenBufferInfo( *hScreen, &csbiInfo )" ) ;
     }
 
-    SHORT bufferWidth = csbiInfo->dwSize.X ;
-    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+    SHORT bufferWidth = endX ;
+    SHORT bufferHeight = endY ;
 
-    COORD characterPosition = { 0, 0 } ;
+    COORD characterPosition = { startX, startY } ;
     COORD characterBufferSize = { bufferWidth, bufferHeight } ;
-    SMALL_RECT consoleWriteArea = { 0, 0, bufferWidth - 1, bufferHeight - 1 } ;
+    SMALL_RECT consoleWriteArea = { startX, startY, bufferWidth - 1, bufferHeight - 1 } ;
 
     // Note that it's a one-dimensional array.
-    CHAR_INFO* consoleBuffer  = ( CHAR_INFO* ) malloc( ( bufferWidth * bufferWidth ) * sizeof( CHAR_INFO ) ) ;
+    CHAR_INFO* consoleBuffer  = ( CHAR_INFO* ) malloc( ( bufferWidth * bufferHeight ) * sizeof( CHAR_INFO ) ) ;
 
     if( consoleBuffer == NULL )
     {

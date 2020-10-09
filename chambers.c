@@ -7,12 +7,18 @@
 HANDLE hMainBuffer ;
 HANDLE hBackBuffer ;
 CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
+CONSOLE_CURSOR_INFO cciInfo ;
+CONSOLE_FONT_INFOEX cfiInfo ;
 
 int main( void )
 {   
-    initial_setup( &hMainBuffer, &hBackBuffer, &csbiInfo, 100, 40 ) ;
+    initial_setup( &hMainBuffer, &hBackBuffer, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
 
-    draw_rectangle( &hMainBuffer, &csbiInfo ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo, 0, 0, 100, 30 ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo, 5, 31, 15, 39 ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo, 16, 31, 26, 39 ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo, 27, 31, 37, 39 ) ;
+    
 
     getchar() ;
 
