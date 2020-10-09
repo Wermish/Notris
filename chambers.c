@@ -17,7 +17,7 @@ int main( void )
     draw_rectangle( &hMainBuffer, &csbiInfo, 0, 0, 100, 30 ) ;
     draw_rectangle( &hMainBuffer, &csbiInfo, 5, 31, 15, 39 ) ;
     draw_rectangle( &hMainBuffer, &csbiInfo, 16, 31, 26, 39 ) ;
-    draw_rectangle( &hMainBuffer, &csbiInfo, 27, 31, 37, 39 ) ;
+    draw_rectangle( &hMainBuffer, &csbiInfo, 27, 31, 37, 39 ) ;  
     
 
     getchar() ;
