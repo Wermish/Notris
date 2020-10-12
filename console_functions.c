@@ -22,7 +22,9 @@ int initial_setup(
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
 
-    // Set cursor to invisible.
+    cfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
+
+     // Set cursor to invisible.
     cciInfo->dwSize = 1 ;
     cciInfo->bVisible = FALSE ;
     
@@ -37,6 +39,11 @@ int initial_setup(
     if( !GetConsoleScreenBufferInfo( *hMainBuffer, csbiInfo ) )
     {
         report_error( "GetConsoleScreenBufferInfo( *hMainBuffer, &csbiInfo )" ) ;
+    }
+
+    if( !GetCurrentConsoleFontEx( *hMainBuffer, FALSE, cfiInfo ) )
+    {
+        report_error( "GetCurrentConsoleFontEx( *hMainBuffer, FALSE, cfiInfo )" );
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.

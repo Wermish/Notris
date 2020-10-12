@@ -5,7 +5,9 @@
 
 // To draw a line, the breadth of the line must increase by 1. E.g, startX = 0, startY = 0, endX = 10, endY = 1.
 
-int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, SHORT startX, SHORT startY, SHORT endX, SHORT endY )
+int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, 
+                    CHAR asciiValue, WORD asciiAttributes, 
+                    SHORT startX, SHORT startY, SHORT endX, SHORT endY )
 {
     // TODO: parameters for drawing coords, colour, character etc...
 
@@ -34,8 +36,8 @@ int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, SHORT
     {
       for (int x = 0; x < bufferWidth; ++x)
       {
-        consoleBuffer[ x + bufferWidth * y ].Char.AsciiChar = ( unsigned char )rand() % 255;
-        consoleBuffer[ x + bufferWidth * y ].Attributes = rand() % 256;
+        consoleBuffer[ x + bufferWidth * y ].Char.AsciiChar = asciiValue ;
+        consoleBuffer[ x + bufferWidth * y ].Attributes = asciiAttributes ;
       }
     }
 
