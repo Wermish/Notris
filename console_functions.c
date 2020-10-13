@@ -6,7 +6,7 @@
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
 int initial_setup( 
-                   HANDLE* hMainBuffer, HANDLE* hBackBuffer,
+                   HANDLE* hMainBuffer, HANDLE* hBackBuffer, HANDLE* hStdInput,
                    CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CONSOLE_CURSOR_INFO* cciInfo, CONSOLE_FONT_INFOEX* cfiInfo,                                                                 
                    SHORT intended_width, SHORT intended_height 
                  ) 
@@ -27,6 +27,8 @@ int initial_setup(
      // Set cursor to invisible.
     cciInfo->dwSize = 1 ;
     cciInfo->bVisible = FALSE ;
+
+    *hStdInput = GetStdHandle( STD_INPUT_HANDLE ) ;
     
     // Initialise the Main Buffer and the Back Buffer.
     *hMainBuffer = CreateConsoleScreenBuffer( 
@@ -99,11 +101,13 @@ int initial_setup(
                                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
+    
 
     if( !SetConsoleCursorInfo( *hBackBuffer, cciInfo ) )
     {
         report_error( "SetConsoleCursorInfo( *hBackBuffer, cciInfo )" ) ;
     }
+    
     // Required for the box drawing characters.
     if( !SetConsoleOutputCP( 437 ) )
     {
