@@ -7,6 +7,10 @@
 HANDLE hMainBuffer ;
 HANDLE hBackBuffer ;
 HANDLE hStdInput ;
+
+HANDLE* hCurrent ;
+HANDLE* hDouble ;
+
 CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
@@ -16,19 +20,25 @@ int main( void )
 
     initial_setup( &hMainBuffer, &hBackBuffer, &hStdInput, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
 
-    draw_rectangle( &hMainBuffer, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 0, 100, 1 ) ;
-    draw_rectangle( &hMainBuffer, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 39, 100, 40 ) ;
-    draw_rectangle( &hMainBuffer, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 0, 2, 40 ) ;
-    draw_rectangle( &hMainBuffer, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 98, 0, 100, 40 ) ; 
+    hCurrent = &hMainBuffer ;
+    hDouble = &hBackBuffer ;
 
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
     COORD playerLocation = { 50, 20 } ;
     CHAR playerIcon = '@' ;
+    CHAR space = ' ' ;
     DWORD written = 0 ;
 
     while(1)
-    {
+    {   
+        SetConsoleActiveScreenBuffer( *hCurrent ) ;
+
+        draw_rectangle( hDouble, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 0, 100, 1 ) ;
+        draw_rectangle( hDouble, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 39, 100, 40 ) ;
+        draw_rectangle( hDouble, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 0, 0, 2, 40 ) ;
+        draw_rectangle( hDouble, &csbiInfo, 219, FOREGROUND_RED | FOREGROUND_GREEN, 98, 0, 100, 40 ) ; 
+
         GetNumberOfConsoleInputEvents( hStdInput, &numberOfEvents ) ;
 
         if( numberOfEvents )
@@ -37,6 +47,9 @@ int main( void )
             INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
 
             ReadConsoleInput( hStdInput, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
+
+            WriteConsoleOutputCharacter( *hDouble, &space, 1, playerLocation, &written ) ;
+            WriteConsoleOutputCharacter( *hCurrent, &space, 1, playerLocation, &written ) ;
 
             for( int i = 0; i < numberOfEventsRead; i++ )
             {
@@ -82,7 +95,19 @@ int main( void )
             }
             free( inputRecordArray ) ;
         }
-        WriteConsoleOutputCharacter( hMainBuffer, &playerIcon, 1, playerLocation, &written ) ;
+        WriteConsoleOutputCharacter( *hDouble, &playerIcon, 1, playerLocation, &written ) ;
+        SetConsoleActiveScreenBuffer( *hDouble ) ;
+
+        if( *hDouble == hBackBuffer )
+        {
+            hDouble = &hMainBuffer ;
+            hCurrent = &hBackBuffer ;
+        }
+        else
+        {
+            hDouble = &hBackBuffer ;
+            hCurrent = &hMainBuffer ;
+        }
         // ~around 50FPS and prevents game dominating CPU.
         Sleep( 20 ) ;
     }
