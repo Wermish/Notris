@@ -10,18 +10,11 @@ typedef struct notrisPiece
 {
     // Piece type 1 - 7. Each coord is one of the blocks which makes up a piece.
     CHAR pieceType ;
-    COORD partOne ;
+    COORD leadPart ;
     COORD partTwo ;
     COORD partThree ;
     COORD partFour ; 
     CHAR_INFO pieceLook ;
 } notrisPiece ;
-
-typedef struct
-{
-    CHAR icon ;
-    CHAR empty ;
-    COORD location ;
-} player ; 
 
 #endif /* GAME_ENTITIES_H */

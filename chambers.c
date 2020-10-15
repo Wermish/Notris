@@ -27,7 +27,7 @@ int main( void )
 
     notrisPiece *p = generate_notris_piece( 3 ) ;
 
-    fprintf( stdout, "%i", p->partThree.X ) ;
+    fprintf( stdout, "%i", p->partFour.X ) ;
 
     CloseHandle( hScreenBufferOne ) ;
     CloseHandle( hScreenBufferTwo ) ;
