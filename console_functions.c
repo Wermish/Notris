@@ -1,13 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <Windows.h>
 #include "console_functions.h"
+
+int generate_random_number( int minimum, int maximum )
+{
+    srand( time( 0 ) ) ;
+    
+    int result = rand() % (( maximum + 1 ) - minimum) + minimum ;
+
+    return result ;
+}
 
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
 int initial_setup( 
-                   HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInput,
-                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CONSOLE_CURSOR_INFO* cciInfo, CONSOLE_FONT_INFOEX* cfiInfo,                                                                 
+                   HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
+                   CONSOLE_SCREEN_BUFFER_INFO* pcsbiInfo, CONSOLE_CURSOR_INFO* pcciInfo, CONSOLE_FONT_INFOEX* pcfiInfo,                                                                 
                    SHORT intended_width, SHORT intended_height 
                  ) 
 {  
@@ -22,90 +32,90 @@ int initial_setup(
     // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
 
-    cfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
+    pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
 
      // Set cursor to invisible.
-    cciInfo->dwSize = 1 ;
-    cciInfo->bVisible = FALSE ;
+    pcciInfo->dwSize = 1 ;
+    pcciInfo->bVisible = FALSE ;
 
-    *hInput = GetStdHandle( STD_INPUT_HANDLE ) ;
+    *phInputBuffer = GetStdHandle( STD_INPUT_HANDLE ) ;
     
     // Initialise the Main Buffer and the Back Buffer.
-    *hScreenBufferOne = CreateConsoleScreenBuffer( 
+    *phScreenBufferOne = CreateConsoleScreenBuffer( 
                                             GENERIC_WRITE | GENERIC_READ, 
                                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
 
     // Fill csbi struct.
-    if( !GetConsoleScreenBufferInfo( *hScreenBufferOne, csbiInfo ) )
+    if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
     {
-        report_error( "GetConsoleScreenBufferInfo( *hScreenBufferOne, &csbiInfo )" ) ;
+        report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, &pcsbiInfo )" ) ;
     }
 
-    if( !GetCurrentConsoleFontEx( *hScreenBufferOne, FALSE, cfiInfo ) )
+    if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {
-        report_error( "GetCurrentConsoleFontEx( *hScreenBufferOne, FALSE, cfiInfo )" );
+        report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" );
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.
-    if( intended_width > csbiInfo->srWindow.Right )
+    if( intended_width > pcsbiInfo->srWindow.Right )
     {
-        if( intended_height < csbiInfo->srWindow.Bottom )
+        if( intended_height < pcsbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
+            coTempBuff.Y = pcsbiInfo->srWindow.Bottom + 1 ;
         }
     }
     else 
     {
-        coTempBuff.X = csbiInfo->srWindow.Right + 1 ;
+        coTempBuff.X = pcsbiInfo->srWindow.Right + 1 ;
 
-        if( intended_height < csbiInfo->srWindow.Bottom )
+        if( intended_height < pcsbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
+            coTempBuff.Y = pcsbiInfo->srWindow.Bottom + 1 ;
         }
     }
 
-    if( !SetConsoleActiveScreenBuffer( *hScreenBufferOne ) )
+    if( !SetConsoleActiveScreenBuffer( *phScreenBufferOne ) )
     {
-        report_error( "SetConsoleActiveScreenBuffer( *hScreenBufferOne )" ) ;
+        report_error( "SetConsoleActiveScreenBuffer( *phScreenBufferOne )" ) ;
     }
     // Set buffer so that intended screen size can be set, then set intended buffer size so no scroll bar shows.
-    if( !SetConsoleScreenBufferSize( *hScreenBufferOne, coTempBuff ) )
+    if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff ) )
     {
-        report_error( "SetConsoleScreenBufferSize( *hScreenBufferOne, coTempBuff )" ) ;
+        report_error( "SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff )" ) ;
     }
 
-    if( !SetConsoleWindowInfo( *hScreenBufferOne, TRUE, &srIntendedScreen ) )
+    if( !SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen ) )
     {
-        report_error("Failed: SetConsoleWindowInfo( *hScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
+        report_error("Failed: SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
     }
 
-    if( !SetConsoleScreenBufferSize( *hScreenBufferOne, coIntendedBuffer ) )
+    if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer ) )
     {
-        report_error( "Failed: SetConsoleScreenBufferSize( *hScreenBufferOne, coIntendedBuffer )" ) ;
+        report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer )" ) ;
     }
 
-    if( !SetConsoleWindowInfo( *hScreenBufferOne, TRUE, &srIntendedScreen ) )
+    if( !SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen ) )
     {
-        report_error( "Failed: SetConsoleWindowInfo( *hScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
+        report_error( "Failed: SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
     }
 
-    if( !SetConsoleCursorInfo( *hScreenBufferOne, cciInfo ) )
+    if( !SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo ) )
     {
-        report_error( "Failed: SetConsoleCursorInfo( *hScreenBufferOne, cciInfo )" ) ;
+        report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
     }
     // Initialise Back Buffer now that Main Buffer and Console Window have been setup.
-    *hScreenBufferTwo = CreateConsoleScreenBuffer( 
+    *phScreenBufferTwo = CreateConsoleScreenBuffer( 
                                             GENERIC_WRITE | GENERIC_READ, 
                                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
     
 
-    if( !SetConsoleCursorInfo( *hScreenBufferTwo, cciInfo ) )
+    if( !SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo ) )
     {
-        report_error( "SetConsoleCursorInfo( *hScreenBufferTwo, cciInfo )" ) ;
+        report_error( "SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo )" ) ;
     }
     
     // Required for the box drawing characters.

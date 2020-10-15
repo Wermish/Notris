@@ -1,21 +1,29 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <Windows.h>
 #include "console_functions.h"
 #include "graphics_functions.h"
+#include "game_entities.h"
+/*
+int draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
+{
+
+  switch( piece->pieceType )
+  {
+    
+  }
+
+  return EXIT_SUCCESS ;
+}
+*/
 
 // To draw a line, the breadth of the line must increase by 1. E.g, startX = 0, startY = 0, endX = 10, endY = 1.
-
-int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, 
+int draw_rectangle( 
+                    HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, 
                     CHAR asciiValue, WORD asciiAttributes, 
-                    SHORT startX, SHORT startY, SHORT endX, SHORT endY )
+                    SHORT startX, SHORT startY, SHORT endX, SHORT endY 
+                  )
 {
-    // TODO: parameters for drawing coords, colour, character etc...
-
-    if( !GetConsoleScreenBufferInfo( *hScreen, csbiInfo ) )
-    {
-        report_error( "GetConsoleScreenBufferInfo( *hScreen, &csbiInfo )" ) ;
-    }
-
     SHORT bufferWidth = endX ;
     SHORT bufferHeight = endY ;
 
@@ -41,9 +49,9 @@ int draw_rectangle( HANDLE* hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo,
       }
     }
 
-    if( !WriteConsoleOutputA( *hScreen, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea ) )
+    if( !WriteConsoleOutputA( *phScreenBuffer, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea ) )
     {
-      report_error( "WriteConsoleOutputA( *hScreen, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea )" ) ;
+      report_error( "WriteConsoleOutputA( *phScreenBuffer, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea )" ) ;
     }
 
     free( consoleBuffer ) ;
