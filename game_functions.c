@@ -3,87 +3,87 @@
 #include "game_functions.h"
 #include "game_entities.h"
 
-struct notrisPiece* generate_notris_piece( int pt ){
+struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
-    piece->pieceType = pt ;
-    piece->pieceLook.Char.AsciiChar = 219 ;
-    piece->leadPart.X = 50 ;
-    piece->leadPart.Y = 5 ;
+    piece->pieceShape = notrisPieceShape ;
+    piece->pieceLook.Char.AsciiChar = 88 ;
+    piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
+    piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
-    // Shape of piece is worked out based on coord of leading block, leadPart.
-    switch( pt )
+    // Shape of piece is worked out based on coord of leading block, blockOne.
+    switch( notrisPieceShape )
     {   // Square
         case 1:
-            piece->partTwo.X = piece->leadPart.X + 1 ; 
-            piece->partTwo.Y = piece->leadPart.Y ;
-            piece->partThree.X = piece->leadPart.X ;
-            piece->partThree.Y = piece->leadPart.Y + 1 ;
-            piece->partFour.X = piece->leadPart.X + 1 ;
-            piece->partFour.Y = piece->leadPart.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_RED ;
+            piece->blockTwo.X = piece->blockOne.X + 1 ; 
+            piece->blockTwo.Y = piece->blockOne.Y ;
+            piece->blockThree.X = piece->blockOne.X ;
+            piece->blockThree.Y = piece->blockOne.Y + 1 ;
+            piece->blockFour.X = piece->blockOne.X + 1 ;
+            piece->blockFour.Y = piece->blockOne.Y + 1 ;
+            piece->pieceLook.Attributes = BACKGROUND_RED ;
             
             break ;
         // Line
         case 2:
-            piece->partTwo.X = piece->leadPart.X ;
-            piece->partTwo.Y = piece->leadPart.Y + 1 ;
-            piece->partThree.X = piece->leadPart.X ;
-            piece->partThree.Y = piece->leadPart.Y + 2 ;
-            piece->partFour.X = piece->leadPart.X ;
-            piece->partFour.Y = piece->leadPart.Y + 3 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN ;
+            piece->blockTwo.X = piece->blockOne.X ;
+            piece->blockTwo.Y = piece->blockOne.Y + 1 ;
+            piece->blockThree.X = piece->blockOne.X ;
+            piece->blockThree.Y = piece->blockOne.Y + 2 ;
+            piece->blockFour.X = piece->blockOne.X ;
+            piece->blockFour.Y = piece->blockOne.Y + 3 ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN ;
             break ;
         // 'L'
         case 3:
-            piece->partTwo.X = piece->leadPart.X ;
-            piece->partTwo.Y = piece->leadPart.Y + 1 ;
-            piece->partThree.X = piece->leadPart.X ;
-            piece->partThree.Y = piece->leadPart.Y + 2 ;
-            piece->partFour.X = piece->leadPart.X + 1 ;
-            piece->partFour.Y = piece->leadPart.Y + 2 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_RED ;
+            piece->blockTwo.X = piece->blockOne.X ;
+            piece->blockTwo.Y = piece->blockOne.Y + 1 ;
+            piece->blockThree.X = piece->blockOne.X ;
+            piece->blockThree.Y = piece->blockOne.Y + 2 ;
+            piece->blockFour.X = piece->blockOne.X + 1 ;
+            piece->blockFour.Y = piece->blockOne.Y + 2 ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
             break ;
         // Mirrored 'L'
         case 4:
-            piece->partTwo.X = piece->leadPart.X ;
-            piece->partTwo.Y = piece->leadPart.Y + 1 ;
-            piece->partThree.X = piece->leadPart.X ;
-            piece->partThree.Y = piece->leadPart.Y + 2 ;
-            piece->partFour.X = piece->leadPart.X - 1 ;
-            piece->partFour.Y = piece->leadPart.Y + 2 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_RED ;
+            piece->blockTwo.X = piece->blockOne.X ;
+            piece->blockTwo.Y = piece->blockOne.Y + 1 ;
+            piece->blockThree.X = piece->blockOne.X ;
+            piece->blockThree.Y = piece->blockOne.Y + 2 ;
+            piece->blockFour.X = piece->blockOne.X - 1 ;
+            piece->blockFour.Y = piece->blockOne.Y + 2 ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
             break ;
         // 'Z'
         case 5:
-            piece->partTwo.X = piece->leadPart.X + 1 ;
-            piece->partTwo.Y = piece->leadPart.Y ;
-            piece->partThree.X = piece->leadPart.X + 1 ;
-            piece->partThree.Y = piece->leadPart.Y + 1 ;
-            piece->partFour.X = piece->leadPart.X + 2 ;
-            piece->partFour.Y = piece->leadPart.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE ;
+            piece->blockTwo.X = piece->blockOne.X + 1 ;
+            piece->blockTwo.Y = piece->blockOne.Y ;
+            piece->blockThree.X = piece->blockOne.X + 1 ;
+            piece->blockThree.Y = piece->blockOne.Y + 1 ;
+            piece->blockFour.X = piece->blockOne.X + 2 ;
+            piece->blockFour.Y = piece->blockOne.Y + 1 ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_BLUE ;
             break ;
         // Mirrored 'Z'
         case 6:
-            piece->partTwo.X = piece->leadPart.X - 1 ;
-            piece->partTwo.Y = piece->leadPart.Y ;
-            piece->partThree.X = piece->leadPart.X - 1 ;
-            piece->partThree.Y = piece->leadPart.Y + 1 ;
-            piece->partFour.X = piece->leadPart.X - 2 ;
-            piece->partFour.Y = piece->leadPart.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE ;
+            piece->blockTwo.X = piece->blockOne.X - 1 ;
+            piece->blockTwo.Y = piece->blockOne.Y ;
+            piece->blockThree.X = piece->blockOne.X - 1 ;
+            piece->blockThree.Y = piece->blockOne.Y + 1 ;
+            piece->blockFour.X = piece->blockOne.X - 2 ;
+            piece->blockFour.Y = piece->blockOne.Y + 1 ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_BLUE ;
             break ;
         // 'Hat'    
         case 7:
-            piece->partTwo.X = piece->leadPart.X ;
-            piece->partTwo.Y = piece->leadPart.Y + 1 ;
-            piece->partThree.X = piece->leadPart.X - 1 ;
-            piece->partThree.Y = piece->leadPart.Y + 1 ;
-            piece->partFour.X = piece->leadPart.X + 1 ;
-            piece->partFour.Y = piece->leadPart.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_BLUE ;
+            piece->blockTwo.X = piece->blockOne.X ;
+            piece->blockTwo.Y = piece->blockOne.Y + 1 ;
+            piece->blockThree.X = piece->blockOne.X - 1 ;
+            piece->blockThree.Y = piece->blockOne.Y + 1 ;
+            piece->blockFour.X = piece->blockOne.X + 1 ;
+            piece->blockFour.Y = piece->blockOne.Y + 1 ;
+            piece->pieceLook.Attributes = BACKGROUND_BLUE ;
             break ;  
     }
     return piece ;

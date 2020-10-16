@@ -4,18 +4,53 @@
 #include "console_functions.h"
 #include "graphics_functions.h"
 #include "game_entities.h"
-/*
+
 int draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
 {
+  
 
-  switch( piece->pieceType )
+
+  switch( piece->pieceShape )
   {
+    // Square.
+    case 1:
+      break ;
+
+    // Line.
+    case 2:
+      
+      break ;
+
+    // 'L'.
+    case 3:
+      break ;
+
+    // Mirrored 'L'.
+    case 4:
+      break ;
+
+    // 'Z'.
+    case 5:
+      break ;
     
+    // Mirrored 'Z'.
+    case 6:
+      break ;
+
+    // 'Hat'. 
+    case 7:
+      break ;
   }
+
+  draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes, 
+                       piece->blockOne.X, piece->blockOne.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1 ) ;
+
+  draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes, 
+                       piece->blockThree.X, piece->blockThree.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
 
   return EXIT_SUCCESS ;
 }
-*/
+
 
 // To draw a line, the breadth of the line must increase by 1. E.g, startX = 0, startY = 0, endX = 10, endY = 1.
 int draw_rectangle( 

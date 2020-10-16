@@ -8,7 +8,6 @@
 
 int main( void )
 { 
-
     HANDLE hScreenBufferOne ;
     HANDLE hScreenBufferTwo ;
     HANDLE hInputBuffer ;
@@ -25,9 +24,11 @@ int main( void )
     phCurrent = &hScreenBufferOne ;
     phDouble = &hScreenBufferTwo ;
 
-    notrisPiece *p = generate_notris_piece( 3 ) ;
+    notrisPiece *p = generate_notris_piece( 1, &csbiInfo ) ;
 
-    fprintf( stdout, "%i", p->partFour.X ) ;
+    draw_notris_piece( &hScreenBufferOne, &csbiInfo, p ) ;
+
+    getchar() ;
 
     CloseHandle( hScreenBufferOne ) ;
     CloseHandle( hScreenBufferTwo ) ;

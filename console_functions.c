@@ -23,36 +23,43 @@ int initial_setup(
 {  
     // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
 
-    // Has to be equal to, or larger than, the Main Buffer's screen.
+    // Has to be equal to, or larger than, the Screen One's screen.
     COORD coIntendedBuffer = { intended_width, intended_height } ;
 
     // Coordinates used in resizing console window.
     COORD coTempBuff = { intended_width, intended_height } ;
 
-    // Coordinates for top left and bottom right corners of the screen of the Main Buffer.
+    // Coordinates for top left and bottom right corners of the screen of the Screen One.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
 
     pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
 
-     // Set cursor to invisible.
+     // Specify cursor as invisible.
     pcciInfo->dwSize = 1 ;
     pcciInfo->bVisible = FALSE ;
 
     *phInputBuffer = GetStdHandle( STD_INPUT_HANDLE ) ;
     
-    // Initialise the Main Buffer and the Back Buffer.
+    // Initialise Screen One.
     *phScreenBufferOne = CreateConsoleScreenBuffer( 
                                             GENERIC_WRITE | GENERIC_READ, 
                                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                                             NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
                                             ) ;
 
+    pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
+
+    if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
+    {
+        report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
+    }
+
     // Fill csbi struct.
     if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
     {
         report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, &pcsbiInfo )" ) ;
     }
-
+    // Fill cfi struct. Could be used at some point to change font and character size to get more 'pixels'.
     if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {
         report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" );
@@ -80,6 +87,7 @@ int initial_setup(
     {
         report_error( "SetConsoleActiveScreenBuffer( *phScreenBufferOne )" ) ;
     }
+
     // Set buffer so that intended screen size can be set, then set intended buffer size so no scroll bar shows.
     if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff ) )
     {
@@ -105,7 +113,7 @@ int initial_setup(
     {
         report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
     }
-    // Initialise Back Buffer now that Main Buffer and Console Window have been setup.
+    // Initialise Screen Two now that Screen One and Console Window have been setup.
     *phScreenBufferTwo = CreateConsoleScreenBuffer( 
                                             GENERIC_WRITE | GENERIC_READ, 
                                             FILE_SHARE_READ | FILE_SHARE_WRITE,
