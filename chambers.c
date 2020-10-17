@@ -26,16 +26,19 @@ int main( void )
 
     notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
-    while(1)
+    while( 1 )
     {   
+        SetConsoleActiveScreenBuffer( *phCurrent ) ;
+
+        erase_notris_piece( phDouble, &csbiInfo, p ) ;
+
         erase_notris_piece( phCurrent, &csbiInfo, p ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
 
-        draw_notris_piece( phCurrent, &csbiInfo, p ) ;
- 
-/*
-        SetConsoleActiveScreenBuffer( phDouble ) ;
+        draw_notris_piece( phDouble, &csbiInfo, p ) ;
+
+        SetConsoleActiveScreenBuffer( *phDouble ) ;
 
         if( *phDouble == hScreenBufferTwo )
         {
@@ -47,7 +50,7 @@ int main( void )
             phDouble = &hScreenBufferTwo ;
             phCurrent = &hScreenBufferOne ;
         }
-*/
+
         Sleep( 50 ) ;
     }
 
