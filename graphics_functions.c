@@ -5,23 +5,21 @@
 #include "graphics_functions.h"
 #include "game_entities.h"
 
-int draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
+void draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
 {
     draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                      piece->blockOne.X, piece->blockOne.Y, piece->blockOne.X + 1, piece->blockOne.Y + 1 ) ;
+                    piece->blockOne.X, piece->blockOne.Y, piece->blockOne.X + 1, piece->blockOne.Y + 1 ) ;
     draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                      piece->blockTwo.X, piece->blockTwo.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1) ;
+                    piece->blockTwo.X, piece->blockTwo.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1) ;
     draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                      piece->blockThree.X, piece->blockThree.Y, piece->blockThree.X + 1, piece->blockThree.Y + 1 ) ;
+                    piece->blockThree.X, piece->blockThree.Y, piece->blockThree.X + 1, piece->blockThree.Y + 1 ) ;
     draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                      piece->blockFour.X, piece->blockFour.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
-
-  return EXIT_SUCCESS ;
+                    piece->blockFour.X, piece->blockFour.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
 }
 
 
-// To draw a line, the breadth of the line must increase by 1. E.g, startX = 0, startY = 0, endX = 10, endY = 1.
-int draw_rectangle( 
+// endX and endY must be at least 1 unit greater than startX and endX respectively.
+void draw_rectangle( 
                     HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, 
                     CHAR asciiValue, WORD asciiAttributes, 
                     SHORT startX, SHORT startY, SHORT endX, SHORT endY 
@@ -58,6 +56,18 @@ int draw_rectangle(
     }
 
     free( consoleBuffer ) ;
+}
 
-    return EXIT_SUCCESS ;
+void erase_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece )
+{
+  CHAR formerChar = piece->pieceLook.Char.AsciiChar ;
+  CHAR formerAttribute = piece->pieceLook.Attributes ;
+
+  piece->pieceLook.Char.AsciiChar = ' ' ;
+  piece->pieceLook.Attributes = 0 ;
+
+  draw_notris_piece( phScreenBuffer, csbiInfo, piece ) ;
+
+  piece->pieceLook.Char.AsciiChar = formerChar ;
+  piece->pieceLook.Attributes = formerAttribute ;
 }

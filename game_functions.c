@@ -8,7 +8,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
     piece->pieceShape = notrisPieceShape ;
-    piece->pieceLook.Char.AsciiChar = 88 ;
+    piece->pieceLook.Char.AsciiChar = 219 ;
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
@@ -22,7 +22,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = BACKGROUND_RED ;
+            piece->pieceLook.Attributes = FOREGROUND_RED ;
             
             break ;
         // Line
@@ -33,7 +33,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X ;
             piece->blockFour.Y = piece->blockOne.Y + 3 ;
-            piece->pieceLook.Attributes = BACKGROUND_GREEN ;
+            piece->pieceLook.Attributes = FOREGROUND_GREEN ;
             break ;
         // 'L'
         case 3:
@@ -43,7 +43,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
-            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
+            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_RED ;
             break ;
         // Mirrored 'L'
         case 4:
@@ -53,7 +53,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X - 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
-            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
+            piece->pieceLook.Attributes = FOREGROUND_BLUE | FOREGROUND_RED ;
             break ;
         // 'Z'
         case 5:
@@ -63,7 +63,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 2 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_BLUE ;
+            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE ;
             break ;
         // Mirrored 'Z'
         case 6:
@@ -73,7 +73,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X - 2 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_BLUE ;
+            piece->pieceLook.Attributes =  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY ;
             break ;
         // 'Hat'    
         case 7:
@@ -83,7 +83,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = BACKGROUND_BLUE ;
+            piece->pieceLook.Attributes = FOREGROUND_BLUE ;
             break ;  
     }
     return piece ;
@@ -107,11 +107,22 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                 if( inputRecordArray[i].EventType == KEY_EVENT )
                 {
                     
+                    if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
+                    {
+                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        {
+                            exit( EXIT_SUCCESS ) ;
+                        }
+                    }
+
                     if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
                             piece->blockOne.Y++ ;
+                            piece->blockTwo.Y++ ;
+                            piece->blockThree.Y++ ;
+                            piece->blockFour.Y++ ;
                         }
                     }
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_LEFT )
@@ -119,6 +130,9 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
                             piece->blockOne.X-- ;
+                            piece->blockTwo.X-- ;
+                            piece->blockThree.X-- ;
+                            piece->blockFour.X-- ;
                         }
                     }
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
@@ -126,6 +140,9 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
                             piece->blockOne.X++ ;
+                            piece->blockTwo.X++ ;
+                            piece->blockThree.X++ ;
+                            piece->blockFour.X++ ;
                         }
                     }
                 }

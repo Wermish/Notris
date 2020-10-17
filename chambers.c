@@ -24,11 +24,32 @@ int main( void )
     phCurrent = &hScreenBufferOne ;
     phDouble = &hScreenBufferTwo ;
 
-    notrisPiece *p = generate_notris_piece( 7, &csbiInfo ) ;
+    notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
-    draw_notris_piece( &hScreenBufferOne, &csbiInfo, p ) ;
+    while(1)
+    {   
+        erase_notris_piece( phCurrent, &csbiInfo, p ) ;
 
-    getchar() ;
+        move_notris_piece( &hInputBuffer, p ) ;
+
+        draw_notris_piece( phCurrent, &csbiInfo, p ) ;
+ 
+/*
+        SetConsoleActiveScreenBuffer( phDouble ) ;
+
+        if( *phDouble == hScreenBufferTwo )
+        {
+            phDouble = &hScreenBufferOne ;
+            phCurrent = &hScreenBufferTwo ;
+        }
+        else
+        {
+            phDouble = &hScreenBufferTwo ;
+            phCurrent = &hScreenBufferOne ;
+        }
+*/
+        Sleep( 50 ) ;
+    }
 
     CloseHandle( hScreenBufferOne ) ;
     CloseHandle( hScreenBufferTwo ) ;
