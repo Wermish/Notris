@@ -7,46 +7,14 @@
 
 int draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
 {
-  
-
-
-  switch( piece->pieceShape )
-  {
-    // Square.
-    case 1:
-      break ;
-
-    // Line.
-    case 2:
-      
-      break ;
-
-    // 'L'.
-    case 3:
-      break ;
-
-    // Mirrored 'L'.
-    case 4:
-      break ;
-
-    // 'Z'.
-    case 5:
-      break ;
-    
-    // Mirrored 'Z'.
-    case 6:
-      break ;
-
-    // 'Hat'. 
-    case 7:
-      break ;
-  }
-
-  draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes, 
-                       piece->blockOne.X, piece->blockOne.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1 ) ;
-
-  draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes, 
-                       piece->blockThree.X, piece->blockThree.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
+    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
+                      piece->blockOne.X, piece->blockOne.Y, piece->blockOne.X + 1, piece->blockOne.Y + 1 ) ;
+    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
+                      piece->blockTwo.X, piece->blockTwo.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1) ;
+    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
+                      piece->blockThree.X, piece->blockThree.Y, piece->blockThree.X + 1, piece->blockThree.Y + 1 ) ;
+    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
+                      piece->blockFour.X, piece->blockFour.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
 
   return EXIT_SUCCESS ;
 }

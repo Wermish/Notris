@@ -12,7 +12,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
-    // Shape of piece is worked out based on coord of leading block, blockOne.
+    // Shape of piece is formed relative to coord of leading block, blockOne.
     switch( notrisPieceShape )
     {   // Square
         case 1:

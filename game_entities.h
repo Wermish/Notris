@@ -2,11 +2,11 @@
 #define GAME_ENTITIES_H
 
 // Idea is to make the whole Notris play area a malloc'd array of CHAR_INFO and write characters to it each frame.
-typedef struct
+typedef struct notrisPlayFieldInfo
 {
     CHAR_INFO* playFieldBuffer ;
     SMALL_RECT playFieldSize ;
-} gameDisplayInfo ;
+} notrisPlayFieldInfo ;
 
 typedef struct notrisPiece
 {
