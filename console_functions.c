@@ -15,11 +15,9 @@ int generate_random_number( int minimum, int maximum )
 
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
-int initial_setup( 
-                   HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
+int initial_setup( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
                    CONSOLE_SCREEN_BUFFER_INFO* pcsbiInfo, CONSOLE_CURSOR_INFO* pcciInfo, CONSOLE_FONT_INFOEX* pcfiInfo,                                                                 
-                   SHORT intended_width, SHORT intended_height 
-                 ) 
+                   SHORT intended_width, SHORT intended_height ) 
 {  
     // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
 
@@ -41,11 +39,9 @@ int initial_setup(
     *phInputBuffer = GetStdHandle( STD_INPUT_HANDLE ) ;
     
     // Initialise Screen One.
-    *phScreenBufferOne = CreateConsoleScreenBuffer( 
-                                            GENERIC_WRITE | GENERIC_READ, 
-                                            FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                            NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
-                                            ) ;
+    *phScreenBufferOne = CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 
+                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
 
     pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
 
@@ -114,11 +110,9 @@ int initial_setup(
         report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
     }
     // Initialise Screen Two now that Screen One and Console Window have been setup.
-    *phScreenBufferTwo = CreateConsoleScreenBuffer( 
-                                            GENERIC_WRITE | GENERIC_READ, 
-                                            FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                            NULL, CONSOLE_TEXTMODE_BUFFER, NULL 
-                                            ) ;
+    *phScreenBufferTwo = CreateConsoleScreenBuffer(  GENERIC_WRITE | GENERIC_READ, 
+                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
     
 
     if( !SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo ) )
