@@ -89,7 +89,6 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
     return piece ;
 }
 
-/*
 void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
 {
     DWORD numberOfEvents = 0 ;
@@ -112,27 +111,25 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            playerLocation->Y++ ;
+                            piece->blockOne.Y++ ;
                         }
                     }
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_LEFT )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            playerLocation->X-- ;
+                            piece->blockOne.X-- ;
                         }
                     }
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            playerLocation->X++ ;
+                            piece->blockOne.X++ ;
                         }
                     }
                 }
             }
             free( inputRecordArray ) ;
         }
-    }
 }
-*/
