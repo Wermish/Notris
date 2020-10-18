@@ -6,7 +6,7 @@ typedef struct notrisPlayFieldInfo
 {
     CHAR_INFO* playFieldBuffer ;
     COORD playFieldCoords ;
-    SMALL_RECT playFieldSize ;
+    SMALL_RECT playFieldArea ;
 } notrisPlayFieldInfo ;
 
 typedef struct notrisPiece
