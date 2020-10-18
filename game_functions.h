@@ -5,4 +5,6 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
 
 void move_notris_piece( HANDLE* phInputBuffer, struct notrisPiece* piece ) ;
 
+void rotate_notris_piece( struct notrisPiece* piece ) ;
+
 #endif /* GAME_FUNCTIONS_H */

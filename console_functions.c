@@ -120,7 +120,7 @@ int initial_setup( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
         report_error( "SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo )" ) ;
     }
     
-    // Required for the box drawing characters.
+    // IBM Code Page 437. Required for the box drawing characters.
     if( !SetConsoleOutputCP( 437 ) )
     {
         report_error( "SetConsoleOutputCP( 437 )" ) ;

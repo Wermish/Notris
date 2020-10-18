@@ -8,6 +8,7 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
     piece->pieceShape = notrisPieceShape ;
+    piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
@@ -115,7 +116,15 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                         }
                     }
 
-                    if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
+                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                    {
+                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        {
+                            rotate_notris_piece( piece ) ;
+                        }
+                    }
+
+                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
@@ -149,4 +158,211 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
             }
             free( inputRecordArray ) ;
         }
+}
+
+void rotate_notris_piece( struct notrisPiece* piece )
+{
+    switch( piece->pieceShape ){
+
+        case 1:
+            break ;
+
+        case 2:
+             switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+        break ;
+
+        case 3:
+             switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+
+        case 4:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+
+        case 5:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // Mirrored 'Z'
+        case 6:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // 'Hat'
+        case 7:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X-- ;
+                    piece->blockFour.Y++ ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X-- ;
+                    piece->blockFour.Y-- ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X++ ;
+                    piece->blockFour.Y-- ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X++ ;
+                    piece->blockFour.Y++ ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+        break ;
+    }
 }

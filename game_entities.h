@@ -13,6 +13,8 @@ typedef struct notrisPiece
 {
     // Piece type 1 - 7. Each coord is one of the blocks which makes up a piece.
     CHAR pieceShape ;
+    // Current rotation. Different pieces have different number of rotations.
+    CHAR piecePhase ;
     COORD blockOne ;
     COORD blockTwo ;
     COORD blockThree ;

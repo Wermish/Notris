@@ -10,8 +10,8 @@ HANDLE hScreenBufferOne ;
 HANDLE hScreenBufferTwo ;
 HANDLE hInputBuffer ;
     
-HANDLE* phCurrent ;
-HANDLE* phDouble ;
+HANDLE* phVisible;
+HANDLE* phNotVisible ;
 
 CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
@@ -21,8 +21,8 @@ int main( void )
 { 
     initial_setup( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
 
-    phCurrent = &hScreenBufferOne ;
-    phDouble = &hScreenBufferTwo ;
+    phVisible= &hScreenBufferOne ;
+    phNotVisible = &hScreenBufferTwo ;
 
     notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
@@ -30,25 +30,25 @@ int main( void )
 
     while( 1 )
     {   
-        //SetConsoleActiveScreenBuffer( *phCurrent ) ;
+        //SetConsoleActiveScreenBuffer( *phVisible) ;
 
-        //erase_notris_piece( phDouble, &csbiInfo, p ) ;
+        //erase_notris_piece( phNotVisible, &csbiInfo, p ) ;
         
-        erase_notris_piece( phCurrent, &csbiInfo, p ) ;
+        erase_notris_piece( phVisible, &csbiInfo, p ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
 /*
-        SetConsoleActiveScreenBuffer( *phDouble ) ;
+        SetConsoleActiveScreenBuffer( *phNotVisible ) ;
 
-        if( *phDouble == hScreenBufferTwo )
+        if( *phNotVisible == hScreenBufferTwo )
         {
-            phDouble = &hScreenBufferOne ;
-            phCurrent = &hScreenBufferTwo ;
+            phNotVisible = &hScreenBufferOne ;
+            phVisible= &hScreenBufferTwo ;
         }
         else
         {
-            phDouble = &hScreenBufferTwo ;
-            phCurrent = &hScreenBufferOne ;
+            phNotVisible = &hScreenBufferTwo ;
+            phVisible= &hScreenBufferOne ;
         }
 */
         halfSecondCount++ ;
@@ -63,7 +63,7 @@ int main( void )
             p->blockFour.Y++ ;
         }
 
-        draw_notris_piece( phCurrent, &csbiInfo, p ) ;
+        draw_notris_piece( phVisible, &csbiInfo, p ) ;
 
         Sleep( 50 ) ;
     }
