@@ -30,21 +30,9 @@ int main( void )
 
     while( 1 )
     {   
-        clear_screen_buffer( phVisible, &csbiInfo ) ;
+        clear_screen_buffer( phNotVisible, &csbiInfo ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
-
-        pieceDropRate++ ;
-
-        if( pieceDropRate == 10 )
-        {
-            pieceDropRate = 0 ;
-
-            p->blockOne.Y++ ;
-            p->blockTwo.Y++ ;
-            p->blockThree.Y++ ;
-            p->blockFour.Y++ ;
-        }
 
         draw_notris_piece( phNotVisible, &csbiInfo, p ) ;
 
@@ -59,6 +47,18 @@ int main( void )
         {
             phNotVisible = &hScreenBufferTwo ;
             phVisible= &hScreenBufferOne ;
+        }
+
+        pieceDropRate++ ;
+
+        if( pieceDropRate == 10 )
+        {
+            pieceDropRate = 0 ;
+
+            p->blockOne.Y++ ;
+            p->blockTwo.Y++ ;
+            p->blockThree.Y++ ;
+            p->blockFour.Y++ ;
         }
 
         Sleep( 50 ) ;
