@@ -3,6 +3,10 @@
 #include "game_functions.h"
 #include "game_entities.h"
 
+/*
+ * Shape of piece is formed relative to coord of leading block, blockOne.
+ */
+
 struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
@@ -13,7 +17,6 @@ struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
-    // Shape of piece is formed relative to coord of leading block, blockOne.
     switch( notrisPieceShape )
     {   // Square
         case 1:
@@ -160,13 +163,17 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
         }
 }
 
+/*
+ * Rotates piece based on current 'phase', or the degree of rotation from starting position.
+ */
+
 void rotate_notris_piece( struct notrisPiece* piece )
 {
     switch( piece->pieceShape ){
-
+        // Square
         case 1:
             break ;
-
+        // Line
         case 2:
              switch( piece->piecePhase )
             {
@@ -191,7 +198,7 @@ void rotate_notris_piece( struct notrisPiece* piece )
                 break ;
             }
         break ;
-
+        // 'L'
         case 3:
              switch( piece->piecePhase )
             {
@@ -232,7 +239,7 @@ void rotate_notris_piece( struct notrisPiece* piece )
                 break ;
             }
             break ;
-
+        // Mirrored 'L'
         case 4:
             switch( piece->piecePhase )
             {
@@ -273,7 +280,7 @@ void rotate_notris_piece( struct notrisPiece* piece )
                 break ;
             }
             break ;
-
+        // 'Z'
         case 5:
             switch( piece->piecePhase )
             {

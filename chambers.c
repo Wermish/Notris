@@ -26,18 +26,28 @@ int main( void )
 
     notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
-    int halfSecondCount = 0 ;
+    int pieceDropRate = 0 ;
 
     while( 1 )
     {   
-        //SetConsoleActiveScreenBuffer( *phVisible) ;
-
-        //erase_notris_piece( phNotVisible, &csbiInfo, p ) ;
-        
-        erase_notris_piece( phVisible, &csbiInfo, p ) ;
+        clear_screen_buffer( phVisible, &csbiInfo ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
-/*
+
+        pieceDropRate++ ;
+
+        if( pieceDropRate == 10 )
+        {
+            pieceDropRate = 0 ;
+
+            p->blockOne.Y++ ;
+            p->blockTwo.Y++ ;
+            p->blockThree.Y++ ;
+            p->blockFour.Y++ ;
+        }
+
+        draw_notris_piece( phNotVisible, &csbiInfo, p ) ;
+
         SetConsoleActiveScreenBuffer( *phNotVisible ) ;
 
         if( *phNotVisible == hScreenBufferTwo )
@@ -50,20 +60,6 @@ int main( void )
             phNotVisible = &hScreenBufferTwo ;
             phVisible= &hScreenBufferOne ;
         }
-*/
-        halfSecondCount++ ;
-
-        if( halfSecondCount == 10 )
-        {
-            halfSecondCount = 0 ;
-
-            p->blockOne.Y++ ;
-            p->blockTwo.Y++ ;
-            p->blockThree.Y++ ;
-            p->blockFour.Y++ ;
-        }
-
-        draw_notris_piece( phVisible, &csbiInfo, p ) ;
 
         Sleep( 50 ) ;
     }
