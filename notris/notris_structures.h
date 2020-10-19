@@ -1,5 +1,5 @@
-#ifndef GAME_ENTITIES_H
-#define GAME_ENTITIES_H
+#ifndef NOTRIS_STRUCTURES_H
+#define NOTRIS_STRUCTURES_H
 
 // Idea is to make the whole Notris play area a malloc'd array of CHAR_INFO and write characters to it each frame. Hmmm...
 typedef struct notrisPlayFieldInfo
@@ -22,4 +22,4 @@ typedef struct notrisPiece
     CHAR_INFO pieceLook ;
 } notrisPiece ;
 
-#endif /* GAME_ENTITIES_H */
+#endif /* NOTRIS_STRUCTURES_H */

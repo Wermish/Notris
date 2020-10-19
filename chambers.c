@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include "console_functions.h"
-#include "graphics_functions.h"
-#include "game_functions.h"
-#include "game_entities.h"
+#include "notris/notris_graphics_functions.h"
+#include "notris/notris_game_functions.h"
+#include "notris/notris_structures.h"
 
 HANDLE hScreenBufferOne ;
 HANDLE hScreenBufferTwo ;
@@ -19,7 +19,7 @@ CONSOLE_FONT_INFOEX cfiInfo ;
 
 int main( void )
 { 
-    initial_setup( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
+    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
 
     phVisible= &hScreenBufferOne ;
     phNotVisible = &hScreenBufferTwo ;

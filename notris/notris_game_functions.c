@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
-#include "game_functions.h"
-#include "game_entities.h"
+#include "notris_game_functions.h"
+#include "notris_structures.h"
 
 /*
  * Shape of piece is formed relative to coord of leading block, blockOne.

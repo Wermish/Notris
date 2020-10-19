@@ -13,9 +13,15 @@ int generate_random_number( int minimum, int maximum )
     return result ;
 }
 
+void report_error( char *msg )
+{
+    fprintf( stderr, "Failed: %s\nError Code: %i\n", msg, GetLastError() ) ;
+    exit( EXIT_FAILURE ) ;
+}
+
 // TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
 
-int initial_setup( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
+int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
                    CONSOLE_SCREEN_BUFFER_INFO* pcsbiInfo, CONSOLE_CURSOR_INFO* pcciInfo, CONSOLE_FONT_INFOEX* pcfiInfo,                                                                 
                    SHORT intended_width, SHORT intended_height ) 
 {  
@@ -129,8 +135,3 @@ int initial_setup( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     return EXIT_SUCCESS ;
 }
 
-void report_error( char *msg )
-{
-    fprintf( stderr, "Failed: %s\nError Code: %i\n", msg, GetLastError() ) ;
-    exit( EXIT_FAILURE ) ;
-}

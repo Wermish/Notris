@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Windows.h>
-#include "console_functions.h"
-#include "graphics_functions.h"
-#include "game_entities.h"
+#include "../console_functions.h"
+#include "notris_graphics_functions.h"
+#include "notris_structures.h"
 
 void clear_screen_buffer( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
 {

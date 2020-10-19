@@ -1,5 +1,5 @@
-#ifndef GRAPHICS_FUNCTIONS_H
-#define GRAPHICS_FUNCTIONS_H
+#ifndef NOTRIS_GRAPHICS_FUNCTIONS_H
+#define NOTRIS_GRAPHICS_FUNCTIONS_H
 
 void clear_screen_buffer( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ) ;
 
@@ -13,4 +13,4 @@ void draw_rectangle( HANDLE* phScreenBuffer,
 
 void erase_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece ) ;
 
-#endif /* GRAPHICS_FUNCTIONS_H */
+#endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */
