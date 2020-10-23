@@ -4,15 +4,6 @@
 #include <Windows.h>
 #include "console_functions.h"
 
-int generate_random_number( int minimum, int maximum )
-{
-    srand( time( 0 ) ) ;
-    
-    int result = rand() % (( maximum + 1 ) - minimum) + minimum ;
-
-    return result ;
-}
-
 void report_error( char *msg )
 {
     fprintf( stderr, "Failed: %s\nError Code: %i\n", msg, GetLastError() ) ;
@@ -48,8 +39,6 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     *phScreenBufferOne = CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 
                                                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                                                     NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
-
-    pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
 
     if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {

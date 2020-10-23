@@ -1,8 +1,6 @@
 #ifndef CONSOLE_FUNCTIONS_H
 #define CONSOLE_FUNCTIONS_H
 
-int generate_random_number( int minimum, int maximum ) ;
-
 void report_error( char *msg ) ;
 
 int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
