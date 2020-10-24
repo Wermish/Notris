@@ -29,10 +29,6 @@ int main( void )
     notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
     int pieceDropRate = 0 ;
-    GetConsoleScreenBufferInfo( hScreenBufferOne, &csbiInfo ) ;
-    fprintf( stdout, "windowXY: %i x %i\nsr: %i, %i, %i, %i",
-            csbiInfo.dwSize.X, csbiInfo.dwSize.Y, 
-            csbiInfo.srWindow.Left, csbiInfo.srWindow.Top, csbiInfo.srWindow.Right, csbiInfo.srWindow.Bottom ) ;
 
     while( 1 )
     {   

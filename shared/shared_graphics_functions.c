@@ -8,7 +8,7 @@
 void clear_screen_buffer( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
 {
   draw_rectangle( phScreenBuffer, 0, 0, 
-                  csbiInfo->srWindow.Left, csbiInfo->srWindow.Top, csbiInfo->srWindow.Right, csbiInfo->srWindow.Bottom ) ;
+                  0, 0, csbiInfo->dwSize.X, csbiInfo->dwSize.Y ) ;
 }
 
 // endX and endY must be at least 1 unit greater than startX and endX respectively.

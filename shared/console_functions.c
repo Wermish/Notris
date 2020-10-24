@@ -40,6 +40,10 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
                                                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                                                     NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
 
+    *phScreenBufferTwo = CreateConsoleScreenBuffer(  GENERIC_WRITE | GENERIC_READ, 
+                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
+
     if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {
         report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
@@ -50,6 +54,7 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     {
         report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, &pcsbiInfo )" ) ;
     }
+
     // Fill cfi struct. Could be used at some point to change font and character size to get more 'pixels'.
     if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {
@@ -74,12 +79,15 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
         }
     }
 
-    if( !SetConsoleActiveScreenBuffer( *phScreenBufferOne ) )
+    // IBM Code Page 437. Required for the box drawing characters.
+    if( !SetConsoleOutputCP( 437 ) )
     {
-        report_error( "SetConsoleActiveScreenBuffer( *phScreenBufferOne )" ) ;
+        report_error( "SetConsoleOutputCP( 437 )" ) ;
     }
 
-    // Set buffer so that intended screen size can be set, then set intended buffer size so no scroll bar shows.
+    // First sets a temporary buffer size which is larger than or equal to intended screen/buffer and then shrinks to intended.
+
+    // Setup ScreenBufferOne---------------------------------------------------------------------------------
     if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff ) )
     {
         report_error( "SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff )" ) ;
@@ -94,32 +102,37 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     {
         report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer )" ) ;
     }
+    // ------------------------------------------------------------------------------------------------------
 
-    if( !SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen ) )
+    // Setup ScreenBufferTwo---------------------------------------------------------------------------------
+    if( !SetConsoleScreenBufferSize( *phScreenBufferTwo, coTempBuff ) )
     {
-        report_error( "Failed: SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
+        report_error( "SetConsoleScreenBufferSize( *phScreenBufferTwo, coTempBuff )" ) ;
     }
+
+    if( !SetConsoleWindowInfo( *phScreenBufferTwo, TRUE, &srIntendedScreen ) )
+    {
+        report_error("Failed: SetConsoleWindowInfo( *phScreenBufferTwo, TRUE, &srIntendedScreen )" ) ;
+    }
+
+    if( !SetConsoleScreenBufferSize( *phScreenBufferTwo, coIntendedBuffer ) )
+    {
+        report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferTwo, coIntendedBuffer )" ) ;
+    }
+    // ------------------------------------------------------------------------------------------------------
 
     if( !SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo ) )
     {
         report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
     }
-    // Initialise Screen Two now that Screen One and Console Window have been setup.
-    *phScreenBufferTwo = CreateConsoleScreenBuffer(  GENERIC_WRITE | GENERIC_READ, 
-                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
     
-
     if( !SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo ) )
     {
         report_error( "SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo )" ) ;
     }
-    
-    // IBM Code Page 437. Required for the box drawing characters.
-    if( !SetConsoleOutputCP( 437 ) )
-    {
-        report_error( "SetConsoleOutputCP( 437 )" ) ;
-    }
+
+    GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) ;
+
 
     return EXIT_SUCCESS ;
 }
