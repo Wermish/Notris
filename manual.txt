@@ -29,3 +29,14 @@ Godspeed and go with Grace!
                                                       GAMEPLAY
 ------------------------------------------------------------------------------------------------------------------------------
 Initial equipment and selection etc done in castle kitchen with chef.
+
+Puzzles in each chamber. One such is Notris, which is used to BUILD walls and stop monster infestation. Goal is to build a
+wall with no gaps and 'top out'. Negative scoring based on gaps.
+
+Each puzzle can grant you boons or banes for another puzzle in chamber.
+
+Notris - seal the chamber's entrance to stop monsters/demons invading the castle. This also blocks your escape...Reverse Tetris.
+Worm - flee frantically from a giant worm. Reverse Snake - you are a morsel to be devoured, and you must dodge the worm
+and collect up the traditional morsels befoe it eats them, so it can't grow. Do it long enough and it starves.
+
+Ending depends on which puzzles were completed in each chamber, which events were encountered in each chamber, and other options...

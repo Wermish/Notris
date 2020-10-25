@@ -15,6 +15,8 @@ struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, CON
     piece->pieceShape = pieceShape ;
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
+
+    
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
@@ -379,9 +381,9 @@ void setup_notris( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldI
 {
     
     npfiInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
-    npfiInfo->playFieldArea.Top =  csbiInfo->srWindow.Top + 2 ;
+    npfiInfo->playFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
     npfiInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
-    npfiInfo->playFieldArea.Bottom = csbiInfo->srWindow.Bottom - 2 ;
+    npfiInfo->playFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
 
     npfiInfo->notrisScore = 0 ;
 

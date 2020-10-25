@@ -41,22 +41,7 @@ int main( void )
     {   
         clear_screen_buffer( phNotVisible, &csbiInfo ) ;
 
-        //draw_notris_play_field( phNotVisible, &npfiInfo ) ;
-
-        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Top,
-                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Top + 1  ) ;
-        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Bottom,
-                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Bottom + 1 ) ;
-
-        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Top,
-                  npfiInfo.playFieldArea.Left + 1, npfiInfo.playFieldArea.Bottom  ) ;
-
-        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Top,
-                  npfiInfo.playFieldArea.Right + 1, npfiInfo.playFieldArea.Bottom  ) ;
+        draw_notris_play_field( phNotVisible, &npfiInfo ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
 
