@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <Windows.h>
+#include "../shared/shared_game_functions.h"
 #include "notris_game_functions.h"
 #include "notris_structures.h"
 
@@ -7,17 +8,17 @@
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
-struct notrisPiece* generate_notris_piece( int notrisPieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ){
+struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
-    piece->pieceShape = notrisPieceShape ;
+    piece->pieceShape = pieceShape ;
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
     piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
     piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
 
-    switch( notrisPieceShape )
+    switch( pieceShape )
     {   // Square
         case 1:
             piece->blockTwo.X = piece->blockOne.X + 1 ; 
@@ -372,4 +373,17 @@ void rotate_notris_piece( struct notrisPiece* piece )
             }
         break ;
     }
+}
+
+void setup_notris( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+{
+    
+    npfiInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
+    npfiInfo->playFieldArea.Top =  csbiInfo->srWindow.Top + 2 ;
+    npfiInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
+    npfiInfo->playFieldArea.Bottom = csbiInfo->srWindow.Bottom - 2 ;
+
+    npfiInfo->notrisScore = 0 ;
+
+    npfiInfo->nextPiece = generate_random_number( 1, 7 ) ;   
 }

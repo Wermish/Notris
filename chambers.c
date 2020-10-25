@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <Windows.h>
 #include "shared/console_functions.h"
 #include "shared/shared_graphics_functions.h"
@@ -19,20 +20,43 @@ CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
 
+notrisPlayFieldInfo npfiInfo ;
+
 int main( void )
-{ 
-    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 100, 40 ) ;
+{
+    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 101, 40 ) ;
 
     phVisible= &hScreenBufferOne ;
     phNotVisible = &hScreenBufferTwo ;
 
     notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
 
-    int pieceDropRate = 0 ;
+    WORD pieceDropRate = 0 ;
+
+    srand( time( 0 ) ) ;
+
+    setup_notris( &csbiInfo, &npfiInfo ) ;
 
     while( 1 )
     {   
         clear_screen_buffer( phNotVisible, &csbiInfo ) ;
+
+        //draw_notris_play_field( phNotVisible, &npfiInfo ) ;
+
+        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Top,
+                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Top + 1  ) ;
+        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Bottom,
+                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Bottom + 1 ) ;
+
+        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo.playFieldArea.Left, npfiInfo.playFieldArea.Top,
+                  npfiInfo.playFieldArea.Left + 1, npfiInfo.playFieldArea.Bottom  ) ;
+
+        draw_rectangle( phNotVisible, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo.playFieldArea.Right, npfiInfo.playFieldArea.Top,
+                  npfiInfo.playFieldArea.Right + 1, npfiInfo.playFieldArea.Bottom  ) ;
 
         move_notris_piece( &hInputBuffer, p ) ;
 

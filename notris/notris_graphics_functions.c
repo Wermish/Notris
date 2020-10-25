@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include "../shared/console_functions.h"
+#include "../shared/shared_graphics_functions.h"
 #include "notris_graphics_functions.h"
 #include "notris_structures.h"
 
@@ -45,9 +46,23 @@ void draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbi
 }
 
 
-void draw_notris_play_field( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+void draw_notris_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
 {
-  
+  draw_rectangle( *phScreenBuffer, 88, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top,
+                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top + 1  ) ;
+
+  draw_rectangle( *phScreenBuffer, 88, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Bottom,
+                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom + 1 ) ;
+
+  draw_rectangle( *phScreenBuffer, 88, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top,
+                  npfiInfo->playFieldArea.Left + 1, npfiInfo->playFieldArea.Bottom  ) ;
+
+  draw_rectangle( *phScreenBuffer, 88, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top,
+                  npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom  ) ;
 }
 
 void erase_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece )

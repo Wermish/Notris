@@ -1,20 +1,29 @@
 #ifndef NOTRIS_STRUCTURES_H
 #define NOTRIS_STRUCTURES_H
 
-// Idea is to make the whole Notris play area a malloc'd array of CHAR_INFO and write characters to it each frame. Hmmm...
+typedef enum notrisPieceShape{
+    square = 1,
+    line = 2,
+    lshape = 3,
+    mirroredlshape = 4,
+    zed = 5,
+    mirroredzed = 6,
+    hat = 7
+} notrisPieceShape ;
+
 typedef struct notrisPlayFieldInfo
 {
-    CHAR_INFO* playFieldBuffer ;
-    COORD playFieldCoords ;
     SMALL_RECT playFieldArea ;
+    DWORD notrisScore ;
+    enum notrisPieceShape nextPiece ;
 } notrisPlayFieldInfo ;
 
 typedef struct notrisPiece
 {
-    // Piece type 1 - 7. Each coord is one of the blocks which makes up a piece.
-    CHAR pieceShape ;
+    enum notrisPieceShape pieceShape ;
     // Current rotation. Different pieces have different number of rotations.
     CHAR piecePhase ;
+    // Each coord is one of the blocks which makes up a piece.
     COORD blockOne ;
     COORD blockTwo ;
     COORD blockThree ;

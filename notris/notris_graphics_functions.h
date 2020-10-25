@@ -3,7 +3,7 @@
 
 void draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece ) ;
 
-void draw_notris_play_field( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo ) ;
+void draw_notris_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo* npfiInfo ) ;
 
 void erase_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece ) ;
 
