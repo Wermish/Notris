@@ -24,19 +24,19 @@ notrisPlayFieldInfo npfiInfo ;
 
 int main( void )
 {
-    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 101, 40 ) ;
-
-    phVisible= &hScreenBufferOne ;
-    phNotVisible = &hScreenBufferTwo ;
-
-    notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &csbiInfo ) ;
-
-    WORD pieceDropRate = 0 ;
-
     srand( time( 0 ) ) ;
+
+    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 101, 40 ) ;
 
     setup_notris( &csbiInfo, &npfiInfo ) ;
 
+    notrisPiece *p = generate_notris_piece( generate_random_number( 1, 7 ), &npfiInfo ) ;
+
+    WORD pieceDropRate = 0 ;
+
+    phVisible= &hScreenBufferOne ;
+    phNotVisible = &hScreenBufferTwo ;
+    
     while( 1 )
     {   
         clear_screen_buffer( phNotVisible, &csbiInfo ) ;

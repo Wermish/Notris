@@ -10,14 +10,10 @@ void report_error( char *msg )
     exit( EXIT_FAILURE ) ;
 }
 
-// TODO: Experiment with setup functions which set console to max size or even full screen, then 'draw' game window within that.
-
 int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
                    CONSOLE_SCREEN_BUFFER_INFO* pcsbiInfo, CONSOLE_CURSOR_INFO* pcciInfo, CONSOLE_FONT_INFOEX* pcfiInfo,                                                                 
                    SHORT intended_width, SHORT intended_height ) 
 {  
-    // I have decided not to position the console window for the user as that would require linking a system library, user32 or gdi32.
-
     // Has to be equal to, or larger than, the Screen One's screen.
     COORD coIntendedBuffer = { intended_width, intended_height } ;
 
@@ -43,7 +39,7 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     *phScreenBufferTwo = CreateConsoleScreenBuffer(  GENERIC_WRITE | GENERIC_READ, 
                                                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                                                     NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
-
+    // Fill cfiex struct.
     if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
     {
         report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
@@ -53,12 +49,6 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
     {
         report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, &pcsbiInfo )" ) ;
-    }
-
-    // Fill cfi struct. Could be used at some point to change font and character size to get more 'pixels'.
-    if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
-    {
-        report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" );
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.
@@ -78,6 +68,11 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
             coTempBuff.Y = pcsbiInfo->srWindow.Bottom + 1 ;
         }
     }
+    
+    wcscpy( pcfiInfo->FaceName, L"Terminal" );
+    
+    //pcfiInfo->dwFontSize.X = 16 ;
+    //pcfiInfo->dwFontSize.Y = 16 ;
 
     // IBM Code Page 437. Required for the box drawing characters.
     if( !SetConsoleOutputCP( 437 ) )
@@ -102,6 +97,16 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     {
         report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer )" ) ;
     }
+
+    if( !SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo ) )
+    {
+        report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
+    }
+
+    if( !SetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
+    {
+        report_error( "SetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
+    }
     // ------------------------------------------------------------------------------------------------------
 
     // Setup ScreenBufferTwo---------------------------------------------------------------------------------
@@ -119,19 +124,23 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     {
         report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferTwo, coIntendedBuffer )" ) ;
     }
-    // ------------------------------------------------------------------------------------------------------
 
-    if( !SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo ) )
-    {
-        report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
-    }
-    
     if( !SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo ) )
     {
         report_error( "SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo )" ) ;
     }
 
-    GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) ;
+    if( !SetCurrentConsoleFontEx( *phScreenBufferTwo, FALSE, pcfiInfo ) )
+    {
+        report_error( "SetCurrentConsoleFontEx( *phScreenBufferTwo, FALSE, pcfiInfo )" ) ;
+    }
+    // ------------------------------------------------------------------------------------------------------
+
+    // Update csbiInfo struct with new values.
+    if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
+    {
+        report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo )" ) ;
+    }
 
 
     return EXIT_SUCCESS ;

@@ -8,7 +8,7 @@
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
-struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ){
+struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
@@ -16,9 +16,9 @@ struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, CON
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
 
-    
-    piece->blockOne.X = csbiInfo->dwSize.X / 2 ;
-    piece->blockOne.Y = csbiInfo->dwSize.Y / 10 ;
+
+    piece->blockOne.X = ( npfiInfo->playFieldArea.Left + npfiInfo->playFieldArea.Right ) / 2 ;
+    piece->blockOne.Y = npfiInfo->playFieldArea.Top + 1 ;
 
     switch( pieceShape )
     {   // Square

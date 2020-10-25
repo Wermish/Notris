@@ -1,7 +1,7 @@
 #ifndef NOTRIS_GAME_FUNCTIONS_H
 #define NOTRIS_GAME_FUNCTIONS_H
 
-struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo ) ;
+struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ) ;
 
 void move_notris_piece( HANDLE* hInputBuffer, struct notrisPiece* piece ) ;
 
