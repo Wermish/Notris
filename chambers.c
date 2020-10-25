@@ -26,7 +26,7 @@ int main( void )
 {
     srand( time( 0 ) ) ;
 
-    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 101, 40 ) ;
+    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 50, 30 ) ;
 
     setup_notris( &csbiInfo, &npfiInfo ) ;
 

@@ -69,17 +69,9 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
         }
     }
     
+    // Terminal raster font is boxier and makes for better 'pixels' when using IBM 437 characters.
     wcscpy( pcfiInfo->FaceName, L"Terminal" );
     
-    //pcfiInfo->dwFontSize.X = 16 ;
-    //pcfiInfo->dwFontSize.Y = 16 ;
-
-    // IBM Code Page 437. Required for the box drawing characters.
-    if( !SetConsoleOutputCP( 437 ) )
-    {
-        report_error( "SetConsoleOutputCP( 437 )" ) ;
-    }
-
     // First sets a temporary buffer size which is larger than or equal to intended screen/buffer and then shrinks to intended.
 
     // Setup ScreenBufferOne---------------------------------------------------------------------------------
@@ -135,6 +127,17 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
         report_error( "SetCurrentConsoleFontEx( *phScreenBufferTwo, FALSE, pcfiInfo )" ) ;
     }
     // ------------------------------------------------------------------------------------------------------
+
+    // IBM Code Page 437. Required for the box drawing characters.
+    if( !SetConsoleOutputCP( 437 ) )
+    {
+        report_error( "SetConsoleOutputCP( 437 )" ) ;
+    }
+
+    if( !SetConsoleTitleA( "CHAMBERS" ) )
+    {
+        report_error( "SetConsoleTitle( \"CHAMBERS\" )" ) ;
+    }
 
     // Update csbiInfo struct with new values.
     if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
