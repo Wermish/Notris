@@ -122,6 +122,44 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                         }
                     }
 
+                    if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                    {
+                        CHAR loopBreak = 1 ;
+
+                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        {
+                            while( loopBreak )
+                            {   
+                                 DWORD numberOfEventsInner = 0 ;
+                                 DWORD numberOfEventsReadInner = 0 ;
+
+                                GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEventsInner ) ;
+
+                                if( numberOfEventsInner )
+                                {
+                                    INPUT_RECORD* inputRecordArrayInner = malloc( sizeof( INPUT_RECORD ) * numberOfEventsInner ) ;
+
+                                    ReadConsoleInput( *phInputBuffer, inputRecordArrayInner, numberOfEventsInner, &numberOfEventsReadInner ) ;
+
+                                    for( int i = 0; i < numberOfEventsReadInner; i++ )
+                                    {
+                                        if( inputRecordArrayInner[i].EventType == KEY_EVENT )
+                                        {
+                                            if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                                            {
+                                                if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
+                                                {
+                                                    free( inputRecordArrayInner ) ;
+                                                    loopBreak = 0 ;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }            
+                            }
+                        }
+                    }
+
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
