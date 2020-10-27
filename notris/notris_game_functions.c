@@ -437,6 +437,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     HANDLE* phNotVisible = hScreenBufferTwo ;
 
     WORD pieceDropRate = 0 ;
+    CHAR pieceFalling = 0 ;
 
     notris_setup( csbiInfo, npfiInfo ) ;
 
@@ -444,7 +445,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
 
     notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), npfiInfo ) ;
        
-    while( 1 )
+    while( !pieceFalling )
     {   
         clear_screen_buffer( phNotVisible, csbiInfo ) ;
 

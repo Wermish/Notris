@@ -56,20 +56,20 @@ void notris_draw_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo*
 {
 
   draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top,
-                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top + 1  ) ;
+                  npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
+                  npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Top  ) ;
 
   draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Bottom,
-                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom + 1 ) ;
+                  npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Bottom,
+                  npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom + 1 ) ;
 
   draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top,
-                  npfiInfo->playFieldArea.Left + 1, npfiInfo->playFieldArea.Bottom  ) ;
+                  npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
+                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Bottom ) ;
 
   draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
-                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top,
-                  npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom + 1  ) ;
+                  npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top - 1,
+                  npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom  ) ;
 }
 
 void notris_erase_piece( HANDLE* phScreenBuffer, struct notrisPiece* piece )
