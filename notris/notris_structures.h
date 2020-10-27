@@ -1,7 +1,14 @@
 #ifndef NOTRIS_STRUCTURES_H
 #define NOTRIS_STRUCTURES_H
 
-typedef enum notrisPieceShape{
+typedef union notrisPieceBoundary
+{   
+    COORD blockBoundary ;
+    SMALL_RECT segmentBoundary ;
+} notrisPieceBoundary ;
+
+typedef enum notrisPieceShape
+{
     square = 1,
     line = 2,
     lshape = 3,
@@ -12,10 +19,13 @@ typedef enum notrisPieceShape{
 } notrisPieceShape ;
 
 typedef struct notrisPlayFieldInfo
-{
-    SMALL_RECT playFieldArea ;
-    DWORD notrisScore ;
+{   
+    // Array of pointers to pieces which have fallen. Used for drawing stacked pieces.
+    struct notrisPiece** fallenPieces ;
     enum notrisPieceShape nextPiece ;
+    SMALL_RECT playFieldArea ;
+    COORD* playAreaFloor ;
+    DWORD notrisScore ;
 } notrisPlayFieldInfo ;
 
 typedef struct notrisPiece
@@ -27,7 +37,13 @@ typedef struct notrisPiece
     COORD blockOne ;
     COORD blockTwo ;
     COORD blockThree ;
-    COORD blockFour ; 
+    COORD blockFour ;
+    // Used for collision detection.
+    union notrisPieceBoundary leftmost ;
+    union notrisPieceBoundary rightmost ;
+    union notrisPieceBoundary upmost ;
+    union notrisPieceBoundary downmost ;
+    // Colour and graphic.
     CHAR_INFO pieceLook ;
 } notrisPiece ;
 

@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <Windows.h>
 #include "../shared/shared_game_functions.h"
+#include "../shared/shared_graphics_functions.h"
 #include "notris_game_functions.h"
+#include "notris_graphics_functions.h"
 #include "notris_structures.h"
 
 /*
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
-struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ){
+struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
@@ -96,7 +98,7 @@ struct notrisPiece* generate_notris_piece( enum notrisPieceShape pieceShape, str
     return piece ;
 }
 
-void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
+void notris_move_piece( HANDLE* phInputBuffer, notrisPiece* piece )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -121,7 +123,7 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                             exit( EXIT_SUCCESS ) ;
                         }
                     }
-
+                    // Pauses the game. Incidentally also causes the piece to vanish while paused as loop is entered before piece is redrawn.
                     if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
                     {
                         CHAR loopBreak = 1 ;
@@ -164,7 +166,7 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            rotate_notris_piece( piece ) ;
+                            notris_rotate_piece_clockwise( piece ) ;
                         }
                     }
 
@@ -182,10 +184,10 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            piece->blockOne.X-- ;
-                            piece->blockTwo.X-- ;
-                            piece->blockThree.X-- ;
-                            piece->blockFour.X-- ;
+                                piece->blockOne.X-- ;
+                                piece->blockTwo.X-- ;
+                                piece->blockThree.X-- ;
+                                piece->blockFour.X-- ;
                         }
                     }
                     else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
@@ -208,7 +210,7 @@ void move_notris_piece( HANDLE* phInputBuffer, notrisPiece* piece )
  * Rotates piece based on current 'phase', or the degree of rotation from starting position.
  */
 
-void rotate_notris_piece( struct notrisPiece* piece )
+void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 {
     switch( piece->pieceShape ){
         // Square
@@ -415,7 +417,7 @@ void rotate_notris_piece( struct notrisPiece* piece )
     }
 }
 
-void setup_notris( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
 {
     
     npfiInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
@@ -425,5 +427,58 @@ void setup_notris( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldI
 
     npfiInfo->notrisScore = 0 ;
 
-    npfiInfo->nextPiece = generate_random_number( 1, 7 ) ;   
+    npfiInfo->nextPiece = random_number_in_range( 1, 7 ) ;   
+}
+
+void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInputBuffer, 
+                  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+{ 
+    HANDLE* phVisible= hScreenBufferOne ;
+    HANDLE* phNotVisible = hScreenBufferTwo ;
+
+    WORD pieceDropRate = 0 ;
+
+    notris_setup( csbiInfo, npfiInfo ) ;
+
+    srand( time( 0 ) ) ;
+
+    notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), npfiInfo ) ;
+       
+    while( 1 )
+    {   
+        clear_screen_buffer( phNotVisible, csbiInfo ) ;
+
+        notris_draw_play_field( phNotVisible, npfiInfo ) ;
+
+        notris_move_piece( hInputBuffer, p ) ;
+
+        notris_draw_piece( phNotVisible, p ) ;
+
+        SetConsoleActiveScreenBuffer( *phNotVisible ) ;
+
+        if( *phNotVisible == hScreenBufferTwo )
+        {
+            phNotVisible = hScreenBufferOne ;
+            phVisible= hScreenBufferTwo ;
+        }
+        else
+        {
+            phNotVisible = hScreenBufferTwo ;
+            phVisible= hScreenBufferOne ;
+        }
+
+        pieceDropRate++ ;
+
+        if( pieceDropRate == 10 )
+        {
+            pieceDropRate = 0 ;
+
+            p->blockOne.Y++ ;
+            p->blockTwo.Y++ ;
+            p->blockThree.Y++ ;
+            p->blockFour.Y++ ;
+        }
+
+        Sleep( 50 ) ;
+    }
 }

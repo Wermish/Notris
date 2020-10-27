@@ -7,7 +7,7 @@
  * Use 'srand( time( 0 ) )' at start of main to seed.
  */
 
-int generate_random_number( int minimum, int maximum )
+int random_number_in_range( int minimum, int maximum )
 {
     int result = rand() % (( maximum + 1 ) - minimum) + minimum ;
 

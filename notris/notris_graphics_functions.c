@@ -6,6 +6,12 @@
 #include "notris_graphics_functions.h"
 #include "notris_structures.h"
 
+void notris_clear_play_area( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+{
+  draw_rectangle( hScreenBuffer, 0, 0, 
+                  npfiInfo->playFieldArea.Left + 1, npfiInfo->playFieldArea.Top + 1, npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom ) ;
+}
+
 /*
  * Unsure which method is better. draw_rectangle() initialises and declares a few variables and creates a malloc'd array, which it later has to
  * free. It has to populate this array too. It eventually calls WriteConsoleOutputA() to copy array into Screen Buffer. I think that writing the
@@ -13,7 +19,7 @@
  * there's only 4 of them.
  */
 
-void draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, notrisPiece* piece )
+void notris_draw_piece( HANDLE* phScreenBuffer, notrisPiece* piece )
 {
   /*
     draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
@@ -46,7 +52,7 @@ void draw_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbi
 }
 
 
-void draw_notris_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+void notris_draw_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
 {
 
   draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
@@ -66,7 +72,7 @@ void draw_notris_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo*
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom + 1  ) ;
 }
 
-void erase_notris_piece( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPiece* piece )
+void notris_erase_piece( HANDLE* phScreenBuffer, struct notrisPiece* piece )
 {
   /*
   CHAR formerChar = piece->pieceLook.Char.AsciiChar ;
