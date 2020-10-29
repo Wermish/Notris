@@ -126,7 +126,7 @@ void notris_move_piece( HANDLE* phInputBuffer, notrisPiece* piece )
                     // Pauses the game. Incidentally also causes the piece to vanish while paused as loop is entered before piece is redrawn.
                     if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
                     {
-                        CHAR loopBreak = 1 ;
+                        BOOL loopBreak = 1 ;
 
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
@@ -427,7 +427,36 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldI
 
     npfiInfo->notrisScore = 0 ;
 
-    npfiInfo->nextPiece = random_number_in_range( 1, 7 ) ;   
+    npfiInfo->nextPiece = random_number_in_range( 1, 7 ) ; 
+
+    // Initialise buffer which maps to play area. Used to keep track of which cells are 'on' and to be drawn each frame.
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    npfiInfo->playFieldBuffer = ( struct playFieldAreaCell** ) malloc( ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) * 
+                                                                        sizeof( struct playFieldAreaCell* ) ) ;
+    
+    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ); i++ )
+    {
+        npfiInfo->playFieldBuffer[i] = ( struct playFieldAreaCell* ) malloc( ( npfiInfo->playFieldArea.Right  - npfiInfo->playFieldArea.Left ) *
+                                                                              sizeof( struct playFieldAreaCell ) ) ;
+    }
+
+    COORD cellCoordCounter = { npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top } ;
+
+    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) ; i++ )
+    {
+        for( int j = 0; j < ( npfiInfo->playFieldArea.Right  - npfiInfo->playFieldArea.Left ); j++ )
+        {
+            npfiInfo->playFieldBuffer[i][j].cellCoord.X = cellCoordCounter.X ;
+            npfiInfo->playFieldBuffer[i][j].cellCoord.Y = cellCoordCounter.Y ;
+            npfiInfo->playFieldBuffer[i][j].cellData.Char.AsciiChar = 0 ;
+            npfiInfo->playFieldBuffer[i][j].cellData.Attributes = 0 ;
+            npfiInfo->playFieldBuffer[i][j].deadOrAlive = 0 ;
+
+            cellCoordCounter.X++ ;
+        }
+        cellCoordCounter.Y++ ;
+    }
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInputBuffer, 
@@ -437,7 +466,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     HANDLE* phNotVisible = hScreenBufferTwo ;
 
     WORD pieceDropRate = 0 ;
-    CHAR pieceFalling = 0 ;
+    BOOL pieceFalling = 1 ;
 
     notris_setup( csbiInfo, npfiInfo ) ;
 
@@ -445,7 +474,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
 
     notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), npfiInfo ) ;
        
-    while( !pieceFalling )
+    while( pieceFalling )
     {   
         clear_screen_buffer( phNotVisible, csbiInfo ) ;
 
@@ -482,4 +511,13 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
 
         Sleep( 50 ) ;
     }
+
+    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) ; i++ )
+    {
+        free( npfiInfo->playFieldBuffer[i] ) ;
+    }
+
+    free( npfiInfo->playFieldBuffer ) ;
+
+    free( p ) ;
 }

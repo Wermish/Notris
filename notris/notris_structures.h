@@ -8,6 +8,15 @@ typedef union notrisPieceBoundary
     
 } notrisPieceBoundary ;
 
+typedef enum notrisPiecePhase
+{
+    phasezero = 0,
+    phaseone = 1,
+    phasetwo = 2,
+    phasethree = 3 
+} 
+notrisPiecePhase ;
+
 typedef enum notrisPieceShape
 {
     square = 1,
@@ -22,6 +31,7 @@ typedef enum notrisPieceShape
 
 typedef struct playFieldAreaCell
 {
+    COORD cellCoord ;
     CHAR_INFO cellData ;
     BOOL deadOrAlive ;
 
@@ -34,9 +44,9 @@ typedef struct notrisPlayFieldInfo
     // Dimensions of the area in which blocks fall.
     SMALL_RECT playFieldArea ;
     // Holds info for each cell in the play area, which is used by the screen buffer.
-    struct playFieldAreaCell playFieldBuffer[20][12] ;
+    struct playFieldAreaCell** playFieldBuffer ;
     // Used for collision detection.
-    COORD playFieldFloor[12] ;
+    COORD* playFieldFloor ;
     DWORD notrisScore ;
 
 } notrisPlayFieldInfo ;
@@ -45,7 +55,7 @@ typedef struct notrisPiece
 {
     enum notrisPieceShape pieceShape ;
     // Current rotation. Different pieces have different number of rotations.
-    CHAR piecePhase ;
+    enum notrisPiecePhase piecePhase ;
     // Each coord is one of the blocks which makes up a piece.
     COORD blockOne ;
     COORD blockTwo ;
