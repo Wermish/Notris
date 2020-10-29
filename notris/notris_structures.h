@@ -5,6 +5,7 @@ typedef union notrisPieceBoundary
 {   
     COORD blockBoundary ;
     SMALL_RECT segmentBoundary ;
+    
 } notrisPieceBoundary ;
 
 typedef enum notrisPieceShape
@@ -16,16 +17,28 @@ typedef enum notrisPieceShape
     zed = 5,
     mirroredzed = 6,
     hat = 7
+
 } notrisPieceShape ;
+
+typedef struct playFieldAreaCell
+{
+    CHAR_INFO cellData ;
+    BOOL deadOrAlive ;
+
+} playFieldAreaCell ;
 
 typedef struct notrisPlayFieldInfo
 {   
-    // Array of pointers to pieces which have fallen. Used for drawing stacked pieces.
-    struct notrisPiece** fallenPieces ;
+    //struct notrisPiece** fallenPieces ; // Array of pointers to pieces which have fallen. Used for drawing stacked pieces.
     enum notrisPieceShape nextPiece ;
+    // Dimensions of the area in which blocks fall.
     SMALL_RECT playFieldArea ;
-    COORD* playAreaFloor ;
+    // Holds info for each cell in the play area, which is used by the screen buffer.
+    struct playFieldAreaCell playFieldBuffer[20][12] ;
+    // Used for collision detection.
+    COORD playFieldFloor[12] ;
     DWORD notrisScore ;
+
 } notrisPlayFieldInfo ;
 
 typedef struct notrisPiece
@@ -45,6 +58,7 @@ typedef struct notrisPiece
     union notrisPieceBoundary downmost ;
     // Colour and graphic.
     CHAR_INFO pieceLook ;
+
 } notrisPiece ;
 
 #endif /* NOTRIS_STRUCTURES_H */
