@@ -43,8 +43,10 @@ typedef struct notrisPlayFieldInfo
     enum notrisPieceShape nextPiece ;
     // Dimensions of the area in which blocks fall.
     SMALL_RECT playFieldArea ;
-    // Holds info for each cell in the play area, which is used by the screen buffer.
-    struct playFieldAreaCell** playFieldBuffer ;
+    // Holds info for each cell in the play area, which is 'sent' to playFieldBuffer.
+    struct playFieldAreaCell** playFieldData ;
+    // Used to draw play field.
+    CHAR_INFO* playFieldBuffer ;
     // Used for collision detection.
     COORD* playFieldFloor ;
     DWORD notrisScore ;

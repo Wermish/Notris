@@ -6,35 +6,14 @@
 #include "notris_graphics_functions.h"
 #include "notris_structures.h"
 
-void notris_clear_play_area( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
 {
   draw_rectangle( hScreenBuffer, 0, 0, 
-                  npfiInfo->playFieldArea.Left + 1, npfiInfo->playFieldArea.Top + 1, npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom ) ;
+                  npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top, npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom ) ;
 }
-
-/*
- * Unsure which method is better. draw_rectangle() initialises and declares a few variables and creates a malloc'd array, which it later has to
- * free. It has to populate this array too. It eventually calls WriteConsoleOutputA() to copy array into Screen Buffer. I think that writing the
- * characters and attributes directly to the console with the API is probably faster, using pairs of FillConsoleOutputAttribute/Character, as
- * there's only 4 of them.
- */
 
 void notris_draw_piece( HANDLE* phScreenBuffer, notrisPiece* piece )
 {
-  /*
-    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                    piece->blockOne.X, piece->blockOne.Y, piece->blockOne.X + 1, piece->blockOne.Y + 1 ) ;
-
-    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                    piece->blockTwo.X, piece->blockTwo.Y, piece->blockTwo.X + 1, piece->blockTwo.Y + 1) ;
-
-    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                    piece->blockThree.X, piece->blockThree.Y, piece->blockThree.X + 1, piece->blockThree.Y + 1 ) ;
-
-    draw_rectangle( phScreenBuffer, csbiInfo, piece->pieceLook.Char.AsciiChar, piece->pieceLook.Attributes,
-                    piece->blockFour.X, piece->blockFour.Y, piece->blockFour.X + 1, piece->blockFour.Y + 1 ) ;
-   */
-
   DWORD charsWritten = 0 ;
   DWORD attributesWritten = 0 ;
 
@@ -51,23 +30,39 @@ void notris_draw_piece( HANDLE* phScreenBuffer, notrisPiece* piece )
   FillConsoleOutputCharacterA( *phScreenBuffer, piece->pieceLook.Char.AsciiChar, 1, piece->blockFour, &charsWritten ) ;
 }
 
-
-void notris_draw_play_field( HANDLE* phScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+void notris_draw_play_field( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
 {
 
-  draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  COORD cursorStartPosition = { npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top } ;
+  COORD bufferSize = { npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom } ;
+
+  SMALL_RECT writeRegion ;
+  writeRegion.Bottom = npfiInfo->playFieldArea.Bottom - 1 ;
+  writeRegion.Left = npfiInfo->playFieldArea.Left ;
+  writeRegion.Right = npfiInfo->playFieldArea.Right - 1 ;
+  writeRegion.Top = npfiInfo->playFieldArea.Top ;
+
+  if( !WriteConsoleOutputA( *hScreenBuffer, npfiInfo->playFieldBuffer, bufferSize, cursorStartPosition, &writeRegion ) ) 
+  {
+    report_error( "WriteConsoleOutputA( *hScreenBuffer, npfiInfo->playFieldBuffer, bufferSize, cursorStartPosition, writeRegion )" ) ;
+  }
+}
+
+void notris_draw_UI( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+{
+  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Top  ) ;
 
-  draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Bottom,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom + 1 ) ;
 
-  draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Bottom ) ;
 
-  draw_rectangle( phScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom  ) ;
 }

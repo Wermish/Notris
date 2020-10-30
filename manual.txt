@@ -28,15 +28,22 @@ Godspeed and go with Grace!
 ------------------------------------------------------------------------------------------------------------------------------
                                                       GAMEPLAY
 ------------------------------------------------------------------------------------------------------------------------------
-Initial equipment and selection etc done in castle kitchen with chef.
 
-Puzzles in each chamber. One such is Notris, which is used to BUILD walls and stop monster infestation. Goal is to build a
-wall with no gaps and 'top out'. Negative scoring based on gaps.
+Roguelike, one life, permadeath etc etc. Similar length to a game of NetHack, i.e variable!
 
-Each puzzle can grant you boons or banes for another puzzle in chamber.
+Gameplay divided into two sections: the puzzles and the events. Events are choices to be made as per adventure books. They can occur as dialogue, or
+narrative etc. They can be influenced by your current equipment and efforts in previous chambers. Sometimes they lead to puzzles, sometimes they don't, sometimes
+they kill you.
 
-Notris - seal the chamber's entrance to stop monsters/demons invading the castle. This also blocks your escape...Reverse Tetris.
+Equipment and items: bombs, keys, ropes, weapons, and armour. Each has a use, and can be used up. For example, an event could be bypassed by using on of them,
+or a puzzle made easier, or a secret revealed. 
+
+Notris - seal the chamber's entrance to stop monsters/demons invading the castle, and also to protect you from the marauding worm which crashes through the
+floors and ceilings occasionally. This also blocks your escape...Points gained for complete lines, which points deducted for gaps. Lines don't vanish. Objective
+is to top out, so opposite of Tetris. Is finite and had a goal.
+
 Worm - flee frantically from a giant worm. Reverse Snake - you are a morsel to be devoured, and you must dodge the worm
-and collect up the traditional morsels befoe it eats them, so it can't grow. Do it long enough and it starves.
+and collect up the varioius magical artefacts etc before it eats them, so it can't grow. Eventually you either need to escape into the next chamber, or lead
+it into a trap. 
 
 Ending depends on which puzzles were completed in each chamber, which events were encountered in each chamber, and other options...
