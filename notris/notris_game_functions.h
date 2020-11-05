@@ -3,7 +3,7 @@
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ) ;
 
-void notris_move_piece( HANDLE* hInputBuffer, struct notrisPiece* piece ) ;
+void notris_move_piece( HANDLE* phInputBuffer, struct notrisPlayFieldInfo* npfiInfo, struct notrisPiece* piece ) ;
 
 void notris_rotate_piece_clockwise( struct notrisPiece* piece ) ;
 

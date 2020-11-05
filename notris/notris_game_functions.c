@@ -18,9 +18,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
 
-
-    piece->blockOne.X = ( npfiInfo->playFieldArea.Left + npfiInfo->playFieldArea.Right ) / 2 ;
-    piece->blockOne.Y = npfiInfo->playFieldArea.Top + 1 ;
+    piece->blockOne.X = ( npfiInfo->playFieldArea.Left + npfiInfo->playFieldArea.Right ) / 2 ; // 24
+    piece->blockOne.Y = npfiInfo->playFieldArea.Top ; // 4
 
     switch( pieceShape )
     {   // Square
@@ -95,10 +94,11 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->pieceLook.Attributes = FOREGROUND_BLUE ;
             break ;  
     }
+
     return piece ;
 }
 
-void notris_move_piece( HANDLE* phInputBuffer, notrisPiece* piece )
+void notris_move_piece( HANDLE* phInputBuffer, struct notrisPlayFieldInfo* npfiInfo, struct notrisPiece* piece )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -419,7 +419,6 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 
 void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
 {
-    
     npfiInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
     npfiInfo->playFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
     npfiInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
@@ -428,53 +427,6 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldI
     npfiInfo->notrisScore = 0 ;
 
     npfiInfo->nextPiece = random_number_in_range( 1, 7 ) ; 
-
-    SHORT playFieldBufferWidth = npfiInfo->playFieldArea.Right ;
-    SHORT playFieldBufferHeight =  npfiInfo->playFieldArea.Bottom ;
-
-    COORD cellCoordCounter = { npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top } ;
-
-    // Initialise matrix which maps to play area.
-    /* ------------------------------------------------------------------------------------------------------------------------------------------- */ 
-    npfiInfo->playFieldData = ( struct playFieldAreaCell** ) malloc( ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) * 
-                                                                        sizeof( struct playFieldAreaCell* ) ) ;
-    
-    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ); i++ )
-    {
-        npfiInfo->playFieldData[i] = ( struct playFieldAreaCell* ) malloc( ( npfiInfo->playFieldArea.Right  - npfiInfo->playFieldArea.Left ) *
-                                                                              sizeof( struct playFieldAreaCell ) ) ;
-    }
-
-    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) ; i++ )
-    {
-        for( int j = 0; j < ( npfiInfo->playFieldArea.Right  - npfiInfo->playFieldArea.Left ); j++ )
-        {
-            npfiInfo->playFieldData[i][j].cellCoord.X = cellCoordCounter.X ;
-            npfiInfo->playFieldData[i][j].cellCoord.Y = cellCoordCounter.Y ;
-            npfiInfo->playFieldData[i][j].cellData.Char.AsciiChar = 0 ;
-            npfiInfo->playFieldData[i][j].cellData.Attributes = 0 ;
-            npfiInfo->playFieldData[i][j].deadOrAlive = 0 ;
-
-            cellCoordCounter.X++ ;
-        }
-        cellCoordCounter.Y++ ;
-    }
-    /* ------------------------------------------------------------------------------------------------------------------------------------------- */
-
-    // Initialise buffer of CHAR_INFO used to draw play field.
-    /* ------------------------------------------------------------------------------------------------------------------------------------------- */
-    npfiInfo->playFieldBuffer = ( CHAR_INFO* ) malloc( ( playFieldBufferWidth * playFieldBufferHeight ) * 
-                                                                        sizeof( CHAR_INFO ) ) ;
-
-    for( int y = 0; y < playFieldBufferHeight ; ++y )
-    {
-        for( int x = 0; x < playFieldBufferWidth ; ++x )
-        {
-            npfiInfo->playFieldBuffer[ x + ( playFieldBufferWidth * y ) ].Char.AsciiChar = 88 ;
-            npfiInfo->playFieldBuffer[ x + ( playFieldBufferWidth * y ) ].Attributes = BACKGROUND_RED ;
-        }
-    }
-    /* ------------------------------------------------------------------------------------------------------------------------------------------- */
 }
 
 void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInputBuffer, 
@@ -490,20 +442,17 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
 
     srand( time( 0 ) ) ;
 
-    notris_draw_UI( hScreenBufferOne, npfiInfo ) ;
-    notris_draw_UI( hScreenBufferTwo, npfiInfo ) ;
-
     notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), npfiInfo ) ;
        
     while( pieceFalling )
     {   
-        //notris_clear_play_field( phNotVisible, npfiInfo ) ;
+        clear_screen_buffer( phNotVisible, csbiInfo ) ;
 
-        notris_move_piece( hInputBuffer, p ) ;
-        
-        notris_draw_play_field( phNotVisible, npfiInfo ) ;
+        notris_draw_UI( phNotVisible, npfiInfo ) ;
 
-        //notris_draw_piece( phNotVisible, p ) ;
+        notris_move_piece( hInputBuffer, npfiInfo, p ) ;
+
+        notris_draw_piece( phNotVisible , p ) ;
 
         SetConsoleActiveScreenBuffer( *phNotVisible ) ;
 
@@ -532,13 +481,6 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
 
         Sleep( 50 ) ;
     }
-
-    for( int i = 0; i < ( npfiInfo->playFieldArea.Bottom - npfiInfo->playFieldArea.Top ) ; i++ )
-    {
-        free( npfiInfo->playFieldData[i] ) ;
-    }
-
-    free( npfiInfo->playFieldData ) ;
 
     free( p ) ;
 }

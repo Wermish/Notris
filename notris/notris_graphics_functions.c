@@ -30,24 +30,6 @@ void notris_draw_piece( HANDLE* phScreenBuffer, notrisPiece* piece )
   FillConsoleOutputCharacterA( *phScreenBuffer, piece->pieceLook.Char.AsciiChar, 1, piece->blockFour, &charsWritten ) ;
 }
 
-void notris_draw_play_field( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
-{
-
-  COORD cursorStartPosition = { npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Top } ;
-  COORD bufferSize = { npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Bottom } ;
-
-  SMALL_RECT writeRegion ;
-  writeRegion.Bottom = npfiInfo->playFieldArea.Bottom - 1 ;
-  writeRegion.Left = npfiInfo->playFieldArea.Left ;
-  writeRegion.Right = npfiInfo->playFieldArea.Right - 1 ;
-  writeRegion.Top = npfiInfo->playFieldArea.Top ;
-
-  if( !WriteConsoleOutputA( *hScreenBuffer, npfiInfo->playFieldBuffer, bufferSize, cursorStartPosition, &writeRegion ) ) 
-  {
-    report_error( "WriteConsoleOutputA( *hScreenBuffer, npfiInfo->playFieldBuffer, bufferSize, cursorStartPosition, writeRegion )" ) ;
-  }
-}
-
 void notris_draw_UI( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
 {
   draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
