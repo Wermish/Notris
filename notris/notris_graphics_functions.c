@@ -30,21 +30,21 @@ void notris_draw_piece( HANDLE* phScreenBuffer, notrisPiece* piece )
   FillConsoleOutputCharacterA( *phScreenBuffer, piece->pieceLook.Char.AsciiChar, 1, piece->blockFour, &charsWritten ) ;
 }
 
-void notris_draw_UI( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo )
+void notris_draw_UI( HANDLE* hScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
 {
-  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 219, FOREGROUND_RED | FOREGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Top  ) ;
 
-  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 219, FOREGROUND_RED | FOREGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Bottom,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom + 1 ) ;
 
-  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 219, FOREGROUND_RED | FOREGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Left - 1, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Left, npfiInfo->playFieldArea.Bottom ) ;
 
-  draw_rectangle( hScreenBuffer, 0, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY,
+  draw_rectangle( hScreenBuffer, 219, FOREGROUND_RED | FOREGROUND_INTENSITY,
                   npfiInfo->playFieldArea.Right, npfiInfo->playFieldArea.Top - 1,
                   npfiInfo->playFieldArea.Right + 1, npfiInfo->playFieldArea.Bottom  ) ;
 }

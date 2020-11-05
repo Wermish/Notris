@@ -448,14 +448,14 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     {   
         clear_screen_buffer( phNotVisible, csbiInfo ) ;
 
-        notris_draw_UI( phNotVisible, npfiInfo ) ;
+        notris_draw_UI( phNotVisible, csbiInfo, npfiInfo ) ;
 
         notris_move_piece( hInputBuffer, npfiInfo, p ) ;
 
         notris_draw_piece( phNotVisible , p ) ;
 
         SetConsoleActiveScreenBuffer( *phNotVisible ) ;
-
+        
         if( *phNotVisible == hScreenBufferTwo )
         {
             phNotVisible = hScreenBufferOne ;
@@ -478,6 +478,8 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
             p->blockThree.Y++ ;
             p->blockFour.Y++ ;
         }
+
+        
 
         Sleep( 50 ) ;
     }

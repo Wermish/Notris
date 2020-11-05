@@ -5,7 +5,7 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo*
 
 void notris_draw_piece( HANDLE* hScreenBuffer, struct notrisPiece* piece ) ;
 
-void notris_draw_UI( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo ) ;
+void notris_draw_UI( HANDLE* hScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo ) ;
 
 void notris_erase_piece( HANDLE* hScreenBuffer, struct notrisPiece* piece ) ;
 
