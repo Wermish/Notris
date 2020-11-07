@@ -10,7 +10,7 @@
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
-struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisPlayFieldInfo* npfiInfo ){
+struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* niInfo ){
 
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
@@ -18,8 +18,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 219 ;
 
-    piece->blockOne.X = ( npfiInfo->playFieldArea.Left + npfiInfo->playFieldArea.Right ) / 2 ; // 24
-    piece->blockOne.Y = npfiInfo->playFieldArea.Top ; // 4
+    piece->blockOne.X = ( niInfo->playFieldArea.Left + niInfo->playFieldArea.Right ) / 2 ; // 24
+    piece->blockOne.Y = niInfo->playFieldArea.Top ; // 4
 
     switch( pieceShape )
     {   // Square
@@ -98,7 +98,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-void notris_move_piece( HANDLE* phInputBuffer, struct notrisPlayFieldInfo* npfiInfo, struct notrisPiece* piece )
+void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -425,20 +425,42 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
     }
 }
 
-void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
-    npfiInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
-    npfiInfo->playFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
-    npfiInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
-    npfiInfo->playFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
+    niInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
+    niInfo->playFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
+    niInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
+    niInfo->playFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
 
-    npfiInfo->notrisScore = 0 ;
+    niInfo->notrisScore = 0 ;
 
-    npfiInfo->nextPiece = random_number_in_range( 1, 7 ) ; 
+    niInfo->nextPiece = random_number_in_range( 1, 7 ) ; 
+
+    SHORT bufferWidth = csbiInfo->dwSize.X ;
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    niInfo->ciNotrisScreenBuffer = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    niInfo->boNotrisCollisionArray = ( BOOL** ) malloc( bufferHeight  * sizeof( BOOL* ) ) ;
+
+    for( int i = 0; i < bufferHeight; i++ )
+    {
+        niInfo->ciNotrisScreenBuffer[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+        niInfo->boNotrisCollisionArray[i] = ( BOOL* ) malloc( bufferWidth * sizeof( BOOL ) ) ;
+    }
+
+    for( int y = 0; y < bufferHeight; y++ )
+    {
+        for( int x = 0; x < bufferWidth; x++ )
+        {
+            niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+            niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+            niInfo->boNotrisCollisionArray[y][x] = 0 ;
+        }
+    }
 }
 
 void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInputBuffer, 
-                  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo )
+                  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
     HANDLE* phVisible= hScreenBufferOne ;
     HANDLE* phNotVisible = hScreenBufferTwo ;
@@ -446,23 +468,23 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     WORD pieceDropRate = 0 ;
     BOOL pieceFalling = 1 ;
 
-    notris_setup( csbiInfo, npfiInfo ) ;
+    notris_setup( csbiInfo, niInfo ) ;
 
     srand( time( 0 ) ) ;
 
-    notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), npfiInfo ) ;
+    notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
+
+    SetConsoleActiveScreenBuffer( *phNotVisible ) ;
        
     while( pieceFalling )
     {   
-        clear_screen_buffer( phNotVisible, csbiInfo ) ;
+        clear_buffer( csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
-        notris_draw_UI( phNotVisible, csbiInfo, npfiInfo ) ;
+        notris_move_piece( hInputBuffer, niInfo, p ) ;
 
-        notris_move_piece( hInputBuffer, npfiInfo, p ) ;
+        notris_draw_piece( niInfo, p ) ;
 
-        notris_draw_piece( phNotVisible , p ) ;
-
-        SetConsoleActiveScreenBuffer( *phNotVisible ) ;
+        draw_buffer_to_screen( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
         /*
         if( *phNotVisible == hScreenBufferTwo )
         {

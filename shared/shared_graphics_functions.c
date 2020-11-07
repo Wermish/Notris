@@ -5,17 +5,49 @@
 #include "shared_graphics_functions.h"
 #include "../notris/notris_structures.h"
 
-void clear_screen_buffer( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
+void clear_buffer( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
 {
-  /* This seems to have fixed the flickering. Must have been leaving artifacts before. Now whole screen is drawn to.
-  COORD coordStartClearing;
-  coordStartClearing.X = 0;
-  coordStartClearing.Y = 0;
+  SHORT bufferWidth = csbiInfo->dwSize.X ;
+  SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
-  SetConsoleCursorPosition( *phScreenBuffer, coordStartClearing);
-  */
-  draw_rectangle( phScreenBuffer, 0, 0, 
-                  0, 0, csbiInfo->dwSize.X, csbiInfo->dwSize.Y ) ;
+  for( int y = 0; y < bufferHeight; y++ )
+    {
+        for( int x = 0; x < bufferWidth; x++ )
+        {
+            buffer[y][x].Char.AsciiChar = 0 ;
+            buffer[y][x].Attributes = 0 ;
+        }
+    }
+}
+
+void draw_buffer_to_screen( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
+{
+    SHORT bufferWidth = csbiInfo->dwSize.X ;
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    COORD bufferSize = { bufferWidth, 1 } ;
+    COORD startPoint = { 0, 0 } ;
+
+    SMALL_RECT srWriteRegion = { .Left = csbiInfo->srWindow.Left, .Top = csbiInfo->srWindow.Top,
+                                 .Right = csbiInfo->srWindow.Right, .Bottom = csbiInfo->srWindow.Top + 1 } ;
+
+    CHAR_INFO* ciPointer ;
+
+    SetConsoleActiveScreenBuffer( *hScreen ) ;
+    SetConsoleCursorPosition( *hScreen, startPoint ) ;
+
+    for( int j = 0; j < bufferHeight; j++ )
+    {
+        ciPointer = buffer[j] ;
+
+        if( !WriteConsoleOutputA( *hScreen, ciPointer, bufferSize, startPoint, &srWriteRegion ) )
+        {
+            report_error( "WriteConsoleOutputA( hScreenBufferOne, buffer, bufferSize, startPoint, &csbiInfo.srWindow )" ) ;
+        }
+
+        srWriteRegion.Top++ ;
+        srWriteRegion.Bottom++ ;
+    }
 }
 
 // endX and endY must be at least 1 unit greater than startX and endX respectively.

@@ -1,12 +1,12 @@
 #ifndef NOTRIS_GRAPHICS_FUNCTIONS_H
 #define NOTRIS_GRAPHICS_FUNCTIONS_H
 
-void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisPlayFieldInfo* npfiInfo ) ;
+void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* npfiInfo ) ;
 
-void notris_draw_piece( HANDLE* hScreenBuffer, struct notrisPiece* piece ) ;
+void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
-void notris_draw_UI( HANDLE* hScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisPlayFieldInfo* npfiInfo ) ;
+void notris_draw_UI( HANDLE* hScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* npfiInfo ) ;
 
-void notris_erase_piece( HANDLE* hScreenBuffer, struct notrisPiece* piece ) ;
+void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 #endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */

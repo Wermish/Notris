@@ -22,15 +22,16 @@ typedef enum notrisPieceShape
 
 } notrisPieceShape ;
 
-typedef struct notrisPlayFieldInfo
+typedef struct notrisInfo
 {   
-    //struct notrisPiece** fallenPieces ; // Array of pointers to pieces which have fallen. Used for drawing stacked pieces.
-    enum notrisPieceShape nextPiece ;
+    CHAR_INFO** ciNotrisScreenBuffer ;
+    BOOL** boNotrisCollisionArray ;
     // Dimensions of the area in which blocks fall.
     SMALL_RECT playFieldArea ;
     DWORD notrisScore ;
-
-} notrisPlayFieldInfo ;
+    enum notrisPieceShape nextPiece ;
+    
+} notrisInfo ;
 
 typedef struct notrisPiece
 {
