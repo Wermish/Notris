@@ -162,7 +162,15 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisPlayFieldInfo* npfiI
                         }
                     }
 
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL )
+                    {
+                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        {
+                            notris_rotate_piece_clockwise( piece ) ;
+                        }
+                    }
+
+                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SHIFT )
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
@@ -455,7 +463,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
         notris_draw_piece( phNotVisible , p ) ;
 
         SetConsoleActiveScreenBuffer( *phNotVisible ) ;
-        
+        /*
         if( *phNotVisible == hScreenBufferTwo )
         {
             phNotVisible = hScreenBufferOne ;
@@ -466,7 +474,7 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
             phNotVisible = hScreenBufferTwo ;
             phVisible= hScreenBufferOne ;
         }
-
+        */
         pieceDropRate++ ;
 
         if( pieceDropRate == 10 )
@@ -478,9 +486,6 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
             p->blockThree.Y++ ;
             p->blockFour.Y++ ;
         }
-
-        
-
         Sleep( 50 ) ;
     }
 

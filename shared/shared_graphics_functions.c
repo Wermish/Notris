@@ -7,13 +7,13 @@
 
 void clear_screen_buffer( HANDLE* phScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo )
 {
-  // This seems to have fixed the flickering. Must have been leaving artifacts before. Now whole screen is drawn to.
+  /* This seems to have fixed the flickering. Must have been leaving artifacts before. Now whole screen is drawn to.
   COORD coordStartClearing;
   coordStartClearing.X = 0;
   coordStartClearing.Y = 0;
 
   SetConsoleCursorPosition( *phScreenBuffer, coordStartClearing);
-
+  */
   draw_rectangle( phScreenBuffer, 0, 0, 
                   0, 0, csbiInfo->dwSize.X, csbiInfo->dwSize.Y ) ;
 }
@@ -47,6 +47,8 @@ void draw_rectangle( HANDLE* phScreenBuffer,
         consoleBuffer[ x + bufferWidth * y ].Attributes = asciiAttributes ;
       }
     }
+    // Ensures drawing is started from correct position. Important for fullscreen drawing, i.e clearing screen buffer.
+    //SetConsoleCursorPosition( *phScreenBuffer, characterPosition ) ;
 
     if( !WriteConsoleOutputA( *phScreenBuffer, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea ) )
     {

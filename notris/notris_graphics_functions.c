@@ -51,19 +51,6 @@ void notris_draw_UI( HANDLE* hScreenBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo
 
 void notris_erase_piece( HANDLE* phScreenBuffer, struct notrisPiece* piece )
 {
-  /*
-  CHAR formerChar = piece->pieceLook.Char.AsciiChar ;
-  CHAR formerAttribute = piece->pieceLook.Attributes ;
-
-  piece->pieceLook.Char.AsciiChar = ' ' ;
-  piece->pieceLook.Attributes = 0 ;
-
-  draw_notris_piece( phScreenBuffer, csbiInfo, piece ) ;
-
-  piece->pieceLook.Char.AsciiChar = formerChar ;
-  piece->pieceLook.Attributes = formerAttribute ;
-   */
-
   DWORD charsWritten = 0 ;
   DWORD attributesWritten = 0 ;
 
