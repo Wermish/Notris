@@ -20,7 +20,7 @@ void clear_buffer( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
     }
 }
 
-void draw_buffer_to_screen( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
+void draw_buffer( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
 {
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;

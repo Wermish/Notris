@@ -7,6 +7,55 @@
 #include "notris_structures.h"
 
 /*
+ * Uses the piece's COORDS as indices for a collision array, an array of BOOLS which signifies if cells are (un)occupied.
+ */
+
+BOOL notris_check_x_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
+{
+    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X++] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X++] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X++] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X++] ) )
+    {
+        return 1 ;
+    }
+
+    
+    else if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X--] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X--] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X--] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X--] ) )
+    {
+        return 1 ;
+    }
+
+    else
+    {
+        return 0 ;
+    }
+}
+
+/*
+ * Separate function from above for simplicity of use with notris_move_piece().
+ */
+
+BOOL notris_check_y_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
+{
+    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y++][piece->blockOne.X] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y++][piece->blockTwo.X] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y++][piece->blockThree.X] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y++][piece->blockThree.X] ) )
+    {
+        return 1 ;
+    }
+
+    else
+    {
+        return 0 ;
+    }
+}
+
+/*
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
@@ -100,6 +149,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
 
 void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
+    BOOL boPieceFallen = 0 ;
+
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
 
@@ -174,7 +225,7 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
                     {
                         if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                         {
-                            notris_rotate_piece_clockwise( piece ) ;
+                            notris_rotate_piece_anticlockwise( piece ) ;
                         }
                     }
 
@@ -217,6 +268,213 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
 /*
  * Rotates piece based on current 'phase', or the degree of rotation from starting position.
  */
+
+void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
+{
+    switch( piece->pieceShape ){
+        // Square
+        case 1:
+            break ;
+        // Line
+        case 2:
+             switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+        break ;
+        // 'L'
+        case 3:
+             switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // Mirrored 'L'
+        case 4:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // 'Z'
+        case 5:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // Mirrored 'Z'
+        case 6:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+            break ;
+        // 'Hat'
+        case 7:
+            switch( piece->piecePhase )
+            {
+                case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X++ ;
+                    piece->blockFour.Y-- ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X++ ;
+                    piece->blockFour.Y++ ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X-- ;
+                    piece->blockFour.Y++ ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X-- ;
+                    piece->blockFour.Y-- ;
+                    piece->piecePhase = 0 ;
+                break ;
+            }
+        break ;
+    }
+}
 
 void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 {
@@ -480,11 +738,13 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     {   
         clear_buffer( csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
+        notris_draw_UI( niInfo ) ;
+
         notris_move_piece( hInputBuffer, niInfo, p ) ;
 
         notris_draw_piece( niInfo, p ) ;
 
-        draw_buffer_to_screen( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+        draw_buffer( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
         /*
         if( *phNotVisible == hScreenBufferTwo )
         {
