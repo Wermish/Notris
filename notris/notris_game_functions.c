@@ -10,25 +10,30 @@
  * Uses the piece's COORDS as indices for a collision array, an array of BOOLS which signifies if cells are (un)occupied.
  */
 
-BOOL notris_check_x_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
+BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X++] ) || 
-         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X++] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X++] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X++] ) )
+    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X + 1] ) )
     {
         return 1 ;
     }
+    else
+    {
+        return 0 ;
+    }
+}
 
-    
-    else if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X--] ) || 
-         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X--] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X--] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X--] ) )
+BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
+{
+    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X - 1] ) )
     {
         return 1 ;
     }
-
     else
     {
         return 0 ;
@@ -41,10 +46,10 @@ BOOL notris_check_x_collision( struct notrisInfo* niInfo, struct notrisPiece* pi
 
 BOOL notris_check_y_collision( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y++][piece->blockOne.X] ) || 
-         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y++][piece->blockTwo.X] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y++][piece->blockThree.X] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y++][piece->blockThree.X] ) )
+    if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
+         ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockThree.X] ) )
     {
         return 1 ;
     }
@@ -91,6 +96,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockFour.X = piece->blockOne.X ;
             piece->blockFour.Y = piece->blockOne.Y + 3 ;
             piece->pieceLook.Attributes = FOREGROUND_GREEN ;
+            notris_rotate_piece_clockwise( piece ) ;
+
             break ;
         // 'L'
         case 3:
@@ -101,6 +108,12 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
             piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_RED ;
+
+            for( int i = 0; i < 3; i++)
+            {
+                notris_rotate_piece_clockwise( piece ) ;
+            }
+
             break ;
         // Mirrored 'L'
         case 4:
@@ -111,6 +124,9 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockFour.X = piece->blockOne.X - 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
             piece->pieceLook.Attributes = FOREGROUND_BLUE | FOREGROUND_RED ;
+
+            notris_rotate_piece_clockwise( piece ) ;
+
             break ;
         // 'Z'
         case 5:
@@ -147,7 +163,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
+BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     BOOL boPieceFallen = 0 ;
 
@@ -156,82 +172,88 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
 
     GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEvents ) ;
 
-        if( numberOfEvents )
+    if( numberOfEvents )
+    {
+        INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
+
+        ReadConsoleInput( *phInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
+
+        for( int i = 0; i < numberOfEventsRead; i++ )
         {
-            INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
-
-            ReadConsoleInput( *phInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
-
-            for( int i = 0; i < numberOfEventsRead; i++ )
+            if( inputRecordArray[i].EventType == KEY_EVENT )
             {
-                if( inputRecordArray[i].EventType == KEY_EVENT )
-                {
                     
-                    if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
+                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
-                        {
-                            exit( EXIT_SUCCESS ) ;
-                        }
+                        exit( EXIT_SUCCESS ) ;
                     }
-                    // Pauses the game. Incidentally also causes the piece to vanish while paused as loop is entered before piece is redrawn.
-                    if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                }
+                // Pauses the game.
+                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                {
+                    BOOL loopBreak = 1 ;
+
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        BOOL loopBreak = 1 ;
+                        while( loopBreak )
+                        {   
+                            DWORD numberOfEventsInner = 0 ;
+                            DWORD numberOfEventsReadInner = 0 ;
 
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
-                        {
-                            while( loopBreak )
-                            {   
-                                 DWORD numberOfEventsInner = 0 ;
-                                 DWORD numberOfEventsReadInner = 0 ;
+                            GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEventsInner ) ;
 
-                                GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEventsInner ) ;
+                            if( numberOfEventsInner )
+                            {
+                                INPUT_RECORD* inputRecordArrayInner = malloc( sizeof( INPUT_RECORD ) * numberOfEventsInner ) ;
 
-                                if( numberOfEventsInner )
+                                ReadConsoleInput( *phInputBuffer, inputRecordArrayInner, numberOfEventsInner, &numberOfEventsReadInner ) ;
+
+                                for( int i = 0; i < numberOfEventsReadInner; i++ )
                                 {
-                                    INPUT_RECORD* inputRecordArrayInner = malloc( sizeof( INPUT_RECORD ) * numberOfEventsInner ) ;
-
-                                    ReadConsoleInput( *phInputBuffer, inputRecordArrayInner, numberOfEventsInner, &numberOfEventsReadInner ) ;
-
-                                    for( int i = 0; i < numberOfEventsReadInner; i++ )
+                                    if( inputRecordArrayInner[i].EventType == KEY_EVENT )
                                     {
-                                        if( inputRecordArrayInner[i].EventType == KEY_EVENT )
+                                        if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
                                         {
-                                            if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                                            if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
                                             {
-                                                if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
-                                                {
-                                                    free( inputRecordArrayInner ) ;
-                                                    loopBreak = 0 ;
-                                                }
+                                                free( inputRecordArrayInner ) ;
+                                                loopBreak = 0 ;
                                             }
                                         }
                                     }
-                                }            
-                            }
+                                }
+                            }            
                         }
                     }
+                }
 
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL )
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        notris_rotate_piece_clockwise( piece ) ;
+                    }
+                }
+
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SHIFT )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        notris_rotate_piece_anticlockwise( piece ) ;
+                    }
+                }
+
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        if( notris_check_y_collision( niInfo, piece ) )
                         {
-                            notris_rotate_piece_clockwise( piece ) ;
+                            return 1 ;
                         }
-                    }
-
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SHIFT )
-                    {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
-                        {
-                            notris_rotate_piece_anticlockwise( piece ) ;
-                        }
-                    }
-
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
-                    {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        else
                         {
                             piece->blockOne.Y++ ;
                             piece->blockTwo.Y++ ;
@@ -239,19 +261,33 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
                             piece->blockFour.Y++ ;
                         }
                     }
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_LEFT )
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_LEFT )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        if( notris_check_x_minus_collision( niInfo, piece ) )
                         {
-                                piece->blockOne.X-- ;
-                                piece->blockTwo.X-- ;
-                                piece->blockThree.X-- ;
-                                piece->blockFour.X-- ;
+                            break ;
+                        }
+                        else
+                        {
+                            piece->blockOne.X-- ;
+                            piece->blockTwo.X-- ;
+                            piece->blockThree.X-- ;
+                            piece->blockFour.X-- ;
                         }
                     }
-                    else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                        if( notris_check_x_plus_collision( niInfo, piece ) )
+                        {
+                            break ;
+                        }
+                        else
                         {
                             piece->blockOne.X++ ;
                             piece->blockTwo.X++ ;
@@ -261,8 +297,10 @@ void notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
                     }
                 }
             }
-            free( inputRecordArray ) ;
         }
+        free( inputRecordArray ) ;
+    }
+    return 0 ;
 }
 
 /*
@@ -683,6 +721,29 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
     }
 }
 
+void notris_set_boundaries( struct notrisInfo* niInfo )
+{
+  for( int roof = niInfo->playFieldArea.Left - 1; roof < niInfo->playFieldArea.Right + 1 ; roof++ )
+  {
+    niInfo->boNotrisCollisionArray[niInfo->playFieldArea.Top - 1][roof] = 1 ;
+  }
+
+  for( int floor = niInfo->playFieldArea.Left - 1; floor < niInfo->playFieldArea.Right + 1; floor++ )
+  {
+    niInfo->boNotrisCollisionArray[niInfo->playFieldArea.Bottom][floor] = 1 ;
+  }
+
+  for( int leftWall = niInfo->playFieldArea.Top; leftWall < niInfo->playFieldArea.Bottom; leftWall++ )
+  {
+    niInfo->boNotrisCollisionArray[leftWall][niInfo->playFieldArea.Left - 1] = 1 ;
+  }
+
+  for( int rightWall = niInfo->playFieldArea.Top; rightWall < niInfo->playFieldArea.Bottom; rightWall++ )
+  {
+    niInfo->boNotrisCollisionArray[rightWall][niInfo->playFieldArea.Right] = 1 ;
+  }
+}
+
 void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
     niInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
@@ -724,52 +785,68 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
     HANDLE* phNotVisible = hScreenBufferTwo ;
 
     WORD pieceDropRate = 0 ;
-    BOOL pieceFalling = 1 ;
+    BOOL pieceFalling ;
 
     notris_setup( csbiInfo, niInfo ) ;
 
+    notris_set_boundaries( niInfo ) ;
+
     srand( time( 0 ) ) ;
 
-    notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
-
     SetConsoleActiveScreenBuffer( *phNotVisible ) ;
+
+    while(1)
+    {
+        notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
+
+        pieceFalling = 1 ;
        
-    while( pieceFalling )
-    {   
-        clear_buffer( csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+        while( pieceFalling )
+        {   
+            clear_buffer( csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
-        notris_draw_UI( niInfo ) ;
+            notris_draw_UI( niInfo ) ;
 
-        notris_move_piece( hInputBuffer, niInfo, p ) ;
+            if( notris_move_piece( hInputBuffer, niInfo, p ) )
+            {
+                pieceFalling = 0 ;
+            }
 
-        notris_draw_piece( niInfo, p ) ;
+            notris_draw_piece( niInfo, p ) ;
 
-        draw_buffer( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
-        /*
-        if( *phNotVisible == hScreenBufferTwo )
-        {
-            phNotVisible = hScreenBufferOne ;
-            phVisible= hScreenBufferTwo ;
+            draw_buffer( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+    
+            pieceDropRate++ ;
+
+            if( pieceDropRate == 10 )
+            {
+                pieceDropRate = 0 ;
+
+                p->blockOne.Y++ ;
+                p->blockTwo.Y++ ;
+                p->blockThree.Y++ ;
+                p->blockFour.Y++ ;
+            }
+
+            Sleep( 50 ) ;
         }
-        else
-        {
-            phNotVisible = hScreenBufferTwo ;
-            phVisible= hScreenBufferOne ;
-        }
-        */
-        pieceDropRate++ ;
+        
+        niInfo->ciNotrisScreenBuffer[p->blockOne.Y][p->blockOne.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
+        niInfo->ciNotrisScreenBuffer[p->blockOne.Y][p->blockOne.X].Attributes = p->pieceLook.Attributes ;
+        niInfo->boNotrisCollisionArray[p->blockOne.Y][p->blockOne.X] = 1 ;
 
-        if( pieceDropRate == 10 )
-        {
-            pieceDropRate = 0 ;
+        niInfo->ciNotrisScreenBuffer[p->blockTwo.Y][p->blockTwo.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
+        niInfo->ciNotrisScreenBuffer[p->blockTwo.Y][p->blockTwo.X].Attributes = p->pieceLook.Attributes ;
+        niInfo->boNotrisCollisionArray[p->blockTwo.Y][p->blockTwo.X] = 1 ;
 
-            p->blockOne.Y++ ;
-            p->blockTwo.Y++ ;
-            p->blockThree.Y++ ;
-            p->blockFour.Y++ ;
-        }
-        Sleep( 50 ) ;
+        niInfo->ciNotrisScreenBuffer[p->blockThree.Y][p->blockThree.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
+        niInfo->ciNotrisScreenBuffer[p->blockThree.Y][p->blockThree.X].Attributes = p->pieceLook.Attributes ;
+        niInfo->boNotrisCollisionArray[p->blockThree.Y][p->blockThree.X] = 1 ;
+
+        niInfo->ciNotrisScreenBuffer[p->blockFour.Y][p->blockFour.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
+        niInfo->ciNotrisScreenBuffer[p->blockFour.Y][p->blockFour.X].Attributes = p->pieceLook.Attributes ;
+        niInfo->boNotrisCollisionArray[p->blockFour.Y][p->blockFour.X] = 1 ;
+
+        free( p ) ;
     }
-
-    free( p ) ;
 }
