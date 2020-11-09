@@ -73,7 +73,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     piece->pieceLook.Char.AsciiChar = 219 ;
 
     piece->blockOne.X = ( niInfo->playFieldArea.Left + niInfo->playFieldArea.Right ) / 2 ; // 24
-    piece->blockOne.Y = niInfo->playFieldArea.Top ; // 4
+    piece->blockOne.Y = niInfo->playFieldArea.Top + 1; // 5
 
     switch( pieceShape )
     {   // Square
@@ -301,6 +301,27 @@ BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
         free( inputRecordArray ) ;
     }
     return 0 ;
+}
+
+BOOL notris_piece_falling( DWORD* counter, struct notrisInfo* niInfo, struct notrisPiece* piece )
+{
+    if( !notris_check_y_collision( niInfo, piece ) )
+    {
+        if( *counter == 10 )
+        {
+            *counter = 0 ;
+
+            piece->blockOne.Y++ ;
+            piece->blockTwo.Y++ ;
+            piece->blockThree.Y++ ;
+            piece->blockFour.Y++ ;
+        }
+        return 0 ;
+    }
+    else
+    {
+        return 1 ;
+    }
 }
 
 /*
@@ -778,22 +799,19 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     }
 }
 
-void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hInputBuffer, 
+void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
-    HANDLE* phVisible= hScreenBufferOne ;
-    HANDLE* phNotVisible = hScreenBufferTwo ;
-
-    WORD pieceDropRate = 0 ;
+    DWORD dwDropCounter = 0 ;
     BOOL pieceFalling ;
 
     notris_setup( csbiInfo, niInfo ) ;
 
     notris_set_boundaries( niInfo ) ;
 
-    srand( time( 0 ) ) ;
+    notris_draw_UI( niInfo ) ;
 
-    SetConsoleActiveScreenBuffer( *phNotVisible ) ;
+    srand( time( 0 ) ) ;
 
     while(1)
     {
@@ -803,30 +821,23 @@ void play_notris( HANDLE* hScreenBufferOne, HANDLE* hScreenBufferTwo, HANDLE* hI
        
         while( pieceFalling )
         {   
-            clear_buffer( csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+            notris_erase_piece( niInfo, p ) ;
 
-            notris_draw_UI( niInfo ) ;
+            if ( notris_piece_falling( &dwDropCounter, niInfo, p ) )
+            {
+                pieceFalling = 0 ;
+            }
 
             if( notris_move_piece( hInputBuffer, niInfo, p ) )
             {
                 pieceFalling = 0 ;
             }
-
+            
             notris_draw_piece( niInfo, p ) ;
 
-            draw_buffer( hScreenBufferOne, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
-    
-            pieceDropRate++ ;
+            draw_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
-            if( pieceDropRate == 10 )
-            {
-                pieceDropRate = 0 ;
-
-                p->blockOne.Y++ ;
-                p->blockTwo.Y++ ;
-                p->blockThree.Y++ ;
-                p->blockFour.Y++ ;
-            }
+            dwDropCounter++ ;
 
             Sleep( 50 ) ;
         }

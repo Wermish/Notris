@@ -9,13 +9,9 @@
 #include "notris/notris_game_functions.h"
 #include "notris/notris_structures.h"
 
-HANDLE hScreenBufferOne ;
-HANDLE hScreenBufferTwo ;
+HANDLE hScreenBuffer ;
 HANDLE hInputBuffer ;
     
-HANDLE* phVisible;
-HANDLE* phNotVisible ;
-
 CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
@@ -24,12 +20,11 @@ notrisInfo npfiInfo ;
 
 int main( void )
 {
-    setup_console( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 50, 30 ) ;
+    setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 51, 40 ) ;
 
-    play_notris( &hScreenBufferOne, &hScreenBufferTwo, &hInputBuffer, &csbiInfo, &npfiInfo ) ;
+    play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &npfiInfo ) ;
 
-    CloseHandle( hScreenBufferOne ) ;
-    CloseHandle( hScreenBufferTwo ) ;
+    CloseHandle( hScreenBuffer ) ;
     CloseHandle( hInputBuffer ) ;
 
     return EXIT_SUCCESS ;

@@ -10,8 +10,8 @@ void report_error( char *msg )
     exit( EXIT_FAILURE ) ;
 }
 
-int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE* phInputBuffer,
-                   CONSOLE_SCREEN_BUFFER_INFO* pcsbiInfo, CONSOLE_CURSOR_INFO* pcciInfo, CONSOLE_FONT_INFOEX* pcfiInfo,                                                                 
+int setup_console( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
+                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CONSOLE_CURSOR_INFO* cciInfo, CONSOLE_FONT_INFOEX* cfiInfo,                                                                 
                    SHORT intended_width, SHORT intended_height ) 
 {  
     // Has to be equal to, or larger than, the Screen One's screen.
@@ -23,108 +23,82 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
     // Coordinates for top left and bottom right corners of the screen of the Screen One.
     SMALL_RECT srIntendedScreen = { 0, 0, intended_width - 1, intended_height - 1 } ;
 
-    pcfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
+    cfiInfo->cbSize = sizeof( CONSOLE_FONT_INFOEX ) ;
 
      // Specify cursor as invisible.
-    pcciInfo->dwSize = 1 ;
-    pcciInfo->bVisible = FALSE ;
+    cciInfo->dwSize = 1 ;
+    cciInfo->bVisible = FALSE ;
 
-    *phInputBuffer = GetStdHandle( STD_INPUT_HANDLE ) ;
+    *hInputBuffer = GetStdHandle( STD_INPUT_HANDLE ) ;
     
     // Initialise Screen One.
-    *phScreenBufferOne = CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 
-                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
+    *hScreenBuffer = CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 
+                                                FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                                NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
 
-    *phScreenBufferTwo = CreateConsoleScreenBuffer(  GENERIC_WRITE | GENERIC_READ, 
-                                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                                    NULL, CONSOLE_TEXTMODE_BUFFER, NULL ) ;
     // Fill cfiex struct.
-    if( !GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
+    if( !GetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo ) )
     {
-        report_error( "GetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
+        report_error( "GetCurrentConsoleFontEx( *hScreenBuffer, FALSE, cfiInfo )" ) ;
     }
 
     // Fill csbi struct.
-    if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
+    if( !GetConsoleScreenBufferInfo( *hScreenBuffer, csbiInfo ) )
     {
-        report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, &pcsbiInfo )" ) ;
+        report_error( "GetConsoleScreenBufferInfo( *hScreenBuffer, &csbiInfo )" ) ;
     }
 
     // Sets coords for a temp buffer large enough to allow screen to be set to intended size. Only needed when run from cmd line.
-    if( intended_width > pcsbiInfo->srWindow.Right )
+    if( intended_width > csbiInfo->srWindow.Right )
     {
-        if( intended_height < pcsbiInfo->srWindow.Bottom )
+        if( intended_height < csbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = pcsbiInfo->srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
         }
     }
     else 
     {
-        coTempBuff.X = pcsbiInfo->srWindow.Right + 1 ;
+        coTempBuff.X = csbiInfo->srWindow.Right + 1 ;
 
-        if( intended_height < pcsbiInfo->srWindow.Bottom )
+        if( intended_height < csbiInfo->srWindow.Bottom )
         {
-            coTempBuff.Y = pcsbiInfo->srWindow.Bottom + 1 ;
+            coTempBuff.Y = csbiInfo->srWindow.Bottom + 1 ;
         }
     }
     
     // Terminal raster font is boxier and makes for better 'pixels' when using IBM 437 characters.
-    wcscpy( pcfiInfo->FaceName, L"Terminal" );
+    wcscpy( cfiInfo->FaceName, L"Terminal" );
+    cfiInfo->dwFontSize.X = 16 ;
+    cfiInfo->dwFontSize.Y = 16 ;
+    cfiInfo->FontFamily = 0x30 ;
+    cfiInfo->FontWeight = 0 ;
     
     // First sets a temporary buffer size which is larger than or equal to intended screen/buffer and then shrinks to intended.
 
-    // Setup ScreenBufferOne---------------------------------------------------------------------------------
-    if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff ) )
+    // Setup ScreenBuffer------------------------------------------------------------------------------------
+    if( !SetConsoleScreenBufferSize( *hScreenBuffer, coTempBuff ) )
     {
-        report_error( "SetConsoleScreenBufferSize( *phScreenBufferOne, coTempBuff )" ) ;
+        report_error( "SetConsoleScreenBufferSize( *hScreenBuffer, coTempBuff )" ) ;
     }
 
-    if( !SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen ) )
+    if( !SetConsoleWindowInfo( *hScreenBuffer, TRUE, &srIntendedScreen ) )
     {
-        report_error("Failed: SetConsoleWindowInfo( *phScreenBufferOne, TRUE, &srIntendedScreen )" ) ;
+        report_error("SetConsoleWindowInfo( *hScreenBuffer, TRUE, &srIntendedScreen )" ) ;
     }
 
-    if( !SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer ) )
+    if( !SetConsoleScreenBufferSize( *hScreenBuffer, coIntendedBuffer ) )
     {
-        report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferOne, coIntendedBuffer )" ) ;
+        report_error( "SetConsoleScreenBufferSize( *hScreenBuffer, coIntendedBuffer )" ) ;
     }
 
-    if( !SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo ) )
+    if( !SetConsoleCursorInfo( *hScreenBuffer, cciInfo ) )
     {
-        report_error( "Failed: SetConsoleCursorInfo( *phScreenBufferOne, pcciInfo )" ) ;
+        report_error( "SetConsoleCursorInfo( *hScreenBuffer, cciInfo )" ) ;
     }
 
-    if( !SetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo ) )
+    if( !SetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo ) )
     {
-        report_error( "SetCurrentConsoleFontEx( *phScreenBufferOne, FALSE, pcfiInfo )" ) ;
-    }
-    // ------------------------------------------------------------------------------------------------------
-
-    // Setup ScreenBufferTwo---------------------------------------------------------------------------------
-    if( !SetConsoleScreenBufferSize( *phScreenBufferTwo, coTempBuff ) )
-    {
-        report_error( "SetConsoleScreenBufferSize( *phScreenBufferTwo, coTempBuff )" ) ;
-    }
-
-    if( !SetConsoleWindowInfo( *phScreenBufferTwo, TRUE, &srIntendedScreen ) )
-    {
-        report_error("Failed: SetConsoleWindowInfo( *phScreenBufferTwo, TRUE, &srIntendedScreen )" ) ;
-    }
-
-    if( !SetConsoleScreenBufferSize( *phScreenBufferTwo, coIntendedBuffer ) )
-    {
-        report_error( "Failed: SetConsoleScreenBufferSize( *phScreenBufferTwo, coIntendedBuffer )" ) ;
-    }
-
-    if( !SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo ) )
-    {
-        report_error( "SetConsoleCursorInfo( *phScreenBufferTwo, pcciInfo )" ) ;
-    }
-
-    if( !SetCurrentConsoleFontEx( *phScreenBufferTwo, FALSE, pcfiInfo ) )
-    {
-        report_error( "SetCurrentConsoleFontEx( *phScreenBufferTwo, FALSE, pcfiInfo )" ) ;
+        report_error( "SetCurrentConsoleFontEx( *hScreenBuffer, FALSE, cfiInfo )" ) ;
     }
     // ------------------------------------------------------------------------------------------------------
 
@@ -139,12 +113,22 @@ int setup_console( HANDLE* phScreenBufferOne, HANDLE* phScreenBufferTwo, HANDLE*
         report_error( "SetConsoleTitle( \"CHAMBERS\" )" ) ;
     }
 
-    // Update csbiInfo struct with new values.
-    if( !GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo ) )
+    // Update csfiInfo struct with new values.
+    if( !GetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo ) )
     {
-        report_error( "GetConsoleScreenBufferInfo( *phScreenBufferOne, pcsbiInfo )" ) ;
+        report_error( "GetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo )" ) ;
     }
 
+    // Update csbiInfo struct with new values.
+    if( !GetConsoleScreenBufferInfo( *hScreenBuffer, csbiInfo ) )
+    {
+        report_error( "GetConsoleScreenBufferInfo( *hScreenBuffer, csbiInfo )" ) ;
+    }
+
+    if( !SetConsoleActiveScreenBuffer( *hScreenBuffer ) )
+    {
+        report_error( "SetConsoleActiveScreenBuffer( *hScreenBuffer )" ) ;
+    }
 
     return EXIT_SUCCESS ;
 }
