@@ -73,7 +73,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     piece->pieceLook.Char.AsciiChar = 0 ;
 
     piece->blockOne.X = ( niInfo->playFieldArea.Left + niInfo->playFieldArea.Right ) / 2 ; // 24
-    piece->blockOne.Y = niInfo->playFieldArea.Top + 1; // 5
+    piece->blockOne.Y = niInfo->playFieldArea.Top ; // 5
 
     switch( pieceShape )
     {   // Square
@@ -802,7 +802,7 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
-    DWORD dwDropCounter = 0 ;
+    DWORD dwDropCounter ;
     BOOL pieceFalling ;
 
     notris_setup( csbiInfo, niInfo ) ;
@@ -818,6 +818,8 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
         notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
 
         pieceFalling = 1 ;
+
+        dwDropCounter = 0 ;
        
         while( pieceFalling )
         {   
