@@ -15,7 +15,7 @@ BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiec
     if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X + 1] ) )
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 1] ) )
     {
         return 1 ;
     }
@@ -30,7 +30,7 @@ BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPie
     if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockThree.X - 1] ) )
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
     {
         return 1 ;
     }
@@ -49,7 +49,7 @@ BOOL notris_check_y_collision( struct notrisInfo* niInfo, struct notrisPiece* pi
     if(  ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
-         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockThree.X] ) )
+         ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) )
     {
         return 1 ;
     }
@@ -70,7 +70,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     
     piece->pieceShape = pieceShape ;
     piece->piecePhase = 0 ;
-    piece->pieceLook.Char.AsciiChar = 219 ;
+    piece->pieceLook.Char.AsciiChar = 0 ;
 
     piece->blockOne.X = ( niInfo->playFieldArea.Left + niInfo->playFieldArea.Right ) / 2 ; // 24
     piece->blockOne.Y = niInfo->playFieldArea.Top + 1; // 5
@@ -84,7 +84,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_RED ;
+            piece->pieceLook.Attributes = BACKGROUND_RED ;
             
             break ;
         // Line
@@ -95,7 +95,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X ;
             piece->blockFour.Y = piece->blockOne.Y + 3 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN ;
             notris_rotate_piece_clockwise( piece ) ;
 
             break ;
@@ -107,7 +107,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_RED ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
 
             for( int i = 0; i < 3; i++)
             {
@@ -123,7 +123,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 2 ;
             piece->blockFour.X = piece->blockOne.X - 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
-            piece->pieceLook.Attributes = FOREGROUND_BLUE | FOREGROUND_RED ;
+            piece->pieceLook.Attributes = BACKGROUND_BLUE | BACKGROUND_RED ;
 
             notris_rotate_piece_clockwise( piece ) ;
 
@@ -136,7 +136,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 2 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_GREEN | FOREGROUND_BLUE ;
+            piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_BLUE ;
             break ;
         // Mirrored 'Z'
         case 6:
@@ -146,7 +146,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X - 2 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes =  FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY ;
+            piece->pieceLook.Attributes =  BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY ;
             break ;
         // 'Hat'    
         case 7:
@@ -156,7 +156,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockThree.Y = piece->blockOne.Y + 1 ;
             piece->blockFour.X = piece->blockOne.X + 1 ;
             piece->blockFour.Y = piece->blockOne.Y + 1 ;
-            piece->pieceLook.Attributes = FOREGROUND_BLUE ;
+            piece->pieceLook.Attributes = BACKGROUND_BLUE ;
             break ;  
     }
 

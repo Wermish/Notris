@@ -39,7 +39,7 @@ int setup_console( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
     // Fill cfiex struct.
     if( !GetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo ) )
     {
-        report_error( "GetCurrentConsoleFontEx( *hScreenBuffer, FALSE, cfiInfo )" ) ;
+        report_error( "GetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo )" ) ;
     }
 
     // Fill csbi struct.
@@ -70,7 +70,7 @@ int setup_console( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
     wcscpy( cfiInfo->FaceName, L"Terminal" );
     cfiInfo->dwFontSize.X = 16 ;
     cfiInfo->dwFontSize.Y = 16 ;
-    cfiInfo->FontFamily = 0x30 ;
+    cfiInfo->FontFamily = 0x30 ; // Supposedly should be 0x30
     cfiInfo->FontWeight = 0 ;
     
     // First sets a temporary buffer size which is larger than or equal to intended screen/buffer and then shrinks to intended.
@@ -98,7 +98,7 @@ int setup_console( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     if( !SetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo ) )
     {
-        report_error( "SetCurrentConsoleFontEx( *hScreenBuffer, FALSE, cfiInfo )" ) ;
+        report_error( "SetCurrentConsoleFontEx( *hScreenBuffer, TRUE, cfiInfo )" ) ;
     }
     // ------------------------------------------------------------------------------------------------------
 
