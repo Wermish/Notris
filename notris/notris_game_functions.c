@@ -72,8 +72,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 0 ;
 
-    piece->blockOne.X = ( niInfo->playFieldArea.Left + niInfo->playFieldArea.Right ) / 2 ; // 24
-    piece->blockOne.Y = niInfo->playFieldArea.Top ; // 5
+    piece->blockOne.X = ( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2 ; // 24
+    piece->blockOne.Y = niInfo->srPlayFieldArea.Top ; // 5
 
     switch( pieceShape )
     {   // Square
@@ -163,20 +163,20 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
+BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     BOOL boPieceFallen = 0 ;
 
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
 
-    GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEvents ) ;
+    GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
 
     if( numberOfEvents )
     {
         INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
 
-        ReadConsoleInput( *phInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
+        ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
 
         for( int i = 0; i < numberOfEventsRead; i++ )
         {
@@ -202,13 +202,13 @@ BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
                             DWORD numberOfEventsInner = 0 ;
                             DWORD numberOfEventsReadInner = 0 ;
 
-                            GetNumberOfConsoleInputEvents( *phInputBuffer, &numberOfEventsInner ) ;
+                            GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEventsInner ) ;
 
                             if( numberOfEventsInner )
                             {
                                 INPUT_RECORD* inputRecordArrayInner = malloc( sizeof( INPUT_RECORD ) * numberOfEventsInner ) ;
 
-                                ReadConsoleInput( *phInputBuffer, inputRecordArrayInner, numberOfEventsInner, &numberOfEventsReadInner ) ;
+                                ReadConsoleInput( *hInputBuffer, inputRecordArrayInner, numberOfEventsInner, &numberOfEventsReadInner ) ;
 
                                 for( int i = 0; i < numberOfEventsReadInner; i++ )
                                 {
@@ -303,13 +303,13 @@ BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct
     return 0 ;
 }
 
-BOOL notris_piece_falling( DWORD* counter, struct notrisInfo* niInfo, struct notrisPiece* piece )
+BOOL notris_piece_falling( DWORD* dwCounter, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     if( !notris_check_y_collision( niInfo, piece ) )
     {
-        if( *counter == 10 )
+        if( *dwCounter == 10 )
         {
-            *counter = 0 ;
+            *dwCounter = 0 ;
 
             piece->blockOne.Y++ ;
             piece->blockTwo.Y++ ;
@@ -340,22 +340,42 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
             {
                 case 0:
                     piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X += 2 ;
                     piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
+                    piece->blockFour.Y += 2 ;
                     piece->piecePhase = 1 ;
                 break ;
 
-                case 1:
+                case 3 :
                     piece->blockOne.X++ ;
                     piece->blockOne.Y++ ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
                     piece->blockFour.X -= 2 ;
                     piece->blockFour.Y -= 2 ;
-                    piece->piecePhase = 0 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
         break ;
@@ -365,11 +385,11 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
             {
                 case 0:
                     piece->blockOne.X-- ;
-                    piece->blockOne.Y-- ;
+                    piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
-                    piece->blockFour.X += 2 ;
-                    piece->piecePhase = 1 ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 3 ;
                 break ;
 
                 case 1:
@@ -377,26 +397,26 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
                     piece->blockOne.Y++ ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
-                    piece->blockFour.Y += 2 ;
-                    piece->piecePhase = 2 ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 0 ;
                 break ;
 
                 case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 1 ;
+                break ;
+
+                case 3:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
-                    piece->blockFour.X -= 2 ;
-                    piece->piecePhase = 3 ;
-                break ;
-
-                case 3:
-                    piece->blockOne.X++ ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X-- ;
-                    piece->blockThree.Y-- ;
-                    piece->blockFour.Y -= 2 ;
-                    piece->piecePhase = 0 ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
             break ;
@@ -557,13 +577,33 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 
                 case 1:
                     piece->blockOne.X-- ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X-- ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X += 2 ;
                     piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 3 ;
+                    break ;
+
+                case 3:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
+                    piece->blockFour.Y += 2 ;
                     piece->piecePhase = 0 ;
-                break ;
+                    break ;
             }
         break ;
         // 'L'
@@ -744,33 +784,33 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 
 void notris_set_boundaries( struct notrisInfo* niInfo )
 {
-  for( int roof = niInfo->playFieldArea.Left - 1; roof < niInfo->playFieldArea.Right + 1 ; roof++ )
+  for( int roof = niInfo->srPlayFieldArea.Left - 1; roof < niInfo->srPlayFieldArea.Right + 1 ; roof++ )
   {
-    niInfo->boNotrisCollisionArray[niInfo->playFieldArea.Top - 1][roof] = 1 ;
+    niInfo->boNotrisCollisionArray[niInfo->srPlayFieldArea.Top - 1][roof] = 1 ;
   }
 
-  for( int floor = niInfo->playFieldArea.Left - 1; floor < niInfo->playFieldArea.Right + 1; floor++ )
+  for( int floor = niInfo->srPlayFieldArea.Left - 1; floor < niInfo->srPlayFieldArea.Right + 1; floor++ )
   {
-    niInfo->boNotrisCollisionArray[niInfo->playFieldArea.Bottom][floor] = 1 ;
+    niInfo->boNotrisCollisionArray[niInfo->srPlayFieldArea.Bottom][floor] = 1 ;
   }
 
-  for( int leftWall = niInfo->playFieldArea.Top; leftWall < niInfo->playFieldArea.Bottom; leftWall++ )
+  for( int leftWall = niInfo->srPlayFieldArea.Top; leftWall < niInfo->srPlayFieldArea.Bottom; leftWall++ )
   {
-    niInfo->boNotrisCollisionArray[leftWall][niInfo->playFieldArea.Left - 1] = 1 ;
+    niInfo->boNotrisCollisionArray[leftWall][niInfo->srPlayFieldArea.Left - 1] = 1 ;
   }
 
-  for( int rightWall = niInfo->playFieldArea.Top; rightWall < niInfo->playFieldArea.Bottom; rightWall++ )
+  for( int rightWall = niInfo->srPlayFieldArea.Top; rightWall < niInfo->srPlayFieldArea.Bottom; rightWall++ )
   {
-    niInfo->boNotrisCollisionArray[rightWall][niInfo->playFieldArea.Right] = 1 ;
+    niInfo->boNotrisCollisionArray[rightWall][niInfo->srPlayFieldArea.Right] = 1 ;
   }
 }
 
 void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
-    niInfo->playFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
-    niInfo->playFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
-    niInfo->playFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
-    niInfo->playFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
+    niInfo->srPlayFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
+    niInfo->srPlayFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
+    niInfo->srPlayFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
+    niInfo->srPlayFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
 
     niInfo->notrisScore = 0 ;
 
@@ -781,11 +821,13 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 
     niInfo->ciNotrisScreenBuffer = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
     niInfo->boNotrisCollisionArray = ( BOOL** ) malloc( bufferHeight  * sizeof( BOOL* ) ) ;
+    niInfo->boNotrisWriteArray = ( BOOL* ) malloc( bufferHeight * sizeof( BOOL ) ) ;
 
     for( int i = 0; i < bufferHeight; i++ )
     {
         niInfo->ciNotrisScreenBuffer[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
         niInfo->boNotrisCollisionArray[i] = ( BOOL* ) malloc( bufferWidth * sizeof( BOOL ) ) ;
+        niInfo->boNotrisWriteArray[i] = 0 ;
     }
 
     for( int y = 0; y < bufferHeight; y++ )
@@ -802,7 +844,7 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
-    DWORD dwDropCounter ;
+    DWORD dwDropdwCounter ;
     BOOL pieceFalling ;
 
     notris_setup( csbiInfo, niInfo ) ;
@@ -815,17 +857,17 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
-        notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
+        notrisPiece *p = notris_create_piece( random_number_in_range( 2, 2 ), niInfo ) ;
 
         pieceFalling = 1 ;
 
-        dwDropCounter = 0 ;
+        dwDropdwCounter = 0 ;
        
         while( pieceFalling )
         {   
             notris_erase_piece( niInfo, p ) ;
 
-            if ( notris_piece_falling( &dwDropCounter, niInfo, p ) )
+            if ( notris_piece_falling( &dwDropdwCounter, niInfo, p ) )
             {
                 pieceFalling = 0 ;
             }
@@ -839,7 +881,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
             draw_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
-            dwDropCounter++ ;
+            dwDropdwCounter++ ;
 
             Sleep( 50 ) ;
         }
