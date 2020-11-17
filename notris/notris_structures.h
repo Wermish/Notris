@@ -28,7 +28,7 @@ typedef enum notrisPieceShape
  * boNotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from ciNotrisScreenBuffer. 1 means the cell is occupied, or drawn.
  * srPlayFieldArea: a SMALL_RECT, the dimensions of the area into which the blocks fall and the action takes place.
  * dwNotrisScore: DWORD returned from play_notris() once the game is over.
- * npsNextPiece: an enum which determines the next piece to fall, displayed to the player ahead of time via the UI.
+ * eNextPiece: an enum which determines the next piece to fall, displayed to the player ahead of time via the UI.
  */
 
 typedef struct notrisInfo

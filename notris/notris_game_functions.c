@@ -109,10 +109,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
             piece->blockFour.Y = piece->blockOne.Y + 2 ;
             piece->pieceLook.Attributes = BACKGROUND_GREEN | BACKGROUND_RED ;
 
-            for( int i = 0; i < 3; i++)
-            {
-                notris_rotate_piece_clockwise( piece ) ;
-            }
+            notris_rotate_piece_anticlockwise( piece ) ;
 
             break ;
         // Mirrored 'L'
@@ -393,11 +390,11 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
                 break ;
 
                 case 1:
-                    piece->blockOne.X++ ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X-- ;
-                    piece->blockThree.Y-- ;
-                    piece->blockFour.X -= 2 ;
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X += 2 ;
                     piece->piecePhase = 0 ;
                 break ;
 
@@ -411,11 +408,11 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
                 break ;
 
                 case 3:
-                    piece->blockOne.X-- ;
-                    piece->blockOne.Y-- ;
-                    piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
-                    piece->blockFour.X += 2 ;
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X -= 2 ;
                     piece->piecePhase = 2 ;
                 break ;
             }
@@ -426,29 +423,29 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
             {
                 case 0:
                     piece->blockOne.X-- ;
-                    piece->blockOne.Y-- ;
+                    piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
-                    piece->blockFour.Y += 2 ;
-                    piece->piecePhase = 1 ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 3 ;
                 break ;
 
                 case 1:
-                    piece->blockOne.X++ ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X-- ;
-                    piece->blockThree.Y-- ;
-                    piece->blockFour.X -= 2 ;
-                    piece->piecePhase = 2 ;
-                break ;
-
-                case 2:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
-                    piece->blockFour.Y -= 2 ;
-                    piece->piecePhase = 3 ;
+                    piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
+                    piece->piecePhase = 1 ;
                 break ;
 
                 case 3:
@@ -456,8 +453,8 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
                     piece->blockOne.Y++ ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
-                    piece->blockFour.X += 2 ;
-                    piece->piecePhase = 0 ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
             break ;
@@ -466,21 +463,39 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
             switch( piece->piecePhase )
             {
                 case 0:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 1:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
                     piece->piecePhase = 1 ;
                 break ;
 
-                case 1:
+                case 3:
                     piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
                     piece->blockFour.X -= 2 ;
-                    piece->piecePhase = 0 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
             break ;
@@ -489,21 +504,39 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
             switch( piece->piecePhase )
             {
                 case 0:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 1:
                     piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 0 ;
+                break ;
+
+                case 2:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
                     piece->piecePhase = 1 ;
                 break ;
 
-                case 1:
+                case 3:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y++ ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
                     piece->blockFour.Y -= 2 ;
-                    piece->piecePhase = 0 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
             break ;
@@ -514,41 +547,41 @@ void notris_rotate_piece_anticlockwise( struct notrisPiece* piece )
                 case 0:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X-- ;
+                    piece->blockFour.Y-- ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X++ ;
                     piece->blockFour.Y-- ;
-                    piece->piecePhase = 1 ;
+                    piece->piecePhase = 0 ;
                 break ;
 
-                case 1:
+                case 2:
                     piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X-- ;
                     piece->blockThree.Y-- ;
                     piece->blockFour.X++ ;
                     piece->blockFour.Y++ ;
-                    piece->piecePhase = 2 ;
+                    piece->piecePhase = 1 ;
                 break ;
 
-                case 2:
+                case 3:
                     piece->blockOne.X++ ;
                     piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y-- ;
                     piece->blockFour.X-- ;
                     piece->blockFour.Y++ ;
-                    piece->piecePhase = 3 ;
-                break ;
-
-                case 3:
-                    piece->blockOne.X-- ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
-                    piece->blockFour.X-- ;
-                    piece->blockFour.Y-- ;
-                    piece->piecePhase = 0 ;
+                    piece->piecePhase = 2 ;
                 break ;
             }
         break ;
@@ -621,26 +654,26 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 
                 case 1:
                     piece->blockOne.X-- ;
-                    piece->blockOne.Y-- ;
+                    piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
+                    piece->blockThree.Y-- ;
                     piece->blockFour.Y -= 2 ;
                     piece->piecePhase = 2 ;
                 break ;
 
                 case 2:
-                    piece->blockOne.X++ ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X-- ;
-                    piece->blockThree.Y-- ;
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
                     piece->blockFour.X += 2 ;
                     piece->piecePhase = 3 ;
                 break ;
 
                 case 3:
-                    piece->blockOne.X-- ;
+                    piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
-                    piece->blockThree.X++ ;
+                    piece->blockThree.X-- ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.Y += 2 ;
                     piece->piecePhase = 0 ;
@@ -662,26 +695,26 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
 
                 case 1:
                     piece->blockOne.X-- ;
-                    piece->blockOne.Y-- ;
+                    piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
-                    piece->blockThree.Y++ ;
+                    piece->blockThree.Y-- ;
                     piece->blockFour.X += 2 ;
                     piece->piecePhase = 2 ;
                 break ;
 
                 case 2:
-                    piece->blockOne.X++ ;
-                    piece->blockOne.Y++ ;
-                    piece->blockThree.X-- ;
-                    piece->blockThree.Y-- ;
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y++ ;
                     piece->blockFour.Y += 2 ;
                     piece->piecePhase = 3 ;
                 break ;
 
                 case 3:
-                    piece->blockOne.X-- ;
+                    piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
-                    piece->blockThree.X++ ;
+                    piece->blockThree.X-- ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X -= 2 ;
                     piece->piecePhase = 0 ;
@@ -702,11 +735,29 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
                 break ;
 
                 case 1:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.Y -= 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
                     piece->blockOne.X-- ;
                     piece->blockOne.Y++ ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.X += 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.Y += 2 ;
                     piece->piecePhase = 0 ;
                 break ;
             }
@@ -725,11 +776,29 @@ void notris_rotate_piece_clockwise( struct notrisPiece* piece )
                 break ;
 
                 case 1:
+                    piece->blockOne.X-- ;
+                    piece->blockOne.Y-- ;
+                    piece->blockThree.X++ ;
+                    piece->blockThree.Y-- ;
+                    piece->blockFour.X += 2 ;
+                    piece->piecePhase = 2 ;
+                break ;
+
+                case 2:
                     piece->blockOne.X++ ;
                     piece->blockOne.Y-- ;
                     piece->blockThree.X++ ;
                     piece->blockThree.Y++ ;
                     piece->blockFour.Y += 2 ;
+                    piece->piecePhase = 3 ;
+                break ;
+
+                case 3:
+                    piece->blockOne.X++ ;
+                    piece->blockOne.Y++ ;
+                    piece->blockThree.X-- ;
+                    piece->blockThree.Y++ ;
+                    piece->blockFour.X -= 2 ;
                     piece->piecePhase = 0 ;
                 break ;
             }
@@ -857,7 +926,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
-        notrisPiece *p = notris_create_piece( random_number_in_range( 2, 2 ), niInfo ) ;
+        notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
 
         pieceFalling = 1 ;
 
