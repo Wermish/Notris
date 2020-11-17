@@ -230,6 +230,156 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
+                        if( piece->pieceShape != 1 ) // Square
+                        {
+                            if( notris_check_x_plus_collision( niInfo, piece ) && notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                break ;
+                            }
+                            else if( notris_check_x_plus_collision( niInfo, piece ) )
+                            {
+                                switch( piece->pieceShape )
+                                {
+                                    case 2:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        else if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X-=2 ;
+                                            piece->blockTwo.X-=2 ;
+                                            piece->blockThree.X-=2 ;
+                                            piece->blockFour.X-=2 ;
+                                        }
+                                        break ;
+
+                                    case 3:
+                                        if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 4:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 5:
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 6 :
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+                                    case 7:
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+                                }   
+                            }
+                            else if( notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                switch( piece->pieceShape )
+                                {
+                                    case 2:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X += 2 ;
+                                            piece->blockTwo.X += 2 ;
+                                            piece->blockThree.X += 2 ;
+                                            piece->blockFour.X += 2 ;
+                                        }
+                                        else if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 3:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 4:
+                                        if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 5:
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 6 :
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 7:
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+                                }
+                            }
+                        }
                         notris_rotate_piece_clockwise( piece ) ;
                     }
                 }
@@ -238,6 +388,156 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
+                        if( piece->pieceShape != 1 ) // Square
+                        {
+                            if( notris_check_x_plus_collision( niInfo, piece ) && notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                break ;
+                            }
+                            else if( notris_check_x_plus_collision( niInfo, piece ) )
+                            {
+                                switch( piece->pieceShape )
+                                {
+                                    case 2:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X -=2 ;
+                                            piece->blockTwo.X -=2 ;
+                                            piece->blockThree.X -= 2 ;
+                                            piece->blockFour.X -= 2 ;
+                                        }
+                                        else if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 3:
+                                        if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 4:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 5:
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+
+                                    case 6 :
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+                                    case 7:
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X-- ;
+                                            piece->blockTwo.X-- ;
+                                            piece->blockThree.X-- ;
+                                            piece->blockFour.X-- ;
+                                        }
+                                        break ;
+                                }   
+                            }
+                            else if( notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                switch( piece->pieceShape )
+                                {
+                                    case 2:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X ++ ;
+                                            piece->blockTwo.X ++ ;
+                                            piece->blockThree.X ++ ;
+                                            piece->blockFour.X ++ ;
+                                        }
+                                        else if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X += 2 ;
+                                            piece->blockTwo.X += 2 ;
+                                            piece->blockThree.X += 2 ;
+                                            piece->blockFour.X += 2 ;
+                                        }
+                                        break ;
+
+                                    case 3:
+                                        if( piece->piecePhase == 0 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 4:
+                                        if( piece->piecePhase == 2 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 5:
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 6 :
+                                        if( piece->piecePhase == 3 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+
+                                    case 7:
+                                        if( piece->piecePhase == 1 )
+                                        {
+                                            piece->blockOne.X++ ;
+                                            piece->blockTwo.X++ ;
+                                            piece->blockThree.X++ ;
+                                            piece->blockFour.X++ ;
+                                        }
+                                        break ;
+                                }
+                            }
+                        }
                         notris_rotate_piece_anticlockwise( piece ) ;
                     }
                 }
@@ -913,7 +1213,7 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
-    DWORD dwDropdwCounter ;
+    DWORD dwDropCounter ;
     BOOL pieceFalling ;
 
     notris_setup( csbiInfo, niInfo ) ;
@@ -930,13 +1230,13 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
         pieceFalling = 1 ;
 
-        dwDropdwCounter = 0 ;
+        dwDropCounter = 0 ;
        
         while( pieceFalling )
         {   
             notris_erase_piece( niInfo, p ) ;
 
-            if ( notris_piece_falling( &dwDropdwCounter, niInfo, p ) )
+            if ( notris_piece_falling( &dwDropCounter, niInfo, p ) )
             {
                 pieceFalling = 0 ;
             }
@@ -950,7 +1250,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
             draw_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
-            dwDropdwCounter++ ;
+            dwDropCounter++ ;
 
             Sleep( 50 ) ;
         }
