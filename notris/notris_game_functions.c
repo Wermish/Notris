@@ -1234,6 +1234,8 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
        
         while( pieceFalling )
         {   
+            // TODO: Compare old vs new collision array to see if needs to be drawn.
+            
             notris_erase_piece( niInfo, p ) ;
 
             if ( notris_piece_falling( &dwDropCounter, niInfo, p ) )
@@ -1254,22 +1256,10 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
             Sleep( 50 ) ;
         }
-        
-        niInfo->ciNotrisScreenBuffer[p->blockOne.Y][p->blockOne.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
-        niInfo->ciNotrisScreenBuffer[p->blockOne.Y][p->blockOne.X].Attributes = p->pieceLook.Attributes ;
-        niInfo->boNotrisCollisionArray[p->blockOne.Y][p->blockOne.X] = 1 ;
 
-        niInfo->ciNotrisScreenBuffer[p->blockTwo.Y][p->blockTwo.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
-        niInfo->ciNotrisScreenBuffer[p->blockTwo.Y][p->blockTwo.X].Attributes = p->pieceLook.Attributes ;
-        niInfo->boNotrisCollisionArray[p->blockTwo.Y][p->blockTwo.X] = 1 ;
+        notris_draw_piece( niInfo, p ) ;
 
-        niInfo->ciNotrisScreenBuffer[p->blockThree.Y][p->blockThree.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
-        niInfo->ciNotrisScreenBuffer[p->blockThree.Y][p->blockThree.X].Attributes = p->pieceLook.Attributes ;
-        niInfo->boNotrisCollisionArray[p->blockThree.Y][p->blockThree.X] = 1 ;
-
-        niInfo->ciNotrisScreenBuffer[p->blockFour.Y][p->blockFour.X].Char.AsciiChar = p->pieceLook.Char.AsciiChar ;
-        niInfo->ciNotrisScreenBuffer[p->blockFour.Y][p->blockFour.X].Attributes = p->pieceLook.Attributes ;
-        niInfo->boNotrisCollisionArray[p->blockFour.Y][p->blockFour.X] = 1 ;
+        notris_erase_row( niInfo ) ;
 
         free( p ) ;
     }

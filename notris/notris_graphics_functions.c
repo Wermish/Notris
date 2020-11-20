@@ -80,3 +80,59 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = 0 ;
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 0 ;
 }
+
+DWORD notris_erase_row( struct notrisInfo* niInfo )
+{
+  DWORD pieceScore = 0 ;
+
+  SHORT floor = niInfo->srPlayFieldArea.Bottom - 1 ;
+  SHORT ceiling = niInfo->srPlayFieldArea.Top + 1 ;
+  SHORT left = niInfo->srPlayFieldArea.Left ;
+  SHORT right = niInfo->srPlayFieldArea.Right ;
+
+  SHORT cellCounter = 0 ;
+  SHORT rowCounter = 0 ;
+
+  SHORT toErase[4] ; //Maximum number of rows which can be erased at a time ;
+
+  for( int y = floor; y > ceiling; y-- )
+  {
+    for( int x = left; x < right; x++ )
+    {
+      if( niInfo->boNotrisCollisionArray[y][x] )
+      {
+        cellCounter++ ;
+      }
+    }
+    if( cellCounter / ( right - left ) == 1 )
+    {
+      toErase[rowCounter] = y ; //TODO: use if( toErase[n] ){etc}
+      rowCounter++ ;
+    }
+    cellCounter = 0 ;
+  }
+  /*
+  if( rowCounter )
+  {
+    for( int y = floor; y > ceiling; y-- )
+    {
+      for( int x = left; x < right; x++ )
+      {
+        if( y - rowCounter < ceiling )
+        {
+          niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+          niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+          niInfo->boNotrisCollisionArray[y][x] = 0 ;
+        }
+        else
+        {
+          niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = niInfo->ciNotrisScreenBuffer[y - rowCounter][x].Char.AsciiChar ;
+          niInfo->ciNotrisScreenBuffer[y][x].Attributes = niInfo->ciNotrisScreenBuffer[y - rowCounter][x].Attributes ;
+          niInfo->boNotrisCollisionArray[y][x] = niInfo->boNotrisCollisionArray[y - rowCounter][x] ;
+        }
+      }
+    }
+  }
+  */
+  return pieceScore ;
+}
