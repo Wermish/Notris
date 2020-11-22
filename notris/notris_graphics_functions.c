@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include "../shared/console_functions.h"
+#include "../shared/shared_game_functions.h"
 #include "../shared/shared_graphics_functions.h"
 #include "notris_graphics_functions.h"
 #include "notris_structures.h"
@@ -81,6 +82,13 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 0 ;
 }
 
+/*
+ * Counts BOOLs in notrisInfo.boCollisionArray with cellCounter. If all 1, increments rowCounter, thus marking row for deletion, and adds it to toErase array.
+ * qsort() sorts rows into descending order. The row with greatest y value, i.e. the lowest spatially, is first in array.
+ * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] upward are shifted down, i.e. 
+ * niInfo.ciNotrisScreenBuffer[y][x] = niInfo.ciNotrisScreenBuffer[y - 1][x].
+ */
+
 DWORD notris_erase_row( struct notrisInfo* niInfo )
 {
   DWORD pieceScore = 0 ;
@@ -93,7 +101,7 @@ DWORD notris_erase_row( struct notrisInfo* niInfo )
   SHORT cellCounter = 0 ;
   SHORT rowCounter = 0 ;
 
-  SHORT toErase[4] ; //Maximum number of rows which can be erased at a time ;
+  SHORT toErase[4] = { 0, 0, 0, 0 } ; // Holds y coords of rows to be deleted.
 
   for( int y = floor; y > ceiling; y-- )
   {
@@ -106,33 +114,41 @@ DWORD notris_erase_row( struct notrisInfo* niInfo )
     }
     if( cellCounter / ( right - left ) == 1 )
     {
-      toErase[rowCounter] = y ; //TODO: use if( toErase[n] ){etc}
+      toErase[rowCounter] = y ;
       rowCounter++ ;
     }
     cellCounter = 0 ;
   }
-  /*
+
+  qsort( toErase, 4, sizeof( SHORT ), comparator_descending ) ;
+
   if( rowCounter )
   {
-    for( int y = floor; y > ceiling; y-- )
+    for( int r = 0; r < 4; r++ )
     {
-      for( int x = left; x < right; x++ )
+      if( toErase[r] )
       {
-        if( y - rowCounter < ceiling )
+        for( int y = toErase[r]; y >= ceiling; y -- )
         {
-          niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
-          niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
-          niInfo->boNotrisCollisionArray[y][x] = 0 ;
-        }
-        else
-        {
-          niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = niInfo->ciNotrisScreenBuffer[y - rowCounter][x].Char.AsciiChar ;
-          niInfo->ciNotrisScreenBuffer[y][x].Attributes = niInfo->ciNotrisScreenBuffer[y - rowCounter][x].Attributes ;
-          niInfo->boNotrisCollisionArray[y][x] = niInfo->boNotrisCollisionArray[y - rowCounter][x] ;
+          for( int x = left; x < right; x++ ) 
+          {
+            if( y == ceiling )
+            {
+              niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+              niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+              niInfo->boNotrisCollisionArray[y][x] = 0 ;
+            }
+            else
+            {
+              niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = niInfo->ciNotrisScreenBuffer[y - 1][x].Char.AsciiChar ;
+              niInfo->ciNotrisScreenBuffer[y][x].Attributes = niInfo->ciNotrisScreenBuffer[y - 1][x].Attributes ;
+              niInfo->boNotrisCollisionArray[y][x] = niInfo->boNotrisCollisionArray[y - 1][x] ;
+            }
+          }
         }
       }
     }
   }
-  */
+  
   return pieceScore ;
 }

@@ -53,7 +53,6 @@ BOOL notris_check_y_collision( struct notrisInfo* niInfo, struct notrisPiece* pi
     {
         return 1 ;
     }
-
     else
     {
         return 0 ;
@@ -226,13 +225,17 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                     }
                 }
 
-                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL )
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_MENU )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
                         if( piece->pieceShape != 1 ) // Square
                         {
                             if( notris_check_x_plus_collision( niInfo, piece ) && notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                break ;
+                            }
+                            else if( notris_check_y_collision( niInfo, piece ) )
                             {
                                 break ;
                             }
@@ -384,13 +387,17 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                     }
                 }
 
-                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SHIFT )
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_CONTROL )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
                         if( piece->pieceShape != 1 ) // Square
                         {
                             if( notris_check_x_plus_collision( niInfo, piece ) && notris_check_x_minus_collision( niInfo, piece ) )
+                            {
+                                break ;
+                            }
+                            else if( notris_check_y_collision( niInfo, piece ) )
                             {
                                 break ;
                             }

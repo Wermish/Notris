@@ -19,7 +19,7 @@ CONSOLE_FONT_INFOEX cfiInfo ;
 notrisInfo npfiInfo ;
 
 int main( void )
-{
+{   
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 51, 41 ) ;
 
     play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &npfiInfo ) ;
@@ -28,5 +28,4 @@ int main( void )
     CloseHandle( hInputBuffer ) ;
 
     return EXIT_SUCCESS ;
-
 }
