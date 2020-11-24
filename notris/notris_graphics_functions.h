@@ -9,6 +9,6 @@ void notris_draw_UI( struct notrisInfo* npfiInfo ) ;
 
 void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
-DWORD notris_erase_row( struct notrisInfo* niInfo ) ;
+void notris_erase_row( struct notrisInfo* niInfo ) ;
 
 #endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */

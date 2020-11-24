@@ -19,19 +19,19 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = 49 /*piece->pieceLook.Char.AsciiChar*/ ;
   niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = 50 /*piece->pieceLook.Char.AsciiChar*/ ;
   niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = 51 /*piece->pieceLook.Char.AsciiChar*/ ;
   niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = 52 /*piece->pieceLook.Char.AsciiChar*/ ;
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
 }
@@ -83,16 +83,15 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 }
 
 /*
- * Counts BOOLs in notrisInfo.boCollisionArray with cellCounter. If all 1, increments rowCounter, thus marking row for deletion, and adds it to toErase array.
- * qsort() sorts rows into descending order. The row with greatest y value, i.e. the lowest spatially, is first in array.
- * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] upward are shifted down, i.e. 
+ * Counts BOOLs in each row of notrisInfo.boCollisionArray with cellCounter. If all 1, increments rowCounter, thus marking row for deletion, and adds it to 
+ * toErase array.
+ * qsort() rows into descending order. The row with greatest y value, i.e. the lowest spatially, is first in array.
+ * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] decreasing are shifted down, i.e. 
  * niInfo.ciNotrisScreenBuffer[y][x] = niInfo.ciNotrisScreenBuffer[y - 1][x].
  */
 
-DWORD notris_erase_row( struct notrisInfo* niInfo )
+void notris_erase_row( struct notrisInfo* niInfo )
 {
-  DWORD pieceScore = 0 ;
-
   SHORT floor = niInfo->srPlayFieldArea.Bottom - 1 ;
   SHORT ceiling = niInfo->srPlayFieldArea.Top + 1 ;
   SHORT left = niInfo->srPlayFieldArea.Left ;
@@ -101,7 +100,7 @@ DWORD notris_erase_row( struct notrisInfo* niInfo )
   SHORT cellCounter = 0 ;
   SHORT rowCounter = 0 ;
 
-  SHORT toErase[4] = { 0, 0, 0, 0 } ; // Holds y coords of rows to be deleted.
+  SHORT toErase[4] = { 0, 0, 0, 0 } ;
 
   for( int y = floor; y > ceiling; y-- )
   {
@@ -149,6 +148,4 @@ DWORD notris_erase_row( struct notrisInfo* niInfo )
       }
     }
   }
-  
-  return pieceScore ;
 }

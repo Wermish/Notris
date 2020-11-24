@@ -1,11 +1,15 @@
 #ifndef NOTRIS_GAME_FUNCTIONS_H
 #define NOTRIS_GAME_FUNCTIONS_H
 
+CHAR notris_check_shape_two_collision_special( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+
 BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
-BOOL notris_check_y_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_check_y_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+
+BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo ) ;
 
