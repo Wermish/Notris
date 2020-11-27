@@ -1,7 +1,9 @@
 #ifndef NOTRIS_GRAPHICS_FUNCTIONS_H
 #define NOTRIS_GRAPHICS_FUNCTIONS_H
 
-void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* npfiInfo ) ;
+void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
+
+void notris_display_score( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 

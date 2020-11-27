@@ -17,49 +17,75 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
                   niInfo->srPlayFieldArea.Left, niInfo->srPlayFieldArea.Top, niInfo->srPlayFieldArea.Right, niInfo->srPlayFieldArea.Bottom ) ;
 }
 
+void notris_display_score( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
+{
+  
+}
+
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = 49 /*piece->pieceLook.Char.AsciiChar*/ ;
+  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = 50 /*piece->pieceLook.Char.AsciiChar*/ ;
+  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = 51 /*piece->pieceLook.Char.AsciiChar*/ ;
+  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = 52 /*piece->pieceLook.Char.AsciiChar*/ ;
+  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
 }
 
 void notris_draw_UI( struct notrisInfo* niInfo )
 {
-  for( int roof = niInfo->srPlayFieldArea.Left - 1; roof < niInfo->srPlayFieldArea.Right + 1 ; roof++ )
+// Draw playfield corners----------------------------------------------------------------------------------------------------------------------------
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 201 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][niInfo->srPlayFieldArea.Left - 1].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                                               FOREGROUND_RED | FOREGROUND_INTENSITY ;
+
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 187 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][niInfo->srPlayFieldArea.Right].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                                            FOREGROUND_RED | FOREGROUND_INTENSITY ;
+
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 200 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][niInfo->srPlayFieldArea.Left - 1].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                                              FOREGROUND_RED | FOREGROUND_INTENSITY ;
+
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 188 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][niInfo->srPlayFieldArea.Right].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                                           FOREGROUND_RED | FOREGROUND_INTENSITY ;                                                                                                                                                                                                         
+// Draw rest of playfield----------------------------------------------------------------------------------------------------------------------------
+  for( int roof = niInfo->srPlayFieldArea.Left; roof < niInfo->srPlayFieldArea.Right ; roof++ )
   {
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY ;
+    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 205 ;
+    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                     FOREGROUND_RED | FOREGROUND_INTENSITY ;
   }
 
-  for( int floor = niInfo->srPlayFieldArea.Left - 1; floor < niInfo->srPlayFieldArea.Right + 1; floor++ )
+  for( int floor = niInfo->srPlayFieldArea.Left; floor < niInfo->srPlayFieldArea.Right; floor++ )
   {
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY ;
+    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 205 ;
+    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                     FOREGROUND_RED | FOREGROUND_INTENSITY ;
   }
 
   for( int leftWall = niInfo->srPlayFieldArea.Top; leftWall < niInfo->srPlayFieldArea.Bottom; leftWall++ )
   {
-    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY ;
+    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 186 ;
+    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                          FOREGROUND_RED | FOREGROUND_INTENSITY ;
   }
 
   for( int rightWall = niInfo->srPlayFieldArea.Top; rightWall < niInfo->srPlayFieldArea.Bottom; rightWall++ )
   {
-    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY ;
+    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 186 ;
+    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | 
+                                                                                        FOREGROUND_RED | FOREGROUND_INTENSITY ;  
   }
 }
 
@@ -88,6 +114,8 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
  * qsort() rows into descending order. The row with greatest y value, i.e. the lowest spatially, is first in array.
  * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] decreasing are shifted down, i.e. 
  * niInfo.ciNotrisScreenBuffer[y][x] = niInfo.ciNotrisScreenBuffer[y - 1][x].
+ * 
+ * TODO: Still not working properly. Sometimes a row is deleted when a piece lands atop another, instead of filling a gap in the row...
  */
 
 void notris_erase_row( struct notrisInfo* niInfo )
@@ -145,6 +173,15 @@ void notris_erase_row( struct notrisInfo* niInfo )
             }
           }
         }
+      }
+    }
+    niInfo->notrisScore = niInfo->notrisScore + ( niInfo->level * rowCounter ) ;
+
+    if( niInfo->level < hardest )
+    {
+      if( niInfo->notrisScore >= ( 20 * niInfo->level ) )
+      {
+        niInfo->level++ ;
       }
     }
   }

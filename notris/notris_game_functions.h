@@ -13,13 +13,15 @@ BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPie
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo ) ;
 
-BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* npfiInfo, struct notrisPiece* piece ) ;
+BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 BOOL notris_piece_falling( DWORD* counter, struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 void notris_rotate_piece_anticlockwise( struct notrisPiece* piece ) ;
 
 void notris_rotate_piece_clockwise( struct notrisPiece* piece ) ;
+
+void notris_score_and_level( struct notrisInfo* niInfo ) ;
 
 void notris_set_boundaries( struct notrisInfo* niInfo ) ;
 

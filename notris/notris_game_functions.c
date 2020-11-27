@@ -691,9 +691,36 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
 
 BOOL notris_piece_falling( DWORD* dwCounter, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
+    DWORD limit ;
+
+    switch( niInfo->level )
+    {
+        case 1:
+            limit = 10 ;
+            break ;
+        case 2:
+            limit = 9 ;
+            break ;
+        case 3:
+            limit = 8 ;
+            break ;
+        case 4:
+            limit = 7 ;
+            break ;
+        case 5:
+            limit = 6 ;
+            break ;
+        case 6:
+            limit = 5 ;
+            break ;
+        case 7:
+            limit = 4 ;
+            break ;
+    }
+
     if( !notris_check_y_plus_collision( niInfo, piece ) )
     {
-        if( *dwCounter == 10 )
+        if( *dwCounter == limit )
         {
             *dwCounter = 0 ;
 
@@ -1317,7 +1344,9 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
-        notrisPiece *p = notris_create_piece( random_number_in_range( 2, 2 ), niInfo ) ;
+        notris_draw_score( hScreenBuffer, niInfo ) ;
+
+        notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
 
         pieceFalling = 1 ;
 

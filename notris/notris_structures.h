@@ -39,7 +39,9 @@ typedef enum notrisLevel
  * boNotrisWriteArray: an array of BOOLs. Each item represents the state of a row of ciNotrisScreenBuffer. If 1, the row has been updated and needs to be drawn.
  * boNotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from ciNotrisScreenBuffer. 1 means the cell is occupied, or drawn.
  * srPlayFieldArea: a SMALL_RECT, the dimensions of the area into which the blocks fall and the action takes place.
- * dwNotrisScore: DWORD returned from play_notris() once the game is over.
+ * srScoreArea: a SMALL_RECT, the dimensions of the area in which the score is displayed.
+ * srLevelArea: a SMALL_RECT, the dimensions of the area in which the current level is displayed.
+ * dwNotrisScore: DWORD storing points accrued through playing Notris.
  * nextPiece: an enum which determines the next piece to fall, displayed to the player ahead of time via the UI.
  * level: pace at which pieces fall. 1 - 7, with 7 the fastest. More points per row deletion at greater levels.
  */
@@ -50,6 +52,8 @@ typedef struct notrisInfo
     BOOL* boNotrisWriteArray ;
     BOOL** boNotrisCollisionArray ;
     SMALL_RECT srPlayFieldArea ;
+    SMALL_RECT srScoreArea ;
+    SMALL_RECT srLevelArea ;
     DWORD notrisScore ;
     enum notrisLevel level ;
     enum notrisPieceShape nextPiece ;

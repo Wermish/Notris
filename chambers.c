@@ -20,7 +20,7 @@ notrisInfo npfiInfo ;
 
 int main( void )
 {   
-    setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 51, 41 ) ;
+    setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 50, 40 ) ;
 
     play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &npfiInfo ) ;
 
