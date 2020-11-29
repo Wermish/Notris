@@ -41,6 +41,7 @@ typedef enum notrisLevel
  * srPlayFieldArea: a SMALL_RECT, the dimensions of the area into which the blocks fall and the action takes place.
  * srScoreArea: a SMALL_RECT, the dimensions of the area in which the score is displayed.
  * srLevelArea: a SMALL_RECT, the dimensions of the area in which the current level is displayed.
+ * srNextPieceArea: a SMALL_RECT, the dimensions of the area in which the next piece to fall is displayed.
  * dwNotrisScore: DWORD storing points accrued through playing Notris.
  * nextPiece: an enum which determines the next piece to fall, displayed to the player ahead of time via the UI.
  * level: pace at which pieces fall. 1 - 7, with 7 the fastest. More points per row deletion at greater levels.
@@ -54,6 +55,7 @@ typedef struct notrisInfo
     SMALL_RECT srPlayFieldArea ;
     SMALL_RECT srScoreArea ;
     SMALL_RECT srLevelArea ;
+    SMALL_RECT srNextPieceArea ;
     DWORD notrisScore ;
     enum notrisLevel level ;
     enum notrisPieceShape nextPiece ;

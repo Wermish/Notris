@@ -38,82 +38,41 @@ void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 
 void notris_draw_UI( struct notrisInfo* niInfo )
 {
-  // Draw PlayFieldArea
+  // Draw PlayFieldArea border
   for( int roof = niInfo->srPlayFieldArea.Left - 1; roof < niInfo->srPlayFieldArea.Right + 1 ; roof++ )
   {
     niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
     niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                     BACKGROUND_RED | BACKGROUND_INTENSITY ;
+                                                                                     BACKGROUND_RED ;
   }
 
   for( int floor = niInfo->srPlayFieldArea.Left - 1; floor < niInfo->srPlayFieldArea.Right + 1; floor++ )
   {
     niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
     niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                     BACKGROUND_RED | BACKGROUND_INTENSITY ;
+                                                                                     BACKGROUND_RED ;
   }
 
   for( int leftWall = niInfo->srPlayFieldArea.Top; leftWall < niInfo->srPlayFieldArea.Bottom; leftWall++ )
   {
     niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
     niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                          BACKGROUND_RED | BACKGROUND_INTENSITY ;
+                                                                                          BACKGROUND_RED ;
   }
 
   for( int rightWall = niInfo->srPlayFieldArea.Top; rightWall < niInfo->srPlayFieldArea.Bottom; rightWall++ )
   {
     niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
     niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                        BACKGROUND_RED | BACKGROUND_INTENSITY ;  
+                                                                                        BACKGROUND_RED ;  
   }
 
-  // Draw ScoreArea
+  draw_string( "Score", niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  for( int roof = niInfo->srScoreArea.Left; roof < niInfo->srScoreArea.Right; roof++ )
-  {
-    niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top][roof].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                             BACKGROUND_RED ;
-  }
-  
-  for( int floor = niInfo->srScoreArea.Left; floor < niInfo->srScoreArea.Right; floor++ )
-  {
-    niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Bottom][floor].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                 BACKGROUND_RED ;
-  }
+  draw_string( "Level", niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top + 1][niInfo->srScoreArea.Left].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top + 1][niInfo->srScoreArea.Left].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                                   BACKGROUND_RED ;
-
-  niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top + 1][niInfo->srScoreArea.Right - 1].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srScoreArea.Top + 1][niInfo->srScoreArea.Right - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                                        BACKGROUND_RED ;                                                                            
-  // Draw LevelArea
-
-   for( int roof = niInfo->srLevelArea.Left; roof < niInfo->srLevelArea.Right; roof++ )
-  {
-    niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top][roof].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                             BACKGROUND_RED ;
-  }
-  
-  for( int floor = niInfo->srLevelArea.Left; floor < niInfo->srLevelArea.Right; floor++ )
-  {
-    niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Bottom][floor].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                 BACKGROUND_RED ;
-  }
-
-  niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top + 1][niInfo->srLevelArea.Left].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top + 1][niInfo->srLevelArea.Left].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                                   BACKGROUND_RED ;
-
-  niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top + 1][niInfo->srLevelArea.Right - 1].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srLevelArea.Top + 1][niInfo->srLevelArea.Right - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                                        BACKGROUND_RED ; 
-}
+  draw_string( "Next", niInfo->ciNotrisScreenBuffer, niInfo->srNextPieceArea.Left, niInfo->srNextPieceArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+}  
 
 void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {

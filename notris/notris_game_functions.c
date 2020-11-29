@@ -1299,13 +1299,19 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 
     niInfo->srScoreArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
     niInfo->srScoreArea.Right = niInfo->srScoreArea.Left + 9 ;
-    niInfo->srScoreArea.Top = niInfo->srPlayFieldArea.Top + 1 ;
+    niInfo->srScoreArea.Top = niInfo->srPlayFieldArea.Top ;
     niInfo->srScoreArea.Bottom = niInfo->srScoreArea.Top + 2 ;
 
     niInfo->srLevelArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
     niInfo->srLevelArea.Right = niInfo->srLevelArea.Left + 4 ;
     niInfo->srLevelArea.Top = niInfo->srScoreArea.Bottom + 2 ;
     niInfo->srLevelArea.Bottom = niInfo->srLevelArea.Top + 2 ;
+
+    niInfo->srNextPieceArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
+    niInfo->srNextPieceArea.Right = niInfo->srNextPieceArea.Left + 7 ;
+    niInfo->srNextPieceArea.Top = niInfo->srLevelArea.Bottom + 2 ;
+    niInfo->srNextPieceArea.Bottom = niInfo->srNextPieceArea.Top + 7 ;
+
 
     niInfo->notrisScore = 0 ;
 
