@@ -20,7 +20,7 @@ void clear_buffer( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
     }
 }
 
-void draw_buffer( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
+void display_buffer( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
 {
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
@@ -88,4 +88,13 @@ void draw_rectangle( HANDLE* phScreenBuffer,
     }
 
     free( consoleBuffer ) ;
+}
+
+void draw_string( CHAR* str, CHAR_INFO** buffer, SHORT startX, SHORT startY, WORD attributes )
+{
+  for( int i = 0; i < strlen( str ); i++ )
+  {
+    buffer[startY][startX + i].Char.AsciiChar = str[i] ;
+    buffer[startY][startX + i].Attributes = attributes ;
+  }
 }

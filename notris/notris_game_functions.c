@@ -1297,6 +1297,16 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     niInfo->srPlayFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
     niInfo->srPlayFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
 
+    niInfo->srScoreArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
+    niInfo->srScoreArea.Right = niInfo->srScoreArea.Left + 9 ;
+    niInfo->srScoreArea.Top = niInfo->srPlayFieldArea.Top + 1 ;
+    niInfo->srScoreArea.Bottom = niInfo->srScoreArea.Top + 2 ;
+
+    niInfo->srLevelArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
+    niInfo->srLevelArea.Right = niInfo->srLevelArea.Left + 4 ;
+    niInfo->srLevelArea.Top = niInfo->srScoreArea.Bottom + 2 ;
+    niInfo->srLevelArea.Bottom = niInfo->srLevelArea.Top + 2 ;
+
     niInfo->notrisScore = 0 ;
 
     niInfo->level = 1 ;
@@ -1344,9 +1354,9 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
-        notris_draw_score( hScreenBuffer, niInfo ) ;
+        notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo ) ;
 
-        notrisPiece *p = notris_create_piece( random_number_in_range( 1, 7 ), niInfo ) ;
+        niInfo->nextPiece =  random_number_in_range( 1, 7 ) ;
 
         pieceFalling = 1 ;
 
@@ -1370,7 +1380,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
             
             notris_draw_piece( niInfo, p ) ;
 
-            draw_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+            display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
 
             dwDropCounter++ ;
 

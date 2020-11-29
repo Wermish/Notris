@@ -3,8 +3,6 @@
 
 void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
 
-void notris_display_score( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
-
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 void notris_draw_UI( struct notrisInfo* npfiInfo ) ;
