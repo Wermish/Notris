@@ -17,6 +17,15 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
                   niInfo->srPlayFieldArea.Left, niInfo->srPlayFieldArea.Top, niInfo->srPlayFieldArea.Right, niInfo->srPlayFieldArea.Bottom ) ;
 }
 
+void notris_draw_level( struct notrisInfo* niInfo )
+{
+  CHAR score[2] ;
+
+  sprintf( score, "%i", niInfo->level ) ;
+
+  draw_string( score, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 1, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+}
+
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
   niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
@@ -162,9 +171,9 @@ void notris_erase_row( struct notrisInfo* niInfo )
     }
     niInfo->notrisScore = niInfo->notrisScore + ( niInfo->level * rowCounter ) ;
 
-    if( niInfo->level < hardest )
+    if( niInfo->level < 7 )
     {
-      if( niInfo->notrisScore >= ( 20 * niInfo->level ) )
+      if( niInfo->notrisScore >= ( 10 * niInfo->level ) )
       {
         niInfo->level++ ;
       }

@@ -1364,6 +1364,8 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
         niInfo->nextPiece =  random_number_in_range( 1, 7 ) ;
 
+        notris_draw_level( niInfo ) ;
+
         pieceFalling = 1 ;
 
         dwDropCounter = 0 ;

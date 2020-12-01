@@ -3,7 +3,7 @@
 
 void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
 
-void notris_draw_level() ;
+void notris_draw_level( struct notrisInfo* niInfo ) ;
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
