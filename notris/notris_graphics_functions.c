@@ -4,6 +4,7 @@
 #include "../shared/console_functions.h"
 #include "../shared/shared_game_functions.h"
 #include "../shared/shared_graphics_functions.h"
+#include "notris_game_functions.h"
 #include "notris_graphics_functions.h"
 #include "notris_structures.h"
 
@@ -19,11 +20,29 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
 
 void notris_draw_level( struct notrisInfo* niInfo )
 {
-  CHAR score[2] ;
+  CHAR level[2] ;
 
-  sprintf( score, "%i", niInfo->level ) ;
+  sprintf( level, "%i", niInfo->level ) ;
 
-  draw_string( score, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 1, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+  draw_string( level, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+}
+
+void notris_draw_next( struct notrisInfo* niInfo )
+{
+  for( int y = niInfo->srNextPieceArea.Top + 1; y <= niInfo->srNextPieceArea.Bottom; y++ )
+  {
+    for( int x = niInfo->srNextPieceArea.Left; x <= niInfo->srNextPieceArea.Right; x++ )
+    {
+      niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+      niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+    }
+  }
+
+  notrisPiece* next = notris_create_piece( niInfo->nextPiece, niInfo, niInfo->srNextPieceArea.Left + 3, niInfo->srNextPieceArea.Top + 2 ) ;
+
+  notris_draw_piece( niInfo, next ) ;
+
+  free( next ) ;
 }
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
@@ -43,6 +62,15 @@ void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
+}
+
+void notris_draw_score( struct notrisInfo* niInfo )
+{
+  CHAR score[8] ;
+
+  sprintf( score, "%i", niInfo->notrisScore ) ;
+
+  draw_string( score, niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 }
 
 void notris_draw_UI( struct notrisInfo* niInfo )

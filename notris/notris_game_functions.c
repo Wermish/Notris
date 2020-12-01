@@ -109,16 +109,16 @@ BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPie
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
 
-struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* niInfo ){
-
+struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* niInfo, SHORT leadBlockX, SHORT leadBlockY )
+{
     notrisPiece *piece = malloc( sizeof( notrisPiece ) ) ;
     
     piece->pieceShape = pieceShape ;
     piece->piecePhase = 0 ;
     piece->pieceLook.Char.AsciiChar = 0 ;
 
-    piece->blockOne.X = ( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2 ; // 24
-    piece->blockOne.Y = niInfo->srPlayFieldArea.Top ; // 5
+    piece->blockOne.X =  leadBlockX ;
+    piece->blockOne.Y = leadBlockY ;
 
     switch( pieceShape )
     {   // Square
@@ -1360,11 +1360,16 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
-        notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo ) ;
+        notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo, 
+                                           (( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2), niInfo->srPlayFieldArea.Top ) ;
 
         niInfo->nextPiece =  random_number_in_range( 1, 7 ) ;
 
         notris_draw_level( niInfo ) ;
+
+        notris_draw_score( niInfo ) ;
+
+        notris_draw_next( niInfo ) ;
 
         pieceFalling = 1 ;
 

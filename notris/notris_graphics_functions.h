@@ -7,9 +7,9 @@ void notris_draw_level( struct notrisInfo* niInfo ) ;
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
-void notris_draw_next() ;
+void notris_draw_next( struct notrisInfo* niInfo  ) ;
 
-void notris_draw_score() ;
+void notris_draw_score( struct notrisInfo* niInfo ) ;
 
 void notris_draw_UI( struct notrisInfo* npfiInfo ) ;
 
