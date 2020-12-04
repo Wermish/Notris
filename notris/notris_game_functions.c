@@ -1360,10 +1360,12 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     while(1)
     {
+        niInfo->nextPiece = 2 ;
+
         notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo, 
                                            (( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2), niInfo->srPlayFieldArea.Top ) ;
 
-        niInfo->nextPiece =  random_number_in_range( 1, 7 ) ;
+        niInfo->nextPiece =  random_number_in_range( 2, 2 ) ;
 
         notris_draw_level( niInfo ) ;
 

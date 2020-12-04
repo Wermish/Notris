@@ -94,7 +94,7 @@ void notris_draw_UI( struct notrisInfo* niInfo )
   {
     niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
     niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | 
-                                                                                          BACKGROUND_RED ;
+                                                                                          BACKGROUND_RED ;                                                                                    
   }
 
   for( int rightWall = niInfo->srPlayFieldArea.Top; rightWall < niInfo->srPlayFieldArea.Bottom; rightWall++ )
@@ -152,7 +152,7 @@ void notris_erase_row( struct notrisInfo* niInfo )
 
   SHORT toErase[4] = { 0, 0, 0, 0 } ;
 
-  for( int y = floor; y > ceiling; y-- )
+  for( int y = ceiling; y <= floor; y++ )
   {
     for( int x = left; x < right; x++ )
     {
@@ -161,7 +161,7 @@ void notris_erase_row( struct notrisInfo* niInfo )
         cellCounter++ ;
       }
     }
-    if( cellCounter / ( right - left ) == 1 )
+    if( cellCounter >= ( right - left ) )
     {
       toErase[rowCounter] = y ;
       rowCounter++ ;
@@ -169,7 +169,15 @@ void notris_erase_row( struct notrisInfo* niInfo )
     cellCounter = 0 ;
   }
 
-  qsort( toErase, 4, sizeof( SHORT ), comparator_descending ) ;
+  for( int i = 0; i < 4; i ++ )
+  {
+    fprintf( stdout, "%i ", toErase[i] ) ;
+  }
+  fprintf( stdout, "| " );
+
+  //qsort( toErase, 4, sizeof( SHORT ), comparator_descending ) ;
+
+  // The row pertaining to the last Y coord in toErase[4] isn't deleted.
 
   if( rowCounter )
   {

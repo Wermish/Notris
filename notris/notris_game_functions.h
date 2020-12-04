@@ -11,6 +11,8 @@ BOOL notris_check_y_plus_collision( struct notrisInfo* niInfo, struct notrisPiec
 
 BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
+BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* piece, INPUT_RECORD irMovement ) ;
+
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo, SHORT leadBlockX, SHORT leadBlockY ) ;
 
 BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
