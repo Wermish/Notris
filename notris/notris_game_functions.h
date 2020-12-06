@@ -3,16 +3,6 @@
 
 BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece, WORD wVirtualKeyCode ) ;
 
-CHAR notris_check_shape_two_collision_special( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
-
-BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
-
-BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
-
-BOOL notris_check_y_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
-
-BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
-
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo, SHORT leadBlockX, SHORT leadBlockY ) ;
 
 BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;

@@ -38,7 +38,7 @@ void notris_draw_next( struct notrisInfo* niInfo )
     }
   }
 
-  notrisPiece* next = notris_create_piece( niInfo->nextPiece, niInfo, niInfo->srNextPieceArea.Left + 1, niInfo->srNextPieceArea.Top + 2 ) ;
+  notrisPiece* next = notris_create_piece( niInfo->nextPiece, niInfo, niInfo->srNextPieceArea.Left + 2, niInfo->srNextPieceArea.Top + 2 ) ;
 
   notris_draw_piece( niInfo, next ) ;
 
