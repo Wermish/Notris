@@ -169,16 +169,6 @@ void notris_erase_row( struct notrisInfo* niInfo )
     cellCounter = 0 ;
   }
 
-  for( int i = 0; i < 4; i ++ )
-  {
-    fprintf( stdout, "%i ", toErase[i] ) ;
-  }
-  fprintf( stdout, "| " );
-
-  //qsort( toErase, 4, sizeof( SHORT ), comparator_descending ) ;
-
-  // The row pertaining to the last Y coord in toErase[4] isn't deleted.
-
   if( rowCounter )
   {
     for( int r = 0; r < 4; r++ )

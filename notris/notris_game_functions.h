@@ -1,27 +1,27 @@
 #ifndef NOTRIS_GAME_FUNCTIONS_H
 #define NOTRIS_GAME_FUNCTIONS_H
 
-CHAR notris_check_shape_two_collision_special( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece, WORD wVirtualKeyCode ) ;
 
-BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+CHAR notris_check_shape_two_collision_special( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_check_x_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-BOOL notris_check_y_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_check_x_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_check_y_plus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* piece, INPUT_RECORD irMovement ) ;
+BOOL notris_check_y_minus_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo, SHORT leadBlockX, SHORT leadBlockY ) ;
 
-BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-BOOL notris_piece_falling( DWORD* counter, struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+BOOL notris_piece_falling( DWORD* counter, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
-void notris_rotate_piece_anticlockwise( struct notrisPiece* piece ) ;
+void notris_rotate_piece_anticlockwise( struct notrisPiece* npPiece ) ;
 
-void notris_rotate_piece_clockwise( struct notrisPiece* piece ) ;
+void notris_rotate_piece_clockwise( struct notrisPiece* npPiece ) ;
 
 void notris_score_and_level( struct notrisInfo* niInfo ) ;
 
