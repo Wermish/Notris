@@ -59,17 +59,17 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
             case VK_CONTROL:
                 if( piece->pieceShape != 1 )
                 {
-                    if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
-                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) 
+                    if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
+                          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
                         
                         &&
 
-                        ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
-                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 1] ) )
+                        ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
+                          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 1] ) ) )
                     {
                         return 1 ;
                     }
@@ -222,17 +222,17 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                                 break ;
                         }
                     }    
-                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
-                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) 
+                    else if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
+                               ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) )
                              
                              &&
                              
-                             ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
-                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) )
+                             ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
+                               ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) ) )
                     {
                         return 1 ;
                     }
@@ -256,17 +256,17 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
             case VK_MENU:
                 if( piece->pieceShape != 1 )
                 {
-                    if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
-                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) 
+                    if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
+                          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
                         
                         &&
 
-                        ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
-                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
-                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 1] ) )
+                        ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 1] ) || 
+                          ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 1] ) ||
+                          ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 1] ) ) )
                     {
                         return 1 ;
                     }
@@ -418,17 +418,17 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                         }
                     }
                     
-                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
-                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) 
+                    else if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
+                               ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) )
                              
                              &&
                              
-                             ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
-                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) )
+                             ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 1][piece->blockOne.X] ) || 
+                               ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 1][piece->blockTwo.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
+                               ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) ) )
                     {
                         return 1 ;
                     }
@@ -731,7 +731,7 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( !notris_check_move_collision( niInfo, piece, inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode ) )
+                        if( !notris_check_move_collision( niInfo, piece, VK_MENU) )
                         {
                             notris_rotate_piece_clockwise( piece ) ;
                         }
@@ -742,7 +742,7 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( !notris_check_move_collision( niInfo, piece, inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode ) )
+                        if( !notris_check_move_collision( niInfo, piece, VK_CONTROL ) )
                         {
                             notris_rotate_piece_anticlockwise( piece ) ;
                         }
