@@ -133,11 +133,9 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 /*
  * Counts BOOLs in each row of notrisInfo.boCollisionArray with cellCounter. If all 1, increments rowCounter, thus marking row for deletion, and adds it to 
  * toErase array.
- * qsort() rows into descending order. The row with greatest y value, i.e. the lowest spatially, is first in array.
- * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] decreasing are shifted down, i.e. 
+ * Rows are counted from 0y increasing. Thus the row are stored in ascending order in toErase[4].
+ * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] to 0y  are shifted down, i.e. 
  * niInfo.ciNotrisScreenBuffer[y][x] = niInfo.ciNotrisScreenBuffer[y - 1][x].
- * 
- * TODO: Still not working properly. Sometimes a row is deleted when a piece lands atop another, instead of filling a gap in the row...
  */
 
 void notris_erase_row( struct notrisInfo* niInfo )
@@ -195,11 +193,11 @@ void notris_erase_row( struct notrisInfo* niInfo )
         }
       }
     }
-    niInfo->notrisScore = niInfo->notrisScore + ( niInfo->level * rowCounter ) ;
+    niInfo->notrisScore = niInfo->notrisScore + ( ( niInfo->level * rowCounter ) * rowCounter ) ;
 
     if( niInfo->level < 7 )
     {
-      if( niInfo->notrisScore >= ( 10 * niInfo->level ) )
+      if( niInfo->notrisScore >= ( 20 * niInfo->level ) )
       {
         niInfo->level++ ;
       }

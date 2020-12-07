@@ -526,6 +526,33 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
     return 0 ;
 }
 
+void notris_create_bag( struct notrisInfo* niInfo )
+{
+    CHAR cSAndZCounter = 0 ;
+
+    notrisPieceShape piece ;
+
+    for( int i = 0; i < 7; i++ )
+    {
+        piece = random_number_in_range( 1, 7 ) ;
+
+        if( cSAndZCounter == 4 && (  piece == 5 || piece == 6  ) )
+        {
+            while( piece != 5 && piece != 4 )
+            {
+                piece = random_number_in_range( 1, 7 ) ;
+            }
+        }   
+        else if( piece == 5 || piece == 6 )
+        {
+            cSAndZCounter++ ;
+        }
+
+        niInfo->pieceBag[i] = piece ;
+        fprintf( stdout, "%i ", niInfo->pieceBag[i] ) ;
+    }
+}
+
 /*
  * Shape of piece is formed relative to coord of leading block, blockOne.
  */
@@ -1372,9 +1399,9 @@ void notris_set_boundaries( struct notrisInfo* niInfo )
 
 void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
-    niInfo->srPlayFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 6 ;
+    niInfo->srPlayFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 5 ;
     niInfo->srPlayFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
-    niInfo->srPlayFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 6 ;
+    niInfo->srPlayFieldArea.Right = ( csbiInfo->srWindow.Right / 2 ) + 5 ;
     niInfo->srPlayFieldArea.Bottom =  (csbiInfo->srWindow.Bottom / 2) + 10 ;
 
     niInfo->srScoreArea.Left = niInfo->srPlayFieldArea.Right + 2 ;
@@ -1396,7 +1423,9 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
 
     niInfo->level = 1 ;
 
-    niInfo->nextPiece = random_number_in_range( 1, 7 ) ; 
+    notris_create_bag( niInfo ) ;
+
+    niInfo->nextPiece = niInfo->pieceBag[0] ;
 
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
@@ -1428,6 +1457,9 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 { 
     DWORD dwDropCounter ;
     BOOL pieceFalling ;
+    CHAR pieceBagPointer = 0 ;
+
+    srand( ( unsigned )time( NULL ) ) ;
 
     notris_setup( csbiInfo, niInfo ) ;
 
@@ -1435,14 +1467,20 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
     notris_draw_UI( niInfo ) ;
 
-    srand( time( 0 ) ) ;
-
     while(1)
     {
+        if( pieceBagPointer == 6 )
+        {
+            pieceBagPointer = 0 ;
+            notris_create_bag( niInfo ) ;
+        }
+
         notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo, 
                                            (( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2), niInfo->srPlayFieldArea.Top ) ;
 
-        niInfo->nextPiece =  random_number_in_range( 1, 7 ) ;
+        pieceBagPointer++ ;
+
+        niInfo->nextPiece =  niInfo->pieceBag[pieceBagPointer] ;
 
         notris_draw_level( niInfo ) ;
 

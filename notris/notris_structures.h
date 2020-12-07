@@ -58,6 +58,7 @@ typedef struct notrisInfo
     SMALL_RECT srNextPieceArea ;
     DWORD notrisScore ;
     enum notrisLevel level ;
+    enum notrisPieceShape pieceBag[7] ;
     enum notrisPieceShape nextPiece ;
     
 } notrisInfo ;

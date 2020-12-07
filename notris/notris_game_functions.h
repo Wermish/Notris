@@ -3,6 +3,8 @@
 
 BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece, WORD wVirtualKeyCode ) ;
 
+void notris_create_bag( struct notrisInfo* niInfo ) ;
+
 struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struct notrisInfo* npfiInfo, SHORT leadBlockX, SHORT leadBlockY ) ;
 
 BOOL notris_move_piece( HANDLE* phInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
