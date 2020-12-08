@@ -76,10 +76,10 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                         return 1 ;
                     }
                     // If cell to the left, or -x, is occupied.
-                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
-                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
-                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
+                    if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
+                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
                     {
                         switch( piece->pieceShape )
                         {
@@ -227,7 +227,10 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                         }
                     }
                     // Specific to pieceShape 2 as it has longer 'reach' in certain situations when rotating.
-                    else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 2] )
+                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 2] ) || 
+                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 2] ) )
                     {
                         if( piece->pieceShape == 2 )
                         {
@@ -241,7 +244,10 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                         }
                     }
                     // Specific to pieceShape 2.
-                    else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 2] )
+                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 2] ) || 
+                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 2] ) )
                     {
                         if( piece->pieceShape == 2 )
                         {
@@ -255,7 +261,7 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                         }
                     }
                     // If cells above and below piece, along y axis, are occupied
-                    else if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
+                    if(      ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
                                ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
                                ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
                                ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) )
@@ -353,6 +359,23 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                                 break ;
                         }
                     }
+                    // Specific to piece 2
+                    if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 2][piece->blockOne.X] ) || 
+                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 2][piece->blockTwo.X] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 2][piece->blockThree.X] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 2][piece->blockFour.X] ) )
+                    {
+                        if( piece->pieceShape == 2 )
+                        {
+                            if( piece->piecePhase == 1 )
+                            {
+                                piece->blockOne.Y -= 2 ;
+                                piece->blockTwo.Y -= 2 ;
+                                piece->blockThree.Y -=2 ;
+                                piece->blockFour.Y -= 2 ;
+                            }
+                        }
+                    }                   
                 }
                 break ;
 
@@ -373,7 +396,7 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                     {
                         return 1 ;
                     }
-                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
+                    if(      ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 1] ) || 
                              ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X - 1] ) ||
                              ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 1] ) ||
                              ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 1] ) )
@@ -520,7 +543,10 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                                 break ;
                         }
                     }
-                    else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 2] )
+                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X - 2] ) || 
+                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X -2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X - 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 2] ) )
                     {
                         if( piece->pieceShape == 2 )
                         {
@@ -533,7 +559,10 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                             }
                         }
                     }
-                    else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 2] )
+                    else if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X + 2] ) || 
+                             ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X + 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X + 2] ) ||
+                             ( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 2] ) )
                     {
                         if( piece->pieceShape == 2 )
                         {
@@ -546,7 +575,7 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                             }
                         }
                     }
-                    else if( ( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
+                    if( (      ( niInfo->boNotrisCollisionArray[piece->blockOne.Y - 1][piece->blockOne.X] ) || 
                                ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y - 1][piece->blockTwo.X] ) ||
                                ( niInfo->boNotrisCollisionArray[piece->blockThree.Y - 1][piece->blockThree.X] ) ||
                                ( niInfo->boNotrisCollisionArray[piece->blockFour.Y - 1][piece->blockFour.X] ) )
@@ -642,6 +671,22 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                                 break ;
                         }
                     }
+                    if( ( niInfo->boNotrisCollisionArray[piece->blockOne.Y + 2][piece->blockOne.X] ) || 
+                        ( niInfo->boNotrisCollisionArray[piece->blockTwo.Y + 2][piece->blockTwo.X] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 2][piece->blockThree.X] ) ||
+                        ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 2][piece->blockFour.X] ) )
+                    {
+                        if( piece->pieceShape == 2 )
+                        {
+                            if( piece->piecePhase == 3 )
+                            {
+                                piece->blockOne.Y -= 2 ;
+                                piece->blockTwo.Y -= 2 ;
+                                piece->blockThree.Y -=2 ;
+                                piece->blockFour.Y -= 2 ;
+                            }
+                        }
+                    }
 
                 }
                 break ;
@@ -683,7 +728,7 @@ void notris_create_bag( struct notrisInfo* niInfo )
         {
             cSAndZCounter++ ;
         }
-        
+
         niInfo->pieceBag[i] = piece ;
     }
 }
@@ -1591,7 +1636,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
     DWORD dwDropCounter ;
-    BOOL pieceFalling ;
+    CHAR pieceLockDownCounter ;
     CHAR pieceBagPointer = 0 ;
 
     srand( ( unsigned )time( 0 ) ) ;
@@ -1621,11 +1666,13 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
         notris_draw_next( niInfo ) ;
 
-        pieceFalling = 1 ;
+        niInfo->boPieceFalling = 1 ;
 
         dwDropCounter = 0 ;
+
+        pieceLockDownCounter = 0 ;
        
-        while( pieceFalling )
+        while( niInfo->boPieceFalling )
         {   
             // TODO: Compare old vs new collision array to see if needs to be drawn.
             
@@ -1633,14 +1680,41 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
             if ( notris_piece_falling( &dwDropCounter, niInfo, p ) )
             {
-                pieceFalling = 0 ;
+                niInfo->boPieceFalling = 0 ;
             }
 
             if( notris_move_piece( hInputBuffer, niInfo, p ) )
             {
-                pieceFalling = 0 ;
+                niInfo->boPieceFalling = 0 ;
             }
-            
+            // 500ms grace period after piece has collided with floor, allowing for movement and rotation. 
+            if( !niInfo->boPieceFalling )
+            {
+                while( pieceLockDownCounter < 10 )
+                {
+                    if( !notris_check_move_collision( niInfo, p, 0 ) )
+                    {
+                        niInfo->boPieceFalling = 1 ;
+
+                        pieceLockDownCounter = 0 ;
+
+                        break ;
+                    }
+
+                    notris_erase_piece( niInfo, p ) ;
+
+                    notris_move_piece( hInputBuffer, niInfo, p ) ;
+
+                    notris_draw_piece( niInfo, p ) ;
+
+                    display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
+
+                    pieceLockDownCounter++ ;
+
+                    Sleep( 50 ) ;
+                }
+            }
+
             notris_draw_piece( niInfo, p ) ;
 
             display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;

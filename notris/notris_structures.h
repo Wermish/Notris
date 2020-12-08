@@ -38,6 +38,7 @@ typedef enum notrisLevel
  * ciNotrisScreenBuffer: a matrix of CHAR_INFOs, each row being a horizontal segment of the screen. The screen updates by writing a row at a time.
  * boNotrisWriteArray: an array of BOOLs. Each item represents the state of a row of ciNotrisScreenBuffer. If 1, the row has been updated and needs to be drawn.
  * boNotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from ciNotrisScreenBuffer. 1 means the cell is occupied, or drawn.
+ * boPieceFalling: whether or not the piece has collided with floor.
  * srPlayFieldArea: a SMALL_RECT, the dimensions of the area into which the blocks fall and the action takes place.
  * srScoreArea: a SMALL_RECT, the dimensions of the area in which the score is displayed.
  * srLevelArea: a SMALL_RECT, the dimensions of the area in which the current level is displayed.
@@ -52,6 +53,7 @@ typedef struct notrisInfo
     CHAR_INFO** ciNotrisScreenBuffer ;
     BOOL* boNotrisWriteArray ;
     BOOL** boNotrisCollisionArray ;
+    BOOL boPieceFalling ;
     SMALL_RECT srPlayFieldArea ;
     SMALL_RECT srScoreArea ;
     SMALL_RECT srLevelArea ;
