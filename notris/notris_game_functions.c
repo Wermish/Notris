@@ -226,7 +226,7 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                                 break ;
                         }
                     }
-                    // Specific to pieceShape 2 as it has longer 'reach' when rotating.
+                    // Specific to pieceShape 2 as it has longer 'reach' in certain situations when rotating.
                     else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X - 2] )
                     {
                         if( piece->pieceShape == 2 )
@@ -240,7 +240,7 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                             }
                         }
                     }
-                    // Specific to pieceShape 2 as it has longer 'reach' when rotating.
+                    // Specific to pieceShape 2.
                     else if( niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X + 2] )
                     {
                         if( piece->pieceShape == 2 )
@@ -283,7 +283,75 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                              ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
                              ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) )
                     {
-                        return 1 ;
+                        switch( piece->pieceShape )
+                        {
+                            case 2:
+                                if( piece->piecePhase == 1 )
+                                {
+                                    piece->blockOne.Y -= 2 ;
+                                    piece->blockTwo.Y -= 2 ;
+                                    piece->blockThree.Y -= 2 ;
+                                    piece->blockFour.Y -= 2 ;
+                                }
+                                else if( piece->piecePhase == 3 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 3:
+                                if( piece->piecePhase == 3 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 4:
+                                if( piece->piecePhase == 1 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 5:
+                                if( piece->piecePhase == 2 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 6:
+                                if( piece->piecePhase == 2 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 7:
+                                if( piece->piecePhase == 0 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                        }
                     }
                 }
                 break ;
@@ -504,7 +572,75 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
                              ( niInfo->boNotrisCollisionArray[piece->blockThree.Y + 1][piece->blockThree.X] ) ||
                              ( niInfo->boNotrisCollisionArray[piece->blockFour.Y + 1][piece->blockFour.X] ) )
                     {
-                        return 1 ;
+                        switch( piece->pieceShape )
+                        {
+                            case 2:
+                                if( piece->piecePhase == 1 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                else if( piece->piecePhase == 3 )
+                                {
+                                    piece->blockOne.Y -= 2 ;
+                                    piece->blockTwo.Y -= 2 ;
+                                    piece->blockThree.Y -= 2 ;
+                                    piece->blockFour.Y -= 2 ;
+                                }
+                                break ;
+                            
+                            case 3:
+                                if( piece->piecePhase == 3 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 4:
+                                if( piece->piecePhase == 1 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 5:
+                                if( piece->piecePhase == 2 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 6:
+                                if( piece->piecePhase == 2 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                            
+                            case 7:
+                                if( piece->piecePhase == 0 )
+                                {
+                                    piece->blockOne.Y-- ;
+                                    piece->blockTwo.Y-- ;
+                                    piece->blockThree.Y-- ;
+                                    piece->blockFour.Y-- ;
+                                }
+                                break ;
+                        }
                     }
 
                 }
@@ -547,9 +683,8 @@ void notris_create_bag( struct notrisInfo* niInfo )
         {
             cSAndZCounter++ ;
         }
-
+        
         niInfo->pieceBag[i] = piece ;
-        fprintf( stdout, "%i ", niInfo->pieceBag[i] ) ;
     }
 }
 
@@ -1459,11 +1594,9 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
     BOOL pieceFalling ;
     CHAR pieceBagPointer = 0 ;
 
-    srand( ( unsigned )time( NULL ) ) ;
+    srand( ( unsigned )time( 0 ) ) ;
 
     notris_setup( csbiInfo, niInfo ) ;
-
-    notris_set_boundaries( niInfo ) ;
 
     notris_draw_UI( niInfo ) ;
 
@@ -1480,7 +1613,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
         pieceBagPointer++ ;
 
-        niInfo->nextPiece =  niInfo->pieceBag[pieceBagPointer] ;
+        niInfo->nextPiece = niInfo->pieceBag[pieceBagPointer] ;
 
         notris_draw_level( niInfo ) ;
 
