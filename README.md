@@ -5,5 +5,5 @@ For now, I will focus on polishing Notris.
 Ideally it will fully conform to the Tetris Guidelines, https://tetris.wiki/Tetris_Guideline.
 
 TO DO:
-* Edge-case issues with collision detection
+* Edge-case issues with collision detection.
 * Implement hi-scores and menu screen.
