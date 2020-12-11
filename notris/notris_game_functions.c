@@ -8,6 +8,7 @@
 #include "notris_structures.h"
 
 /*
+ * TEST
  * Uses the piece's COORDS as indices for niNotrisInfo.boNotrisCollisionArray.
  * TODO: redo checking functions, switching on INPUT_RECORD.Event.KeyEvent.wVirtualKey.
  */
