@@ -6,7 +6,7 @@
 
 void report_error( char *msg )
 {
-    fprintf( stderr, "Failed: %s\nError Code: %i\n", msg, GetLastError() ) ;
+    fprintf( stderr, "Error: %s\nError Code: %i\n", msg, GetLastError() ) ;
     exit( EXIT_FAILURE ) ;
 }
 

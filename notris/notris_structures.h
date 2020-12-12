@@ -36,6 +36,8 @@ typedef enum notrisLevel
 
 /*
  * ciNotrisScreenBuffer: a matrix of CHAR_INFOs, each row being a horizontal segment of the screen. The screen updates by writing a row at a time.
+ * ciNotrisPauseMenu: as above but displays the pause menu during play when the pause key is pressed.
+ * ciNotrisMainMenu: as above but displays the main menu when the game starts.
  * boNotrisWriteArray: an array of BOOLs. Each item represents the state of a row of ciNotrisScreenBuffer. If 1, the row has been updated and needs to be drawn.
  * boNotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from ciNotrisScreenBuffer. 1 means the cell is occupied, or drawn.
  * boPieceFalling: whether or not the piece has collided with floor.
@@ -51,6 +53,8 @@ typedef enum notrisLevel
 typedef struct notrisInfo
 {   
     CHAR_INFO** ciNotrisScreenBuffer ;
+    CHAR_INFO** ciNotrisPauseMenu ;
+    CHAR_INFO** ciNotrisMainMenu ;
     BOOL* boNotrisWriteArray ;
     BOOL** boNotrisCollisionArray ;
     BOOL boPieceFalling ;
