@@ -197,11 +197,29 @@ void notris_erase_row( struct notrisInfo* niInfo )
         }
       }
     }
-    niInfo->notrisScore = niInfo->notrisScore + ( ( niInfo->level * rowCounter ) * rowCounter ) ;
+
+    switch( rowCounter )
+    {
+      case 1:
+        niInfo->notrisScore += (  100 * niInfo->level ) ;
+        break ;
+
+      case 2:
+        niInfo->notrisScore += ( 300 * niInfo->level );
+        break ;
+        
+      case 3:
+        niInfo->notrisScore += ( 500 * niInfo->level );
+        break ;
+        
+      case 4:
+        niInfo->notrisScore += ( 800 * niInfo->level ) ;
+        break ;       
+    }
 
     if( niInfo->level < 7 )
     {
-      if( niInfo->notrisScore >= ( 20 * niInfo->level ) )
+      if( niInfo->notrisScore >= ( 1500 * niInfo->level ) )
       {
         niInfo->level++ ;
       }
