@@ -1,9 +1,13 @@
 # Notris
-A Command Line implementation of Tetris, which was originally part of a puzzle/RPG game. Development of said game is suspended until I have the time to spare.
-For now, I will focus on polishing Notris. 
+A Win32 Command Line implementation of Tetris.
 
-Ideally it will fully conform to the Tetris Guidelines, https://tetris.wiki/Tetris_Guideline.
+Mostly conformant to the Tetris Guidelines: https://tetris.wiki/Tetris_Guideline.
 
-TO DO:
-* Edge-case issues with collision detection.
-* Implement hi-scores and menu screen.
+## Controls
+Key        |Effect
+-----------|-----------
+Arrow Keys | Move, except for Up
+Ctrl | Rotate piece anticlockwise 
+Alt | Rotate piece clockwise
+Tab | Pause the game
+Esc | Exit Notris
