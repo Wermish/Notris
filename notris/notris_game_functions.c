@@ -823,6 +823,19 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
+                        CHAR cursor = 26 ;
+
+                        SHORT cursorX = niInfo->srPlayFieldArea.Left + 1 ;
+                        SHORT cursorY = niInfo->srPlayFieldArea.Top + 7 ;
+
+                        BOOL cursorSelection = 1 ;
+
+                        niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
+                        niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+
+                        niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
+                        niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = 0 ;
+
                         while( loopBreak )
                         {   
                             display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisPauseMenu ) ;
@@ -847,14 +860,82 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                             if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
                                             {
                                                 free( inputRecordArrayInner ) ;
+
                                                 loopBreak = 0 ;
 
                                                 display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
                                             }
                                         }
+                                        else if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_UP )
+                                        {
+                                            if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
+                                            {
+                                                if( cursorSelection )
+                                                {
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = 0 ;
+
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+
+                                                    cursorSelection = 0 ;
+                                                }                                            
+                                                else
+                                                {
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = 0 ;
+
+                                                    cursorSelection = 1 ;
+                                                }
+                                            }
+                                        }
+                                        else if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
+                                        {
+                                            if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
+                                            {
+                                                if( cursorSelection )
+                                                {
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = 0 ;
+
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+
+                                                    cursorSelection = 0 ;
+                                                }
+                                                else
+                                                {
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = 0 ;
+
+                                                    cursorSelection = 1 ;
+                                                }
+                                            }
+                                        }
+                                        else if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                                        {
+                                            if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
+                                            {
+                                                if( cursorSelection )
+                                                {
+                                                    loopBreak = 0 ;
+                                                }
+                                                else
+                                                {
+                                                    exit( EXIT_SUCCESS ) ;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }            
+                            }
+                            Sleep(25) ;            
                         }
                     }
                 }
