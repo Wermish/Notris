@@ -870,18 +870,8 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                         {
                                             if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
                                             {
-                                                if( cursorSelection )
-                                                {
-                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
-                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = 0 ;
-
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 26 ;
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
-
-                                                    cursorSelection = 0 ;
-                                                }                                            
-                                                else
-                                                {
+                                                if( !cursorSelection )
+                                                {                                           
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
 
@@ -902,19 +892,9 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = 0 ;
 
                                                     niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 26 ;
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ; ;
 
                                                     cursorSelection = 0 ;
-                                                }
-                                                else
-                                                {
-                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
-                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
-
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = 0 ;
-
-                                                    cursorSelection = 1 ;
                                                 }
                                             }
                                         }
@@ -935,7 +915,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                     }
                                 }
                             }
-                            Sleep(25) ;            
+                            Sleep(50) ;            
                         }
                     }
                 }
