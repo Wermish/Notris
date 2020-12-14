@@ -634,6 +634,25 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
     return 0 ;
 }
 
+void notris_cleanup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
+{
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    for( int y = 0; y < bufferHeight; y++ )
+    {
+        free( niInfo->ciNotrisScreenBuffer[y] ) ;
+        free( niInfo->ciNotrisMainMenu[y] ) ;
+        free( niInfo->ciNotrisPauseMenu[y] ) ;
+        free( niInfo->boNotrisCollisionArray[y] ) ;
+    }
+
+    free( niInfo->ciNotrisScreenBuffer ) ;
+    free( niInfo->ciNotrisMainMenu ) ;
+    free( niInfo->ciNotrisPauseMenu ) ;
+    free( niInfo->boNotrisCollisionArray ) ;
+    free( niInfo->boNotrisWriteArray ) ;
+}
+
 void notris_create_bag( struct notrisInfo* niInfo )
 {
     CHAR cSAndZCounter = 0 ;
@@ -769,7 +788,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
 
 // TODO: redo bounds checking for pieceShape 2. In some cases needs to check for boNotrisCollisionArray[y + 2][x], not just + 1.
 
-BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct notrisPiece* piece )
+BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
+                        CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     BOOL boPieceFallen = 0 ;
 
@@ -805,6 +825,8 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                     {
                         while( loopBreak )
                         {   
+                            display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisPauseMenu ) ;
+
                             DWORD numberOfEventsInner = 0 ;
                             DWORD numberOfEventsReadInner = 0 ;
 
@@ -826,6 +848,8 @@ BOOL notris_move_piece( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
                                             {
                                                 free( inputRecordArrayInner ) ;
                                                 loopBreak = 0 ;
+
+                                                display_buffer( hScreenBuffer, csbiInfo, niInfo->ciNotrisScreenBuffer ) ;
                                             }
                                         }
                                     }
@@ -1539,12 +1563,16 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
     niInfo->ciNotrisScreenBuffer = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    niInfo->ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    niInfo->ciNotrisPauseMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
     niInfo->boNotrisCollisionArray = ( BOOL** ) malloc( bufferHeight  * sizeof( BOOL* ) ) ;
     niInfo->boNotrisWriteArray = ( BOOL* ) malloc( bufferHeight * sizeof( BOOL ) ) ;
 
     for( int i = 0; i < bufferHeight; i++ )
     {
         niInfo->ciNotrisScreenBuffer[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+        niInfo->ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+        niInfo->ciNotrisPauseMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
         niInfo->boNotrisCollisionArray[i] = ( BOOL* ) malloc( bufferWidth * sizeof( BOOL ) ) ;
         niInfo->boNotrisWriteArray[i] = 0 ;
     }
@@ -1555,6 +1583,10 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
         {
             niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
             niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+            niInfo->ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
+            niInfo->ciNotrisMainMenu[y][x].Attributes = 0 ;
+            niInfo->ciNotrisPauseMenu[y][x].Char.AsciiChar = 0 ;
+            niInfo->ciNotrisPauseMenu[y][x].Attributes = 0 ;
             niInfo->boNotrisCollisionArray[y][x] = 0 ;
         }
     }
@@ -1611,7 +1643,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                 niInfo->boPieceFalling = 0 ;
             }
 
-            if( notris_move_piece( hInputBuffer, niInfo, p ) )
+            if( notris_move_piece( hScreenBuffer, hInputBuffer, csbiInfo, niInfo, p ) )
             {
                 niInfo->boPieceFalling = 0 ;
             }
@@ -1622,7 +1654,7 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                 {
                     notris_erase_piece( niInfo, p ) ;
 
-                    notris_move_piece( hInputBuffer, niInfo, p ) ;
+                    notris_move_piece(  hScreenBuffer, hInputBuffer, csbiInfo, niInfo, p ) ;
 
                     notris_draw_piece( niInfo, p ) ;
 

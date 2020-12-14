@@ -16,13 +16,15 @@ CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
 
-notrisInfo npfiInfo ;
+notrisInfo niInfo ;
 
 int main( void )
 {   
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
 
-    play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &npfiInfo ) ;
+    play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+
+    notris_cleanup( &csbiInfo, &niInfo ) ;
 
     CloseHandle( hScreenBuffer ) ;
     CloseHandle( hInputBuffer ) ;
