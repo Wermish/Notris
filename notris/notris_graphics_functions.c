@@ -6,7 +6,6 @@
 #include "../shared/shared_graphics_functions.h"
 #include "notris_game_functions.h"
 #include "notris_graphics_functions.h"
-#include "notris_graphics_structures.h"
 #include "notris_structures.h"
 
 /*

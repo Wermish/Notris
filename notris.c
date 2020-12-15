@@ -20,9 +20,16 @@ notrisInfo niInfo ;
 
 int main( void )
 {   
+    srand( ( unsigned )time( 0 ) ) ;
+
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
 
-    play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+    notris_setup( &csbiInfo, &niInfo ) ;
+
+    while( 1 )
+    {
+        play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+    }
 
     notris_cleanup( &csbiInfo, &niInfo ) ;
 

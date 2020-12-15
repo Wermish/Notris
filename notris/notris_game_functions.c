@@ -1653,16 +1653,11 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     }
 }
 
-void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
-                  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
+void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
     DWORD dwDropCounter ;
     CHAR pieceLockDownCounter ;
     CHAR pieceBagPointer = 0 ;
-
-    srand( ( unsigned )time( 0 ) ) ;
-
-    notris_setup( csbiInfo, niInfo ) ;
 
     notris_draw_UI( niInfo ) ;
 
