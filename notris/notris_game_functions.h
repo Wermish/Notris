@@ -11,6 +11,8 @@ void notris_create_bag( struct notrisInfo* niInfo ) ;
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape npsPieceShape, struct notrisInfo* npfiInfo, SHORT sLeadBlockX, SHORT sLeadBlockY ) ;
 
+BOOL notris_menu_selection( HANDLE* hInputBuffer, struct notrisInfo* niInfo ) ;
+
 BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                         CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
@@ -26,7 +28,7 @@ void notris_set_boundaries( struct notrisInfo* niInfo ) ;
 
 void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* npfiInfo ) ;
 
-void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
+BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* npfiInfo ) ;
 
 #endif /* NOTRIS_GAME_FUNCTIONS_H */

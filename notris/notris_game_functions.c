@@ -786,7 +786,57 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-// TODO: redo bounds checking for pieceShape 2. In some cases needs to check for boNotrisCollisionArray[y + 2][x], not just + 1.
+BOOL notris_menu_selection( HANDLE* hInputBuffer, struct notrisInfo* niInfo )
+{
+    DWORD numberOfEvents = 0 ;
+    DWORD numberOfEventsRead = 0 ;
+
+    GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
+
+    if( numberOfEvents )
+    {
+        INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
+
+        ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
+
+        for( int i = 0; i < numberOfEventsRead; i++ )
+        {
+            if( inputRecordArray[i].EventType == KEY_EVENT )
+            {
+                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_UP )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        return 1 ;
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        exit( EXIT_SUCCESS ) ;
+                    }
+                }
+            }
+        }
+        free( inputRecordArray ) ;
+    }
+    return 0 ;
+}
 
 BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                         CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisPiece* piece )
@@ -817,7 +867,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                     }
                 }
                 // Pauses the game.
-                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
                 {
                     BOOL loopBreak = 1 ;
 
@@ -906,9 +956,10 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                                 {
                                                     loopBreak = 0 ;
                                                 }
+                                                // Exits play_notris() and returns to main menu.
                                                 else
                                                 {
-                                                    exit( EXIT_SUCCESS ) ;
+                                                    return 1 ;
                                                 }
                                             }
                                         }
@@ -985,7 +1036,6 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
         }
         free( inputRecordArray ) ;
     }
-
     return 0 ;
 }
 
@@ -1653,15 +1703,16 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     }
 }
 
-void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
+BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
     DWORD dwDropCounter ;
+
     CHAR pieceLockDownCounter ;
     CHAR pieceBagPointer = 0 ;
 
     notris_draw_UI( niInfo ) ;
 
-    while(1)
+    while( 1 )
     {
         if( pieceBagPointer == 6 )
         {
@@ -1698,11 +1749,13 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
             {
                 niInfo->boPieceFalling = 0 ;
             }
-
+            // Exits back to main menu if 1.
             if( notris_move_piece( hScreenBuffer, hInputBuffer, csbiInfo, niInfo, p ) )
             {
-                niInfo->boPieceFalling = 0 ;
+                free( p ) ;
+                return 1 ;
             }
+
             // 250ms grace period after piece has collided with floor, allowing for movement and rotation. 
             if( !niInfo->boPieceFalling )
             {
@@ -1746,5 +1799,5 @@ void play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
 
         free( p ) ;
     }
-    //TODO: free() malloc'd arrays.
+    return 0 ;
 }

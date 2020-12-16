@@ -18,20 +18,36 @@ CONSOLE_FONT_INFOEX cfiInfo ;
 
 notrisInfo niInfo ;
 
+BOOL playingNotris = 0 ;
+BOOL browsingMenu = 1 ;
+
 int main( void )
 {   
     srand( ( unsigned )time( 0 ) ) ;
 
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
 
-    notris_setup( &csbiInfo, &niInfo ) ;
-
-    while( 1 )
+    while( browsingMenu )
     {
-        play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
-    }
+        display_buffer( &hScreenBuffer, &csbiInfo, niInfo.ciNotrisMainMenu ) ;
 
-    notris_cleanup( &csbiInfo, &niInfo ) ;
+        if( notris_menu_selection( &hInputBuffer, &niInfo ) )
+        {
+            playingNotris = 1 ;
+        }
+
+        while( playingNotris )
+        {
+            notris_setup( &csbiInfo, &niInfo ) ;
+
+            if( play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) )
+            {
+                playingNotris = 0 ;
+            }
+
+            notris_cleanup( &csbiInfo, &niInfo ) ;
+        }
+    }
 
     CloseHandle( hScreenBuffer ) ;
     CloseHandle( hInputBuffer ) ;
