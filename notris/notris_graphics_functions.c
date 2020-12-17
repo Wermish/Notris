@@ -27,6 +27,11 @@ void notris_draw_level( struct notrisInfo* niInfo )
   draw_string( level, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 }
 
+void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu )
+{
+  
+}
+
 void notris_draw_next( struct notrisInfo* niInfo )
 {
   for( int y = niInfo->srNextPieceArea.Top + 1; y <= niInfo->srNextPieceArea.Bottom; y++ )

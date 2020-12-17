@@ -5,9 +5,11 @@ void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
 
 void notris_draw_level( struct notrisInfo* niInfo ) ;
 
-void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
+void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu ) ;
 
 void notris_draw_next( struct notrisInfo* niInfo  ) ;
+
+void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 void notris_draw_score( struct notrisInfo* niInfo ) ;
 

@@ -18,8 +18,10 @@ CONSOLE_FONT_INFOEX cfiInfo ;
 
 notrisInfo niInfo ;
 
-BOOL playingNotris = 0 ;
-BOOL browsingMenu = 1 ;
+CHAR_INFO** ciNotrisMainMenu ;
+CHAR_INFO** ciNotrisScoreTable ;
+
+BOOL browsingMenu ;
 
 int main( void )
 {   
@@ -27,27 +29,35 @@ int main( void )
 
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
 
+    notris_setup_menu( &csbiInfo, ciNotrisMainMenu, ciNotrisScoreTable ) ;
+
+    browsingMenu = 1 ;
+
     while( browsingMenu )
     {
-        display_buffer( &hScreenBuffer, &csbiInfo, niInfo.ciNotrisMainMenu ) ;
+        display_buffer( &hScreenBuffer, &csbiInfo, ciNotrisMainMenu ) ;
 
-        if( notris_menu_selection( &hInputBuffer, &niInfo ) )
+        if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 1 )
         {
-            playingNotris = 1 ;
+            notris_setup_game( &csbiInfo, &niInfo ) ;
+
+            play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+
+            notris_cleanup_game( &csbiInfo, &niInfo ) ;
+        }
+        else if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 2 )
+        {
+            // Display scoreboard.
+        }
+        else if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 3 )
+        {
+            browsingMenu = 0 ;
         }
 
-        while( playingNotris )
-        {
-            notris_setup( &csbiInfo, &niInfo ) ;
-
-            if( play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) )
-            {
-                playingNotris = 0 ;
-            }
-
-            notris_cleanup( &csbiInfo, &niInfo ) ;
-        }
+        Sleep( 50 ) ;
     }
+
+    notris_cleanup_menu( &csbiInfo, ciNotrisMainMenu, ciNotrisScoreTable ) ;
 
     CloseHandle( hScreenBuffer ) ;
     CloseHandle( hInputBuffer ) ;

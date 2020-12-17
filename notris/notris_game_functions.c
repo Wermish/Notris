@@ -634,23 +634,35 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
     return 0 ;
 }
 
-void notris_cleanup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
+void notris_cleanup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
     for( int y = 0; y < bufferHeight; y++ )
     {
         free( niInfo->ciNotrisScreenBuffer[y] ) ;
-        free( niInfo->ciNotrisMainMenu[y] ) ;
         free( niInfo->ciNotrisPauseMenu[y] ) ;
         free( niInfo->boNotrisCollisionArray[y] ) ;
     }
 
     free( niInfo->ciNotrisScreenBuffer ) ;
-    free( niInfo->ciNotrisMainMenu ) ;
     free( niInfo->ciNotrisPauseMenu ) ;
     free( niInfo->boNotrisCollisionArray ) ;
     free( niInfo->boNotrisWriteArray ) ;
+}
+
+void notris_cleanup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu, CHAR_INFO** ciNotrisScoreTable )
+{
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    for( int y = 0; y < bufferHeight; y++ )
+    {
+        free( ciNotrisMainMenu[y] ) ;
+        free( ciNotrisScoreTable[y] ) ;
+    }
+
+    free( ciNotrisMainMenu ) ;
+    free( ciNotrisScoreTable ) ;
 }
 
 void notris_create_bag( struct notrisInfo* niInfo )
@@ -786,10 +798,14 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-BOOL notris_menu_selection( HANDLE* hInputBuffer, struct notrisInfo* niInfo )
+SHORT notris_menu_selection( HANDLE* hInputBuffer, CHAR_INFO** ciMainMenu )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
+
+    SHORT menuOptions[] = { 1, 2, 3 } ;
+    SHORT* menuPointer = menuOptions ;
+    SHORT result = 0 ;
 
     GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
 
@@ -807,35 +823,41 @@ BOOL notris_menu_selection( HANDLE* hInputBuffer, struct notrisInfo* niInfo )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        
+                        if( *menuPointer > 0 )
+                        {
+                            menuPointer-- ;
+                        }
                     }
                 }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        
+                        if( *menuPointer < 2 )
+                        {
+                            menuPointer++ ;
+                        }
                     }
                 }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        return 1 ;
+                        result = *menuPointer ;
                     }
                 }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        exit( EXIT_SUCCESS ) ;
+                        result = 3 ;
                     }
                 }
             }
         }
         free( inputRecordArray ) ;
     }
-    return 0 ;
+    return result ;
 }
 
 BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
@@ -1640,7 +1662,7 @@ void notris_set_boundaries( struct notrisInfo* niInfo )
   }
 }
 
-void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
+void notris_setup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
     niInfo->srPlayFieldArea.Left = ( csbiInfo->srWindow.Right / 2 ) - 5 ;
     niInfo->srPlayFieldArea.Top =  (csbiInfo->srWindow.Bottom / 2) - 10 ;
@@ -1674,7 +1696,6 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
     niInfo->ciNotrisScreenBuffer = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
-    niInfo->ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
     niInfo->ciNotrisPauseMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
     niInfo->boNotrisCollisionArray = ( BOOL** ) malloc( bufferHeight  * sizeof( BOOL* ) ) ;
     niInfo->boNotrisWriteArray = ( BOOL* ) malloc( bufferHeight * sizeof( BOOL ) ) ;
@@ -1682,7 +1703,6 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
     for( int i = 0; i < bufferHeight; i++ )
     {
         niInfo->ciNotrisScreenBuffer[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
-        niInfo->ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
         niInfo->ciNotrisPauseMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
         niInfo->boNotrisCollisionArray[i] = ( BOOL* ) malloc( bufferWidth * sizeof( BOOL ) ) ;
         niInfo->boNotrisWriteArray[i] = 0 ;
@@ -1694,11 +1714,35 @@ void notris_setup( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niIn
         {
             niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
             niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
-            niInfo->ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
-            niInfo->ciNotrisMainMenu[y][x].Attributes = 0 ;
             niInfo->ciNotrisPauseMenu[y][x].Char.AsciiChar = 0 ;
             niInfo->ciNotrisPauseMenu[y][x].Attributes = 0 ;
             niInfo->boNotrisCollisionArray[y][x] = 0 ;
+        }
+    }
+}
+
+void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu, CHAR_INFO** ciNotrisScoreTable )
+{
+    SHORT bufferWidth = csbiInfo->dwSize.X ;
+    SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    ciNotrisScoreTable = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+
+    for( int i = 0; i < bufferHeight; i++ )
+    {
+       ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+       ciNotrisScoreTable[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+    }
+
+    for( int y = 0; y < bufferHeight; y++ )
+    {
+        for( int x = 0; x < bufferWidth; x++ )
+        {
+            ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
+            ciNotrisMainMenu[y][x].Attributes = 0 ;
+            ciNotrisScoreTable[y][x].Char.AsciiChar = 0 ;
+            ciNotrisScoreTable[y][x].Attributes = 0 ;
         }
     }
 }
