@@ -796,7 +796,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
+SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -804,6 +804,9 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
     SHORT menuOptions[] = { 1, 2, 3 } ;
     SHORT* menuPointer = menuOptions ;
     SHORT result = 0 ;
+
+    SHORT cursorX = 17 ;
+    SHORT cursorY = 18 ;
 
     GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
 
@@ -813,6 +816,9 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
 
         ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
 
+        nmMenu->ciNotrisMainMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
+        nmMenu->ciNotrisMainMenu[cursorY][cursorX].Attributes = 0;
+
         for( int i = 0; i < numberOfEventsRead; i++ )
         {
             if( inputRecordArray[i].EventType == KEY_EVENT )
@@ -821,8 +827,9 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( *menuPointer > 0 )
+                        if( *menuPointer > 1 )
                         {
+                            cursorY -= 2 ;
                             menuPointer-- ;
                         }
                     }
@@ -831,8 +838,9 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( *menuPointer < 2 )
+                        if( *menuPointer < 3 )
                         {
+                            cursorY += 2 ;
                             menuPointer++ ;
                         }
                     }
@@ -855,6 +863,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
         }
         free( inputRecordArray ) ;
     }
+
     return result ;
 }
 

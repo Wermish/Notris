@@ -97,6 +97,10 @@ void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* 
 {
   notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 2, 2 ) ;
 
+  draw_string( "Play", nmMenu->ciNotrisMainMenu, 18, 18, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
+  draw_string( "Scores", nmMenu->ciNotrisMainMenu, 18, 20, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
+  draw_string( "Exit", nmMenu->ciNotrisMainMenu, 18, 22, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
+
 }
 
 void notris_draw_next( struct notrisInfo* niInfo )

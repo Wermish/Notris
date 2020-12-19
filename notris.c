@@ -21,6 +21,8 @@ notrisInfo niInfo ;
 
 BOOL browsingMenu ;
 
+SHORT choice ;
+
 int main( void )
 {   
     srand( ( unsigned )time( 0 ) ) ;
@@ -31,15 +33,17 @@ int main( void )
 
     notris_draw_menu( &csbiInfo, &nmMenu ) ;
 
-    display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
-/*
     browsingMenu = 1 ;
 
     while( browsingMenu )
     {
         display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
 
-        if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 1 )
+        choice = 0 ;
+
+        choice = notris_menu_selection( &hInputBuffer, &csbiInfo, &nmMenu ) ;
+
+        if( choice == 1 )
         {
             notris_setup_game( &csbiInfo, &niInfo ) ;
 
@@ -47,19 +51,17 @@ int main( void )
 
             notris_cleanup_game( &csbiInfo, &niInfo ) ;
         }
-        else if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 2 )
+        else if( choice == 2 )
         {
             // Display scoreboard.
         }
-        else if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 3 )
+        else if( choice == 3 )
         {
             browsingMenu = 0 ;
         }
 
         Sleep( 50 ) ;
     }
-*/
-    getchar() ;
 
     notris_cleanup_menu( &csbiInfo, &nmMenu ) ;
 

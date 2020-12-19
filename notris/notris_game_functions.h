@@ -13,7 +13,7 @@ void notris_create_bag( struct notrisInfo* niInfo ) ;
 
 struct notrisPiece* notris_create_piece( enum notrisPieceShape npsPieceShape, struct notrisInfo* npfiInfo, SHORT sLeadBlockX, SHORT sLeadBlockY ) ;
 
-SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu ) ;
+SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu ) ;
 
 BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                         CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
