@@ -16,10 +16,8 @@ CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
 
+notrisMenu nmMenu ;
 notrisInfo niInfo ;
-
-CHAR_INFO** ciNotrisMainMenu ;
-CHAR_INFO** ciNotrisScoreTable ;
 
 BOOL browsingMenu ;
 
@@ -29,13 +27,17 @@ int main( void )
 
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
 
-    notris_setup_menu( &csbiInfo, ciNotrisMainMenu, ciNotrisScoreTable ) ;
+    notris_setup_menu( &csbiInfo, &nmMenu ) ;
 
+    notris_draw_menu( &csbiInfo, &nmMenu ) ;
+
+    display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
+/*
     browsingMenu = 1 ;
 
     while( browsingMenu )
     {
-        display_buffer( &hScreenBuffer, &csbiInfo, ciNotrisMainMenu ) ;
+        display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
 
         if( notris_menu_selection( &hInputBuffer, ciNotrisMainMenu ) == 1 )
         {
@@ -56,8 +58,10 @@ int main( void )
 
         Sleep( 50 ) ;
     }
+*/
+    getchar() ;
 
-    notris_cleanup_menu( &csbiInfo, ciNotrisMainMenu, ciNotrisScoreTable ) ;
+    notris_cleanup_menu( &csbiInfo, &nmMenu ) ;
 
     CloseHandle( hScreenBuffer ) ;
     CloseHandle( hInputBuffer ) ;

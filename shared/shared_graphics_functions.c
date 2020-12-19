@@ -50,44 +50,21 @@ void display_buffer( HANDLE *hScreen, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR
     }
 }
 
-// endX and endY must be at least 1 unit greater than startX and endX respectively.
-void draw_rectangle( HANDLE* phScreenBuffer, 
-                     CHAR asciiValue, WORD asciiAttributes, 
-                     SHORT startX, SHORT startY, SHORT endX, SHORT endY )
+void draw_bubble_writing(  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, CHAR* msg, SHORT startX, SHORT startY, WORD attributes )
 {
-    SHORT bufferWidth = endX ;
-    SHORT bufferHeight = endY ;
+  
+}
 
-    COORD characterPosition = { startX, startY } ;
-    COORD characterBufferSize = { bufferWidth, bufferHeight } ;
-    SMALL_RECT consoleWriteArea = { startX, startY, bufferWidth - 1, bufferHeight - 1 } ;
-
-    // Note that it's a one-dimensional array.
-    CHAR_INFO* consoleBuffer  = ( CHAR_INFO* ) malloc( ( bufferWidth * bufferHeight ) * sizeof( CHAR_INFO ) ) ;
-
-    if( consoleBuffer == NULL )
+void draw_rectangle( CHAR_INFO** buffer, CHAR asciiValue, WORD asciiAttributes, SHORT startX, SHORT startY, SHORT endX, SHORT endY )
+{
+    for( int y = startY; y < endY; y++ )
     {
-      report_error( "Failed: CHAR_INFO* consoleBuffer  = ( CHAR_INFO* ) malloc( ( bufferWidth * bufferWidth ) * sizeof( CHAR_INFO ) )" ) ;
-    }
-
-    // Accessed like a matrix by using offset. bufferWidth * y gives the first cell of each row, and column given by adding x to it.
-    for (int y = 0; y < bufferHeight; ++y)
-    {
-      for (int x = 0; x < bufferWidth; ++x)
+      for( int x = startX; x < endX; x++ )
       {
-        consoleBuffer[ x + bufferWidth * y ].Char.AsciiChar = asciiValue ;
-        consoleBuffer[ x + bufferWidth * y ].Attributes = asciiAttributes ;
+        buffer[y][x].Char.AsciiChar = asciiValue ;
+        buffer[y][x].Attributes = asciiAttributes ;
       }
     }
-    // Ensures drawing is started from correct position. Important for fullscreen drawing, i.e clearing screen buffer.
-    //SetConsoleCursorPosition( *phScreenBuffer, characterPosition ) ;
-
-    if( !WriteConsoleOutputA( *phScreenBuffer, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea ) )
-    {
-      report_error( "WriteConsoleOutputA( *phScreenBuffer, consoleBuffer, characterBufferSize, characterPosition, &consoleWriteArea )" ) ;
-    }
-
-    free( consoleBuffer ) ;
 }
 
 void draw_string( CHAR* str, CHAR_INFO** buffer, SHORT startX, SHORT startY, WORD attributes )

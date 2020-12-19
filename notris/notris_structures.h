@@ -67,6 +67,12 @@ typedef struct notrisInfo
     
 } notrisInfo ;
 
+typedef struct notrisMenu
+{
+    CHAR_INFO** ciNotrisMainMenu ;
+    
+}  notrisMenu ;
+
 typedef struct notrisPiece
 {
     enum notrisPieceShape pieceShape ;

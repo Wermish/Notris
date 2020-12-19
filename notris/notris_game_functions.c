@@ -651,18 +651,16 @@ void notris_cleanup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInf
     free( niInfo->boNotrisWriteArray ) ;
 }
 
-void notris_cleanup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu, CHAR_INFO** ciNotrisScoreTable )
+void notris_cleanup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
 {
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
     for( int y = 0; y < bufferHeight; y++ )
     {
-        free( ciNotrisMainMenu[y] ) ;
-        free( ciNotrisScoreTable[y] ) ;
+        free( nmMenu->ciNotrisMainMenu[y] ) ;
     }
 
-    free( ciNotrisMainMenu ) ;
-    free( ciNotrisScoreTable ) ;
+    free( nmMenu->ciNotrisMainMenu ) ;
 }
 
 void notris_create_bag( struct notrisInfo* niInfo )
@@ -798,7 +796,7 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-SHORT notris_menu_selection( HANDLE* hInputBuffer, CHAR_INFO** ciMainMenu )
+SHORT notris_menu_selection( HANDLE* hInputBuffer, struct notrisMenu* nmMenu )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -1721,28 +1719,24 @@ void notris_setup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo*
     }
 }
 
-void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu, CHAR_INFO** ciNotrisScoreTable )
+void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu  )
 {
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
-    ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
-    ciNotrisScoreTable = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    nmMenu->ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
 
     for( int i = 0; i < bufferHeight; i++ )
     {
-       ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
-       ciNotrisScoreTable[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+       nmMenu->ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
     }
 
     for( int y = 0; y < bufferHeight; y++ )
     {
         for( int x = 0; x < bufferWidth; x++ )
         {
-            ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
-            ciNotrisMainMenu[y][x].Attributes = 0 ;
-            ciNotrisScoreTable[y][x].Char.AsciiChar = 0 ;
-            ciNotrisScoreTable[y][x].Attributes = 0 ;
+            nmMenu->ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
+            nmMenu->ciNotrisMainMenu[y][x].Attributes = 0 ;
         }
     }
 }

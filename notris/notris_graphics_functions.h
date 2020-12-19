@@ -1,11 +1,15 @@
 #ifndef NOTRIS_GRAPHICS_FUNCTIONS_H
 #define NOTRIS_GRAPHICS_FUNCTIONS_H
 
-void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo ) ;
+void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo ) ;
+
+void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer ) ;
 
 void notris_draw_level( struct notrisInfo* niInfo ) ;
 
-void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu ) ;
+void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, SHORT startX, SHORT startY ) ;
+
+void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu ) ;
 
 void notris_draw_next( struct notrisInfo* niInfo  ) ;
 
@@ -18,5 +22,7 @@ void notris_draw_UI( struct notrisInfo* npfiInfo ) ;
 void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) ;
 
 void notris_erase_row( struct notrisInfo* niInfo ) ;
+
+void notris_test( CHAR_INFO** buffer ) ;
 
 #endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */

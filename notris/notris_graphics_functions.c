@@ -12,10 +12,15 @@
  * These functions don't draw to the screen directly. Instead they set values in the NotrisScreenBuffer which is then drawn.
  */
 
-void notris_clear_play_field( HANDLE* hScreenBuffer, struct notrisInfo* niInfo )
+void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo )
 {
-  draw_rectangle( hScreenBuffer, 0, 0, 
+  draw_rectangle( buffer, 0, 0, 
                   niInfo->srPlayFieldArea.Left, niInfo->srPlayFieldArea.Top, niInfo->srPlayFieldArea.Right, niInfo->srPlayFieldArea.Bottom ) ;
+}
+
+void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
+{
+
 }
 
 void notris_draw_level( struct notrisInfo* niInfo )
@@ -27,9 +32,71 @@ void notris_draw_level( struct notrisInfo* niInfo )
   draw_string( level, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 }
 
-void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** ciNotrisMainMenu )
+void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, SHORT startX, SHORT startY )
 {
+
+  SHORT bubbleY = 0 ;
+  SHORT bubbleX = 0 ;
+
+  CHAR logo[6][5][5] = {{{219, 219,   219,   219,   219  },
+                        {219,  0,     0,     0,     219  },
+                        {219,  0,     0,     0,     219  },
+                        {219,  0,     0,     0,     219  },
+                        {219,  0,     0,     0,     219  } },
+
+                       {{219, 219, 219, 219, 219},
+                        {219, 0,   0,   0,   219},
+                        {219, 0,   0,   0,   219},
+                        {219, 0,   0,   0,   219},
+                        {219, 219, 219, 219, 219} },
   
+                       {{0,   0,   219, 0,   0  },
+                        {219, 219, 219, 219, 219},
+                        {0,   0,   219, 0,   0  },
+                        {0,   0,   219, 0,   0  },
+                        {0,   0,   219, 0,   0  } },
+
+                       {{219,   0,   0, 0,   0  },
+                        {219, 219, 219, 219, 219},
+                        {219, 0,   0,   0,   0  },
+                        {219, 0,   0,   0,   0  },
+                        {219, 0,   0,   0,   0  } },
+
+                       {{0, 0, 219, 0, 0},
+                        {0, 0, 0,   0, 0},
+                        {0, 0, 219, 0, 0},
+                        {0, 0, 219, 0, 0},
+                        {0, 0, 219, 0, 0} },
+
+                       {{219, 219, 219, 219, 219},
+                        {219, 0,   0,   0,   0  },
+                        {219, 219, 219, 219, 219},
+                        {0,   0,   0,   0,   219},
+                        {219, 219, 219, 219, 219} }} ; 
+
+  for( int i = 0; i < 6; i++ )
+  {
+    for( int y = startY; y < ( startY + 5 ); y++ )
+    {
+      for( int x = startX; x < ( startX + 5 ); x++ )
+      {
+        buffer[y][x].Char.AsciiChar = logo[i][bubbleY][bubbleX] ;
+        buffer[y][x].Attributes = FOREGROUND_RED ;
+
+        bubbleX++ ;
+      }
+      bubbleY++ ;
+      bubbleX = 0 ;
+    }
+    startX += 6 ;
+    bubbleY = 0 ;
+  }
+}
+
+void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu)
+{
+  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 2, 2 ) ;
+
 }
 
 void notris_draw_next( struct notrisInfo* niInfo )
@@ -248,4 +315,9 @@ void notris_erase_row( struct notrisInfo* niInfo )
       }
     }
   }
+}
+
+void notris_test( CHAR_INFO** buffer )
+{
+  buffer[5][5].Char.AsciiChar = 219 ;
 }
