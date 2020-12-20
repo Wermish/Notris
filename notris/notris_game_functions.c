@@ -801,12 +801,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
 
-    SHORT menuOptions[] = { 1, 2, 3 } ;
-    SHORT* menuPointer = menuOptions ;
     SHORT result = 0 ;
-
-    SHORT cursorX = 17 ;
-    SHORT cursorY = 18 ;
 
     GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
 
@@ -816,8 +811,10 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
 
         ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
 
-        nmMenu->ciNotrisMainMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
-        nmMenu->ciNotrisMainMenu[cursorY][cursorX].Attributes = 0;
+        //nmMenu->menuChoice = 0 ;
+
+        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 0 ;
+        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0 ;
 
         for( int i = 0; i < numberOfEventsRead; i++ )
         {
@@ -827,10 +824,10 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( *menuPointer > 1 )
+                        if( nmMenu->menuChoice > 1 )
                         {
-                            cursorY -= 2 ;
-                            menuPointer-- ;
+                            nmMenu->cursorPosition.Y -= 2 ;
+                            nmMenu->menuChoice-- ;
                         }
                     }
                 }
@@ -838,10 +835,10 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( *menuPointer < 3 )
+                        if( nmMenu->menuChoice < 3 )
                         {
-                            cursorY += 2 ;
-                            menuPointer++ ;
+                            nmMenu->cursorPosition.Y += 2 ;
+                            nmMenu->menuChoice++ ;
                         }
                     }
                 }
@@ -849,7 +846,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        result = *menuPointer ;
+                        result = nmMenu->menuChoice ;
                     }
                 }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
@@ -861,6 +858,10 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 }
             }
         }
+
+        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
+        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY ;
+
         free( inputRecordArray ) ;
     }
 
@@ -1732,6 +1733,11 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
 {
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
+
+    nmMenu->cursorPosition.X = 17 ;
+    nmMenu->cursorPosition.Y = 18 ;
+
+    nmMenu->menuChoice = 1 ;
 
     nmMenu->ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
 
