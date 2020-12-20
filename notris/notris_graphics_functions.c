@@ -42,15 +42,15 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
                         FOREGROUND_RED | FOREGROUND_INTENSITY, FOREGROUND_GREEN | FOREGROUND_INTENSITY, FOREGROUND_BLUE | FOREGROUND_INTENSITY, 
                         FOREGROUND_RED | FOREGROUND_GREEN, FOREGROUND_RED | FOREGROUND_BLUE, FOREGROUND_GREEN | FOREGROUND_BLUE,
                         FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-                        FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-                        FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
-                        FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY } ;
+                        FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY } ;
 
-  CHAR logo[6][5][5] = {{{219, 219,   219,   219,   219  },
-                        {219,  0,     0,     0,     219  },
-                        {219,  0,     0,     0,     219  },
-                        {219,  0,     0,     0,     219  },
-                        {219,  0,     0,     0,     219  } },
+  WORD bubbleAttribute = 0 ;
+
+  CHAR logo[6][5][5]={ {{219, 219, 219, 219, 219},
+                        {219,  0,  0,   0,   219},
+                        {219,  0,  0,   0,   219},
+                        {219,  0,  0,   0,   219},
+                        {219,  0,  0,   0,   219} },
 
                        {{219, 219, 219, 219, 219},
                         {219, 0,   0,   0,   219},
@@ -58,23 +58,23 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
                         {219, 0,   0,   0,   219},
                         {219, 219, 219, 219, 219} },
   
-                       {{0,   0,   219, 0,   0  },
-                        {219, 219, 219, 219, 219},
+                       {{219, 219, 219, 219, 219},
+                        {0,   0,   219, 0,   0  },
                         {0,   0,   219, 0,   0  },
                         {0,   0,   219, 0,   0  },
                         {0,   0,   219, 0,   0  } },
 
-                       {{219,   0,   0, 0,   0  },
-                        {219, 219, 219, 219, 219},
-                        {219, 0,   0,   0,   0  },
-                        {219, 0,   0,   0,   0  },
-                        {219, 0,   0,   0,   0  } },
+                       {{219, 219, 219, 219, 219},
+                        {219, 0,   0,   0,   219},
+                        {219, 0,   0,   219, 219},
+                        {219, 0,   0,   219, 0  },
+                        {219, 0,   0,   219, 219} },
 
-                       {{0, 0, 219, 0, 0},
-                        {0, 0, 219, 0, 0},
-                        {0, 0, 219, 0, 0},
-                        {0, 0, 219, 0, 0},
-                        {0, 0, 219, 0, 0} },
+                       {{219, 219, 219, 219, 219},
+                        {0,   0,   219, 0,   0  },
+                        {0,   0,   219, 0,   0  },
+                        {0,   0,   219, 0,   0  },
+                        {219, 219, 219, 219, 219} },
 
                        {{219, 219, 219, 219, 219},
                         {219, 0,   0,   0,   0  },
@@ -84,6 +84,9 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
 
   for( int i = 0; i < 6; i++ )
   {
+
+    bubbleAttribute = attributes[random_number_in_range(0, 11)] ;      
+
     for( int y = startY; y < ( startY + 5 ); y++ )
     {
       for( int x = startX; x < ( startX + 5 ); x++ )
@@ -91,7 +94,7 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
         if( logo[i][bubbleY][bubbleX] )
         {
           buffer[y][x].Char.AsciiChar = logo[i][bubbleY][bubbleX] ;
-          buffer[y][x].Attributes = attributes[random_number_in_range(0, 14)] ;
+          buffer[y][x].Attributes = bubbleAttribute ;
         }
         bubbleX++ ;
       }
@@ -105,7 +108,11 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
 
 void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu)
 {
-  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 2, 2 ) ;
+
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004 | 0x0001 | 0x0002 | 0x0003, 1, 1, 40, 2 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004 | 0x0001 | 0x0002 | 0x0003, 1, 9, 40, 10 ) ;
+
+  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 3, 3 ) ;
 
   draw_string( "Play", nmMenu->ciNotrisMainMenu, 18, 18, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
   draw_string( "Scores", nmMenu->ciNotrisMainMenu, 18, 20, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;

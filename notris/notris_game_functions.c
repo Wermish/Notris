@@ -811,8 +811,6 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
 
         ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
 
-        //nmMenu->menuChoice = 0 ;
-
         nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 0 ;
         nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0 ;
 
@@ -893,7 +891,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        exit( EXIT_SUCCESS ) ;
+                        return 1 ;
                     }
                 }
                 // Pauses the game.

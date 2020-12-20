@@ -27,7 +27,7 @@ int main( void )
 {   
     srand( ( unsigned )time( 0 ) ) ;
 
-    setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 40, 40 ) ;
+    setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 41, 41 ) ;
 
     notris_setup_menu( &csbiInfo, &nmMenu ) ;
 
