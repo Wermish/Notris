@@ -881,7 +881,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                     {
                         if( levelSelection )
                         {
-                            result = 0 ;
+                            result = -1 ;
                         }
                         else
                         {
@@ -892,7 +892,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
             }
         }
 
-        if( levelSelection )
+        if( !levelSelection )
         {
             nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
             nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
@@ -1816,7 +1816,7 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
 
         niInfo->nextPiece = niInfo->pieceBag[pieceBagPointer] ;
 
-        notris_draw_level( niInfo ) ;
+        notris_draw_level(  niInfo->ciNotrisScreenBuffer, niInfo, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 2 ) ;
 
         notris_draw_score( niInfo ) ;
 

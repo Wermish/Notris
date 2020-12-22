@@ -23,13 +23,20 @@ void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO*
 
 }
 
-void notris_draw_level( struct notrisInfo* niInfo )
+void notris_draw_level( CHAR_INFO** buffer, struct notrisInfo* niInfo, SHORT startX, SHORT startY )
 {
   CHAR level[2] ;
 
   sprintf( level, "%i", niInfo->level ) ;
 
-  draw_string( level, niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+  draw_string( level, buffer, startX, startY, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+}
+
+void notris_draw_level_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisMenu* nmMenu )
+{
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 0, 0, 1, 11, 39, 39 ) ;
+  draw_string( "LEVEL:", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004 | 0x0002 | 0x0001 | 0x0008 ) ;
+  notris_draw_level( nmMenu->ciNotrisMainMenu, niInfo, 24, 18 ) ;
 }
 
 void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, SHORT startX, SHORT startY )
@@ -114,13 +121,20 @@ void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* 
 
   notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 3, 3 ) ;
 
-  draw_string( "Play", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "Scores", nmMenu->ciNotrisMainMenu, 18, 20, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "Exit", nmMenu->ciNotrisMainMenu, 18, 22, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  notris_draw_menu_options( csbiInfo, nmMenu ) ;
+
+}
+
+void notris_draw_menu_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
+{
+  draw_rectangle(  nmMenu->ciNotrisMainMenu, 0, 0, 1, 11, 39, 39  ) ;
+
+  draw_string( "PLAY", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "SCORES", nmMenu->ciNotrisMainMenu, 18, 20, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "EXIT", nmMenu->ciNotrisMainMenu, 18, 22, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
 
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
-
 }
 
 void notris_draw_next( struct notrisInfo* niInfo )
@@ -216,17 +230,17 @@ void notris_draw_UI( struct notrisInfo* niInfo )
     niInfo->boNotrisCollisionArray[rightWall][niInfo->srPlayFieldArea.Right] = 1 ;                                                                                      
   }
 
-  draw_string( "Score", niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "SCORE", niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "Level", niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "LEVEL", niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "Next", niInfo->ciNotrisScreenBuffer, niInfo->srNextPieceArea.Left, niInfo->srNextPieceArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "NEXT", niInfo->ciNotrisScreenBuffer, niInfo->srNextPieceArea.Left, niInfo->srNextPieceArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "Paused", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+  draw_string( "PAUSED", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "Resume", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 7, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
+  draw_string( "RESUME", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 7, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
 
-  draw_string( "Exit", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 10, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
+  draw_string( "EXIT", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 10, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
 }  
 
 void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )

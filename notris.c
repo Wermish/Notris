@@ -21,6 +21,8 @@ notrisInfo niInfo ;
 
 BOOL browsingMenu ;
 
+BOOL selectingLevel ;
+
 SHORT menuChoice ;
 
 SHORT levelChoice ;
@@ -47,15 +49,27 @@ int main( void )
         {
             notris_setup_game( &csbiInfo, &niInfo ) ;
 
-            while( !levelChoice )
+            selectingLevel = 1 ;
+
+            while( selectingLevel )
             {
+                levelChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 1 ) ;
+            
+                if( levelChoice != 0 )
+                {
+                    selectingLevel = 0 ;
+                }
+
+                notris_draw_level_options( &csbiInfo, &niInfo, &nmMenu ) ;
 
                 display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
 
-                levelChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 1 ) ;
+                Sleep(50) ;
             }
 
-            if( levelChoice )
+            notris_draw_menu_options( &csbiInfo, &nmMenu ) ;
+
+            if( levelChoice > 0 )
             {
                 niInfo.level = levelChoice ;
 
