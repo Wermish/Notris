@@ -924,16 +924,8 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
         {
             if( inputRecordArray[i].EventType == KEY_EVENT )
             {
-                    
-                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
-                {
-                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
-                    {
-                        return 1 ;
-                    }
-                }
                 // Pauses the game.
-                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
                 {
                     BOOL loopBreak = 1 ;
 
@@ -971,7 +963,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                 {
                                     if( inputRecordArrayInner[i].EventType == KEY_EVENT )
                                     {
-                                        if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_TAB )
+                                        if( inputRecordArrayInner[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
                                         {
                                             if( inputRecordArrayInner[i].Event.KeyEvent.bKeyDown )
                                             {

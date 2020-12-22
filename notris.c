@@ -71,8 +71,6 @@ int main( void )
 
             if( levelChoice > 0 )
             {
-                niInfo.level = levelChoice ;
-
                 play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
             }
 
