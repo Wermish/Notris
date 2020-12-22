@@ -796,7 +796,8 @@ struct notrisPiece* notris_create_piece( enum notrisPieceShape pieceShape, struc
     return piece ;
 }
 
-SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
+SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, 
+                             struct notrisInfo* niInfo, struct notrisMenu* nmMenu, BOOL levelSelection )
 {
     DWORD numberOfEvents = 0 ;
     DWORD numberOfEventsRead = 0 ;
@@ -822,10 +823,20 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( nmMenu->menuChoice > 1 )
+                        if( levelSelection )
                         {
-                            nmMenu->cursorPosition.Y -= 2 ;
-                            nmMenu->menuChoice-- ;
+                            if( niInfo->level < 7 )
+                            {
+                                niInfo->level++ ;
+                            }
+                        }
+                        else
+                        {
+                            if( nmMenu->menuChoice > 1 )
+                            {
+                                nmMenu->cursorPosition.Y -= 2 ;
+                                nmMenu->menuChoice-- ;
+                            }
                         }
                     }
                 }
@@ -833,10 +844,20 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        if( nmMenu->menuChoice < 3 )
+                        if( levelSelection )
                         {
-                            nmMenu->cursorPosition.Y += 2 ;
-                            nmMenu->menuChoice++ ;
+                            if( niInfo->level > 1 )
+                            {
+                                niInfo->level-- ;
+                            }
+                        }
+                        else
+                        {
+                            if( nmMenu->menuChoice < 3 )
+                            {
+                                nmMenu->cursorPosition.Y += 2 ;
+                                nmMenu->menuChoice++ ;
+                            }
                         }
                     }
                 }
@@ -844,21 +865,38 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        result = nmMenu->menuChoice ;
+                        if( levelSelection )
+                        {
+                            result = niInfo->level ;
+                        }
+                        else
+                        {
+                            result = nmMenu->menuChoice ;
+                        }
                     }
                 }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
                     {
-                        result = 3 ;
+                        if( levelSelection )
+                        {
+                            result = 0 ;
+                        }
+                        else
+                        {
+                            result = 3 ;
+                        }
                     }
                 }
             }
         }
 
-        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
-        nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY ;
+        if( levelSelection )
+        {
+            nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
+            nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
+        }
 
         free( inputRecordArray ) ;
     }

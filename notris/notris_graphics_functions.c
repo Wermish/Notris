@@ -109,17 +109,17 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
 void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu)
 {
 
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004 | 0x0001 | 0x0002 | 0x0003, 1, 1, 40, 2 ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004 | 0x0001 | 0x0002 | 0x0003, 1, 9, 40, 10 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 1, 1, 40, 2 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 1, 9, 40, 10 ) ;
 
   notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 3, 3 ) ;
 
-  draw_string( "Play", nmMenu->ciNotrisMainMenu, 18, 18, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
-  draw_string( "Scores", nmMenu->ciNotrisMainMenu, 18, 20, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
-  draw_string( "Exit", nmMenu->ciNotrisMainMenu, 18, 22, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY ) ;
+  draw_string( "Play", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "Scores", nmMenu->ciNotrisMainMenu, 18, 20, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "Exit", nmMenu->ciNotrisMainMenu, 18, 22, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
 
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
-  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY ;
+  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
 
 }
 

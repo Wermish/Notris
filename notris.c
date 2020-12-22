@@ -21,7 +21,9 @@ notrisInfo niInfo ;
 
 BOOL browsingMenu ;
 
-SHORT choice ;
+SHORT menuChoice ;
+
+SHORT levelChoice ;
 
 int main( void )
 {   
@@ -39,23 +41,34 @@ int main( void )
     {
         display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
 
-        choice = 0 ;
+        menuChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 0 ) ;
 
-        choice = notris_menu_selection( &hInputBuffer, &csbiInfo, &nmMenu ) ;
-
-        if( choice == 1 )
+        if( menuChoice == 1 )
         {
             notris_setup_game( &csbiInfo, &niInfo ) ;
 
-            play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+            while( !levelChoice )
+            {
+
+                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
+
+                levelChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 1 ) ;
+            }
+
+            if( levelChoice )
+            {
+                niInfo.level = levelChoice ;
+
+                play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+            }
 
             notris_cleanup_game( &csbiInfo, &niInfo ) ;
         }
-        else if( choice == 2 )
+        else if( menuChoice == 2 )
         {
             // Display scoreboard.
         }
-        else if( choice == 3 )
+        else if( menuChoice == 3 )
         {
             browsingMenu = 0 ;
         }
