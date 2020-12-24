@@ -1050,7 +1050,26 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                         }
                     }
                 }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        SHORT siHardDropCounter = 1 ;
 
+                        while( !notris_check_axis_collision( niInfo, piece, 1, 'y' ) )
+                        {
+                            piece->blockOne.Y++ ;
+                            piece->blockTwo.Y++ ;
+                            piece->blockThree.Y++ ;
+                            piece->blockFour.Y++ ;
+
+                            siHardDropCounter++ ;
+                        }
+
+                        niInfo->notrisScore += 2 * siHardDropCounter ;
+
+                    }
+                }
                 else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
                 {
                     if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
@@ -1061,6 +1080,8 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                             piece->blockTwo.Y++ ;
                             piece->blockThree.Y++ ;
                             piece->blockFour.Y++ ;
+
+                            niInfo->notrisScore++ ;
                         }
                     }
                 }
