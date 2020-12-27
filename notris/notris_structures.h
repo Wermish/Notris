@@ -102,7 +102,7 @@ typedef struct notrisScore
 {
     CHAR chPlayerTag[3] ;
     DWORD dwScore ;
-    
+
 } notrisScore ;
 
 #endif /* NOTRIS_STRUCTURES_H */

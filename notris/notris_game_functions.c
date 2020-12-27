@@ -1818,6 +1818,34 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
     }
 }
 
+void notris_setup_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
+{       
+    if( ( *fTopScores = fopen( "notris.scores", "rb+" ) ) == NULL )
+    {
+        *fTopScores = fopen( "notris.scores", "wb" ) ;
+
+        DWORD score = 444 ;
+        CHAR letter = 65 ;
+
+        for( int i = 0; i < 10; i++ )
+        {
+            nsScore->chPlayerTag[0] = letter ;
+            nsScore->chPlayerTag[1] = letter ;
+            nsScore->chPlayerTag[2] = letter ;
+            nsScore->dwScore = score ;
+
+            score-- ;
+            letter++ ;
+
+            fwrite( nsScore, sizeof( struct notrisScore ), 1, *fTopScores ) ;
+        }
+
+        fclose( *fTopScores ) ;
+
+        *fTopScores = fopen( "notris.scores", "rb+" ) ;
+    }
+}
+
 BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 { 
     DWORD dwDropCounter ;
@@ -1918,8 +1946,6 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
         notris_draw_piece( niInfo, p ) ;
 
         notris_erase_row( niInfo ) ;
-
-        
 
         free( p ) ;
     }

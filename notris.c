@@ -32,11 +32,12 @@ SHORT levelChoice ;
 
 int main( void )
 {   
-    fTopScores = fopen( "notris.scores", "rb+" ) ;
+    notris_setup_scores_file( &fTopScores, &nsScore );
 
-    if( fTopScores == NULL )
+    for( int i = 0; i < 10; i++ )
     {
-        fTopScores = fopen( "notris.scores", "wb" ) ;
+        fread( &nsScore, sizeof( struct notrisScore ), 1, fTopScores ) ;
+        fprintf( stdout, "%c%c%c, %i\n", nsScore.chPlayerTag[0], nsScore.chPlayerTag[1], nsScore.chPlayerTag[2], nsScore.dwScore ) ;
     }
 
     srand( ( unsigned )time( 0 ) ) ;
@@ -81,7 +82,10 @@ int main( void )
 
             if( levelChoice > 0 )
             {
-                play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) ;
+                if( !play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) )
+                {
+                    // Write score to file.
+                }
             }
 
             notris_cleanup_game( &csbiInfo, &niInfo ) ;
