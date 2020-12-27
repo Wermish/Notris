@@ -5,6 +5,8 @@ BOOL notris_check_axis_collision( struct notrisInfo* niInfo, struct notrisPiece*
 
 BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece, WORD wVirtualKeyCode ) ;
 
+BOOL notris_check_topout( struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
+
 void notris_cleanup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo ) ;
 
 void notris_cleanup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu ) ;

@@ -634,6 +634,19 @@ BOOL notris_check_move_collision( struct notrisInfo* niInfo, struct notrisPiece*
     return 0 ;
 }
 
+BOOL notris_check_topout( struct notrisInfo* niInfo, struct notrisPiece* npPiece )
+{
+    if( ( niInfo->boNotrisCollisionArray[npPiece->blockOne.Y][npPiece->blockOne.X] ) || 
+        ( niInfo->boNotrisCollisionArray[npPiece->blockTwo.Y][npPiece->blockTwo.X] ) ||
+        ( niInfo->boNotrisCollisionArray[npPiece->blockThree.Y][npPiece->blockThree.X] ) ||
+        ( niInfo->boNotrisCollisionArray[npPiece->blockFour.Y][npPiece->blockFour.X] ) )
+        {
+            return 1 ;
+        }
+
+    return 0 ;
+}
+
 void notris_cleanup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )
 {
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
@@ -1812,10 +1825,18 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
     CHAR pieceLockDownCounter ;
     CHAR pieceBagPointer = 0 ;
 
+    BOOL boToppedOut = 0 ;
+
     notris_draw_UI( niInfo ) ;
 
-    while( 1 )
+    while( !boToppedOut )
     {
+        niInfo->boPieceFalling = 1 ;
+
+        dwDropCounter = 0 ;
+
+        pieceLockDownCounter = 0 ;
+
         if( pieceBagPointer == 6 )
         {
             pieceBagPointer = 0 ;
@@ -1824,6 +1845,11 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
 
         notrisPiece *p = notris_create_piece( niInfo->nextPiece, niInfo, 
                                            (( niInfo->srPlayFieldArea.Left + niInfo->srPlayFieldArea.Right ) / 2), niInfo->srPlayFieldArea.Top ) ;
+
+        if( notris_check_topout( niInfo, p ) )
+        {
+            boToppedOut = 1 ;
+        }                                   
 
         pieceBagPointer++ ;
 
@@ -1835,12 +1861,6 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
 
         notris_draw_next( niInfo ) ;
 
-        niInfo->boPieceFalling = 1 ;
-
-        dwDropCounter = 0 ;
-
-        pieceLockDownCounter = 0 ;
-       
         while( niInfo->boPieceFalling )
         {   
             // TODO: Compare old vs new collision array to see if needs to be drawn.
@@ -1898,6 +1918,8 @@ BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BU
         notris_draw_piece( niInfo, p ) ;
 
         notris_erase_row( niInfo ) ;
+
+        
 
         free( p ) ;
     }

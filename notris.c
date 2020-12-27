@@ -16,8 +16,11 @@ CONSOLE_SCREEN_BUFFER_INFO csbiInfo ;
 CONSOLE_CURSOR_INFO cciInfo ;
 CONSOLE_FONT_INFOEX cfiInfo ;
 
+FILE *fTopScores ;
+
 notrisMenu nmMenu ;
 notrisInfo niInfo ;
+notrisScore nsScore ;
 
 BOOL browsingMenu ;
 
@@ -29,6 +32,13 @@ SHORT levelChoice ;
 
 int main( void )
 {   
+    fTopScores = fopen( "notris.scores", "rb+" ) ;
+
+    if( fTopScores == NULL )
+    {
+        fTopScores = fopen( "notris.scores", "wb" ) ;
+    }
+
     srand( ( unsigned )time( 0 ) ) ;
 
     setup_console( &hScreenBuffer, &hInputBuffer, &csbiInfo, &cciInfo, &cfiInfo, 41, 41 ) ;
