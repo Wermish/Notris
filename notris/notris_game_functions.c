@@ -1841,9 +1841,45 @@ void notris_setup_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
         }
 
         fclose( *fTopScores ) ;
-
-        *fTopScores = fopen( "notris.scores", "rb+" ) ;
     }
+}
+
+int notris_struct_score_comparator( const void * a, const void *b )
+{
+    notrisScore *notrisScoreA = ( notrisScore *)a ;
+    notrisScore *notrisScoreB = ( notrisScore *)b ;
+
+    return ( notrisScoreB->dwScore - notrisScoreA->dwScore ) ;
+}
+
+void notris_update_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
+{
+    *fTopScores = fopen( "notris.scores", "rb" ) ;
+
+    notrisScore nsScoreArray[11] ;
+
+    for( int i = 0; i < 10; i++ )
+    {
+        fread( &nsScoreArray[i], sizeof( struct notrisScore ), 1, *fTopScores ) ;
+    }
+
+    fclose( *fTopScores );
+
+    nsScoreArray[10].chPlayerTag[0] = nsScore->chPlayerTag[0] ;
+    nsScoreArray[10].chPlayerTag[1] = nsScore->chPlayerTag[1] ;
+    nsScoreArray[10].chPlayerTag[2] = nsScore->chPlayerTag[2] ;
+    nsScoreArray[10].dwScore = nsScore->dwScore ;
+
+    qsort( nsScoreArray, 11, sizeof( struct notrisScore ), notris_struct_score_comparator ) ;
+
+    fopen( "notris.scores", "wb" ) ;
+
+    for( int j = 0; j < 10; j++ )
+    {
+        fwrite( &nsScoreArray[j], sizeof( struct notrisScore ), 1, *fTopScores ) ;
+    }
+
+    fclose( *fTopScores ) ;
 }
 
 BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo )

@@ -85,6 +85,13 @@ int main( void )
                 if( !play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) )
                 {
                     // Write score to file.
+                    nsScore.chPlayerTag[0] = 67 ;
+                    nsScore.chPlayerTag[1] = 72 ;
+                    nsScore.chPlayerTag[2] = 65 ;
+
+                    nsScore.dwScore = niInfo.notrisScore ;
+
+                    notris_update_scores_file( &fTopScores, &nsScore ) ;
                 }
             }
 

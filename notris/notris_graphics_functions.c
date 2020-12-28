@@ -354,8 +354,3 @@ void notris_erase_row( struct notrisInfo* niInfo )
     }
   }
 }
-
-void notris_test( CHAR_INFO** buffer )
-{
-  buffer[5][5].Char.AsciiChar = 219 ;
-}

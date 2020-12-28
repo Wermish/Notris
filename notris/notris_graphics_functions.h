@@ -27,6 +27,4 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) 
 
 void notris_erase_row( struct notrisInfo* niInfo ) ;
 
-void notris_test( CHAR_INFO** buffer ) ;
-
 #endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */
