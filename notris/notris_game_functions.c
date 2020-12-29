@@ -1796,8 +1796,13 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
     SHORT bufferWidth = csbiInfo->dwSize.X ;
     SHORT bufferHeight = csbiInfo->dwSize.Y ;
 
-    nmMenu->cursorPosition.X = 17 ;
-    nmMenu->cursorPosition.Y = 18 ;
+    nmMenu->srMenuBox.Left = ( bufferWidth / 2 ) - 5 ;
+    nmMenu->srMenuBox.Right = ( bufferWidth / 2 ) + 5 ;
+    nmMenu->srMenuBox.Top = ( bufferHeight / 2 ) - 3 ;
+    nmMenu->srMenuBox.Bottom = ( bufferHeight / 2 ) + 4 ;
+
+    nmMenu->cursorPosition.X = nmMenu->srMenuBox.Left + 1 ;
+    nmMenu->cursorPosition.Y = nmMenu->srMenuBox.Top + 1 ;
 
     nmMenu->menuChoice = 1 ;
 

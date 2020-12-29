@@ -81,6 +81,7 @@ typedef struct notrisMenu
     CHAR_INFO** ciNotrisMainMenu ;
     enum menuOption menuChoice ;
     COORD cursorPosition ;
+    SMALL_RECT srMenuBox ;
 }  notrisMenu ;
 
 typedef struct notrisPiece

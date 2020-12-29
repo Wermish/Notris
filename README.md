@@ -1,9 +1,8 @@
 # Introduction
-A Win32 Command Line implementation of Tetris.
+A Win32 Command Line implementation of Tetris, created using MSVC/C and the Console API.
 
-Unofficial, uncalled for, and ultimately useless.
+I decided not to use a multimedia library so that I would have to create everything from scratch; my 'only' tools being a modern, well developed compiler and a modern, well developed OS. I decided to use Tetris as it is well known and its rules are well documented (https://tetris.wiki/Tetris_Guideline).
 
-Mostly conformant to the Tetris Guidelines: https://tetris.wiki/Tetris_Guideline.
 
 ## Controls
 Key        |Effect

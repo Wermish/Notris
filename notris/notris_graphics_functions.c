@@ -18,6 +18,16 @@ void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo )
                   niInfo->srPlayFieldArea.Left, niInfo->srPlayFieldArea.Top, niInfo->srPlayFieldArea.Right, niInfo->srPlayFieldArea.Bottom ) ;
 }
 
+void notris_draw_game_over( struct notrisInfo* niInfo )
+{
+  notris_clear_play_field( niInfo->ciNotrisScreenBuffer, niInfo );
+                    
+  draw_string( "GAME", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, 0x0004 ) ;
+  draw_string( "OVER", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 3, niInfo->srPlayFieldArea.Top + 4, 0x0004 ) ;
+  draw_string( "NAME", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 1, niInfo->srPlayFieldArea.Top + 7, 0x0004 ) ;
+  draw_string( "AAA", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 6, niInfo->srPlayFieldArea.Top + 7, 0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
+}
+
 void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
 {
 
@@ -34,9 +44,11 @@ void notris_draw_level( CHAR_INFO** buffer, struct notrisInfo* niInfo, SHORT sta
 
 void notris_draw_level_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisMenu* nmMenu )
 {
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 0, 0, 1, 11, 39, 39 ) ;
-  draw_string( "LEVEL:", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004 | 0x0002 | 0x0001 | 0x0008 ) ;
-  notris_draw_level( nmMenu->ciNotrisMainMenu, niInfo, 24, 18 ) ;
+  draw_rectangle(  nmMenu->ciNotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
+
+  draw_string( "LEVEL:", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 1, nmMenu->srMenuBox.Top + 3, 0x0004 | 0x0002 | 0x0001 | 0x0008 ) ;
+
+  notris_draw_level( nmMenu->ciNotrisMainMenu, niInfo, nmMenu->srMenuBox.Left + 7, nmMenu->srMenuBox.Top + 3 ) ;
 }
 
 void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, SHORT startX, SHORT startY )
@@ -115,23 +127,30 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
 
 void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu)
 {
+  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, csbiInfo->srWindow.Left + 3, csbiInfo->srWindow.Top + 3 ) ;
 
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 1, 1, 40, 2 ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 1, 9, 40, 10 ) ;
-
-  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, 3, 3 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 1, 40, 2 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 9, 40, 10 ) ;
 
   notris_draw_menu_options( csbiInfo, nmMenu ) ;
-
 }
 
 void notris_draw_menu_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
 {
-  draw_rectangle(  nmMenu->ciNotrisMainMenu, 0, 0, 1, 11, 39, 39  ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
 
-  draw_string( "PLAY", nmMenu->ciNotrisMainMenu, 18, 18, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "SCORES", nmMenu->ciNotrisMainMenu, 18, 20, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "EXIT", nmMenu->ciNotrisMainMenu, 18, 22, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+                  nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Top - 1, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Top ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+                  nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Bottom, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Bottom + 1  ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+                  nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Bottom ) ;
+  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+                  nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Bottom ) ;
+
+  draw_string( "PLAY", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 1, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "SCORES", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 3, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "EXIT", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 5, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
 
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;

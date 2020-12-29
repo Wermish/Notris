@@ -3,6 +3,8 @@
 
 void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo ) ;
 
+void notris_draw_game_over( struct notrisInfo* niInfo ) ;
+
 void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer ) ;
 
 void notris_draw_level( CHAR_INFO** buffer, struct notrisInfo* niInfo, SHORT startX, SHORT startY ) ;

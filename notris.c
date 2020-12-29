@@ -22,13 +22,15 @@ notrisMenu nmMenu ;
 notrisInfo niInfo ;
 notrisScore nsScore ;
 
-BOOL browsingMenu ;
+BOOL boBrowsingMenu ;
 
-BOOL selectingLevel ;
+BOOL boSelectingLevel ;
 
-SHORT menuChoice ;
+BOOL boEnteringName ;
 
-SHORT levelChoice ;
+SHORT siMenuChoice ;
+
+SHORT siLevelChoice ;
 
 int main( void )
 {   
@@ -48,27 +50,27 @@ int main( void )
 
     notris_draw_menu( &csbiInfo, &nmMenu ) ;
 
-    browsingMenu = 1 ;
+    boBrowsingMenu = 1 ;
 
-    while( browsingMenu )
+    while( boBrowsingMenu )
     {
         display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
 
-        menuChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 0 ) ;
+        siMenuChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 0 ) ;
 
-        if( menuChoice == 1 )
+        if( siMenuChoice == 1 )
         {
             notris_setup_game( &csbiInfo, &niInfo ) ;
 
-            selectingLevel = 1 ;
+            boSelectingLevel = 1 ;
 
-            while( selectingLevel )
+            while( boSelectingLevel )
             {
-                levelChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 1 ) ;
+                siLevelChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 1 ) ;
             
-                if( levelChoice != 0 )
+                if( siLevelChoice != 0 )
                 {
-                    selectingLevel = 0 ;
+                    boSelectingLevel = 0 ;
                 }
 
                 notris_draw_level_options( &csbiInfo, &niInfo, &nmMenu ) ;
@@ -80,10 +82,20 @@ int main( void )
 
             notris_draw_menu_options( &csbiInfo, &nmMenu ) ;
 
-            if( levelChoice > 0 )
+            if( siLevelChoice > 0 )
             {
                 if( !play_notris( &hScreenBuffer, &hInputBuffer, &csbiInfo, &niInfo ) )
                 {
+                    boEnteringName = 1 ;
+
+                    notris_draw_game_over( &niInfo ) ;
+
+                    while( boEnteringName )
+                    {
+                        display_buffer( &hScreenBuffer, &csbiInfo, niInfo.ciNotrisScreenBuffer ) ;
+
+                        Sleep( 50 ) ;
+                    }
                     // Write score to file.
                     nsScore.chPlayerTag[0] = 67 ;
                     nsScore.chPlayerTag[1] = 72 ;
@@ -97,13 +109,13 @@ int main( void )
 
             notris_cleanup_game( &csbiInfo, &niInfo ) ;
         }
-        else if( menuChoice == 2 )
+        else if( siMenuChoice == 2 )
         {
             // Display scoreboard.
         }
-        else if( menuChoice == 3 )
+        else if( siMenuChoice == 3 )
         {
-            browsingMenu = 0 ;
+            boBrowsingMenu = 0 ;
         }
 
         Sleep( 50 ) ;
