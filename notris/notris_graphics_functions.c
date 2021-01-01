@@ -31,7 +31,11 @@ void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notris
 {
   notrisScore nsScore ;
 
-  CHAR* scoreRecord = calloc( csbiInfo->srWindow.Right, sizeof( CHAR ) ) ;
+  CHAR playerTag[4] ;
+  CHAR scoreRecord[10] ; 
+
+  SHORT edgePadding = 2 ;
+  SHORT recordPadding = 0 ;
 
   draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
                   nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Top + 1 ) ;
@@ -48,9 +52,19 @@ void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notris
   {
     fread( &nsScore, sizeof( struct notrisScore ), 1, *fTopScores ) ;
 
-    sprintf( scoreRecord, "%c%c%c %i", nsScore.chPlayerTag[0], nsScore.chPlayerTag[1], nsScore.chPlayerTag[2], nsScore.dwScore ) ;
+    sprintf( playerTag, "%c%c%c", nsScore.chPlayerTag[0], nsScore.chPlayerTag[1], nsScore.chPlayerTag[2] ) ;
 
-    draw_string( scoreRecord, nmMenu->ciNotrisTopScores, ( nmMenu->srScoreBox.Right - nmMenu->srScoreBox.Left ), nmMenu->srScoreBox.Top + 1 + i, 0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
+    sprintf( scoreRecord, "%i", nsScore.dwScore ) ;
+
+    draw_string( playerTag, nmMenu->ciNotrisTopScores,
+                (nmMenu->srScoreBox.Left + edgePadding ), nmMenu->srScoreBox.Top + edgePadding + recordPadding,
+                0x0001 | 0x0002 | 0x0004 | 0x0008  ) ;
+
+    draw_string( scoreRecord, nmMenu->ciNotrisTopScores, 
+               ( ( nmMenu->srScoreBox.Right - count_digits( nsScore.dwScore ) ) - edgePadding ), nmMenu->srScoreBox.Top + edgePadding + recordPadding,
+               0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
+
+    recordPadding += 2 ;
   }
 
   fclose( *fTopScores ) ;
@@ -175,7 +189,7 @@ void notris_draw_menu_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notr
   draw_string( "SCORES", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 3, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
   draw_string( "EXIT", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 5, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
 
-  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
+  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 254 ;
   nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
 }
 

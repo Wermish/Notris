@@ -907,7 +907,7 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
 
         if( !levelSelection )
         {
-            nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 26 ;
+            nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 254 ;
             nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
         }
 
@@ -951,7 +951,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
 
                         BOOL cursorSelection = 1 ;
 
-                        niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
+                        niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 254 ;
                         niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
 
                         niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
@@ -993,7 +993,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                             {
                                                 if( !cursorSelection )
                                                 {                                           
-                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 254 ;
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ;
 
                                                     niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 0 ;
@@ -1012,7 +1012,7 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Char.AsciiChar = 0 ;
                                                     niInfo->ciNotrisPauseMenu[cursorY][cursorX].Attributes = 0 ;
 
-                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 26 ;
+                                                    niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Char.AsciiChar = 254 ;
                                                     niInfo->ciNotrisPauseMenu[cursorY + 3][cursorX].Attributes = FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN ; ;
 
                                                     cursorSelection = 0 ;
@@ -1215,7 +1215,7 @@ BOOL notris_name_entry( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct 
         free( inputRecordArray ) ;
     }
 
-    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Char.AsciiChar = 24 ;
+    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Char.AsciiChar = 220 ;
     niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
 
     niInfo->boNotrisCollisionArray[niInfo->coNameEntryCursor.Y - 1][niInfo->coNameEntryCursor.X] = 1 ;
@@ -1903,10 +1903,10 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
     nmMenu->srMenuBox.Top = ( bufferHeight / 2 ) - 3 ;
     nmMenu->srMenuBox.Bottom = ( bufferHeight / 2 ) + 4 ;
 
-    nmMenu->srScoreBox.Left = ( bufferWidth / 2 ) - 8 ;
-    nmMenu->srScoreBox.Right = ( bufferWidth / 2 ) + 8 ;
-    nmMenu->srScoreBox.Top = ( bufferHeight / 2 ) - 10 ;
-    nmMenu->srScoreBox.Bottom = ( bufferHeight / 2 ) + 10 ;
+    nmMenu->srScoreBox.Left = ( bufferWidth / 2 ) - 10 ;
+    nmMenu->srScoreBox.Right = ( bufferWidth / 2 ) + 10 ;
+    nmMenu->srScoreBox.Top = ( bufferHeight / 2 ) - 11 ;
+    nmMenu->srScoreBox.Bottom = ( bufferHeight / 2 ) + 11 ;
 
     nmMenu->cursorPosition.X = nmMenu->srMenuBox.Left + 1 ;
     nmMenu->cursorPosition.Y = nmMenu->srMenuBox.Top + 1 ;

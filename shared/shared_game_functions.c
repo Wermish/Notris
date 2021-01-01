@@ -45,6 +45,20 @@ int comparator_descending( const void *a, const void *b )
     return c ;
 }
 
+SHORT count_digits( DWORD number )
+{
+    SHORT digits = 0 ;
+
+    while( number != 0 )
+    {
+        number /= 10 ;
+        
+        digits++ ;
+    }
+
+    return digits ;
+}
+
 /*
  * Use 'srand( time( 0 ) )' at start of main to seed.
  */
