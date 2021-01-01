@@ -24,13 +24,36 @@ void notris_draw_game_over( struct notrisInfo* niInfo )
                     
   draw_string( "GAME", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, 0x0004 ) ;
   draw_string( "OVER", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 3, niInfo->srPlayFieldArea.Top + 4, 0x0004 ) ;
-  draw_string( "NAME", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 1, niInfo->srPlayFieldArea.Top + 7, 0x0004 ) ;
-  draw_string( "AAA", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 6, niInfo->srPlayFieldArea.Top + 7, 0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
+  draw_string( "NAME:", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 1, niInfo->srPlayFieldArea.Top + 7, 0x0004 ) ;
 }
 
-void notris_draw_hiscore_table( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer )
+void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu, FILE** fTopScores )
 {
+  notrisScore nsScore ;
 
+  CHAR* scoreRecord = calloc( csbiInfo->srWindow.Right, sizeof( CHAR ) ) ;
+
+  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+                  nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Top + 1 ) ;
+  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+                  nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Bottom, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Bottom + 1 ) ;
+  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+                  nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Left + 1, nmMenu->srScoreBox.Bottom ) ;
+  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+                  nmMenu->srScoreBox.Right - 1, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Bottom ) ;
+
+  *fTopScores = fopen( "notris.scores", "rb" ) ;
+
+  for( int i = 0; i < 10; i++ )
+  {
+    fread( &nsScore, sizeof( struct notrisScore ), 1, *fTopScores ) ;
+
+    sprintf( scoreRecord, "%c%c%c %i", nsScore.chPlayerTag[0], nsScore.chPlayerTag[1], nsScore.chPlayerTag[2], nsScore.dwScore ) ;
+
+    draw_string( scoreRecord, nmMenu->ciNotrisTopScores, ( nmMenu->srScoreBox.Right - nmMenu->srScoreBox.Left ), nmMenu->srScoreBox.Top + 1 + i, 0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
+  }
+
+  fclose( *fTopScores ) ;
 }
 
 void notris_draw_level( CHAR_INFO** buffer, struct notrisInfo* niInfo, SHORT startX, SHORT startY )
@@ -191,6 +214,16 @@ void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
   niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
   niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
+}
+
+void notris_draw_player_tag( struct notrisInfo* niInfo, struct notrisScore* nsScore )
+{
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Char.AsciiChar = nsScore->chPlayerTag[0] ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Char.AsciiChar = nsScore->chPlayerTag[1] ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Char.AsciiChar = nsScore->chPlayerTag[2] ;
+  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
 }
 
 void notris_draw_score( struct notrisInfo* niInfo )

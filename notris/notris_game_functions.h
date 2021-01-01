@@ -21,13 +21,13 @@ SHORT notris_menu_selection( HANDLE* hInputBuffer, CONSOLE_SCREEN_BUFFER_INFO* c
 BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                         CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
+BOOL notris_name_entry( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct notrisScore* nsScore ) ;
+
 BOOL notris_piece_falling( DWORD* dwCounter, struct notrisInfo* niInfo, struct notrisPiece* npPiece ) ;
 
 void notris_rotate_piece_anticlockwise( struct notrisPiece* npPiece ) ;
 
 void notris_rotate_piece_clockwise( struct notrisPiece* npPiece ) ;
-
-void notris_score_and_level( struct notrisInfo* niInfo ) ;
 
 void notris_set_boundaries( struct notrisInfo* niInfo ) ;
 
@@ -35,7 +35,7 @@ void notris_setup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo*
 
 void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu ) ;
 
-void notris_setup_scores_file( FILE** fTopScores, struct notrisScore* nsScore ) ;
+void notris_setup_scores( FILE** fTopScores, struct notrisScore* nsPlayerScore ) ;
 
 int notris_struct_score_comparator( const void * a, const void *b ) ;
 

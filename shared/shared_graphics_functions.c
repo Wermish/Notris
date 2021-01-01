@@ -55,6 +55,26 @@ void draw_bubble_writing(  CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buf
   
 }
 
+void draw_integer( DWORD number, CHAR_INFO** buffer, SHORT startX, SHORT startY, WORD attributes )
+{
+  CHAR* chNumberString ;
+  SHORT siDigitCounter = 0 ;
+
+  while( number != 0 )
+  {
+    number /= 10 ;
+    siDigitCounter++ ;
+  }
+
+  chNumberString = calloc( siDigitCounter, sizeof( CHAR ) ) ;
+
+  sprintf( chNumberString, "%i", number ) ;
+
+  draw_string( chNumberString, buffer, startX, startY, attributes ) ;
+
+  free( chNumberString ) ;
+}
+
 void draw_rectangle( CHAR_INFO** buffer, CHAR asciiValue, WORD asciiAttributes, SHORT startX, SHORT startY, SHORT endX, SHORT endY )
 {
     for( int y = startY; y < endY; y++ )

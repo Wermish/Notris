@@ -1131,6 +1131,98 @@ BOOL notris_move_piece( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
     return 0 ;
 }
 
+BOOL notris_name_entry( HANDLE* hInputBuffer, struct notrisInfo* niInfo, struct notrisScore* nsScore )
+{
+    DWORD numberOfEvents = 0 ;
+    DWORD numberOfEventsRead = 0 ;
+
+    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Char.AsciiChar = 0 ;
+    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Attributes = 0 ;
+
+    niInfo->boNotrisCollisionArray[niInfo->coNameEntryCursor.Y - 1][niInfo->coNameEntryCursor.X] = 0 ;
+
+    GetNumberOfConsoleInputEvents( *hInputBuffer, &numberOfEvents ) ;
+
+    if( numberOfEvents )
+    {
+        INPUT_RECORD* inputRecordArray = malloc( sizeof( INPUT_RECORD ) * numberOfEvents ) ;
+
+        ReadConsoleInput( *hInputBuffer, inputRecordArray, numberOfEvents, &numberOfEventsRead ) ;
+
+        for( int i = 0; i < numberOfEventsRead; i++ )
+        {
+            if( inputRecordArray[i].EventType == KEY_EVENT )
+            {
+                if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        return 1 ;
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_LEFT )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        if(  niInfo->letter > 0 )
+                        {
+                            niInfo->letter-- ;
+                            niInfo->coNameEntryCursor.X-- ;
+                        }
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_RIGHT )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        if(  niInfo->letter < 2 )
+                        {
+                            niInfo->letter++ ;
+                            niInfo->coNameEntryCursor.X++ ;
+                        }
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_UP )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        if( nsScore->chPlayerTag[niInfo->letter] > 65 && nsScore->chPlayerTag[niInfo->letter] <= 90 )
+                        {
+                            nsScore->chPlayerTag[niInfo->letter]-- ;
+                        }
+                        else if( nsScore->chPlayerTag[niInfo->letter] == 65 )
+                        {
+                            nsScore->chPlayerTag[niInfo->letter] = 90 ;
+                        }
+                    }
+                }
+                else if( inputRecordArray[i].Event.KeyEvent.wVirtualKeyCode == VK_DOWN )
+                {
+                    if( inputRecordArray[i].Event.KeyEvent.bKeyDown )
+                    {
+                        if( nsScore->chPlayerTag[niInfo->letter] >= 65 && nsScore->chPlayerTag[niInfo->letter] < 90 )
+                        {
+                                nsScore->chPlayerTag[niInfo->letter]++ ;
+                        }
+                        else if( nsScore->chPlayerTag[niInfo->letter] == 90 )
+                        {
+                            nsScore->chPlayerTag[niInfo->letter] = 65 ;
+                        }
+                    }
+                }
+            }
+        }
+        free( inputRecordArray ) ;
+    }
+
+    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Char.AsciiChar = 24 ;
+    niInfo->ciNotrisScreenBuffer[niInfo->coNameEntryCursor.Y][niInfo->coNameEntryCursor.X].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+
+    niInfo->boNotrisCollisionArray[niInfo->coNameEntryCursor.Y - 1][niInfo->coNameEntryCursor.X] = 1 ;
+
+    return 0 ;
+}
+
 BOOL notris_piece_falling( DWORD* dwCounter, struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
     DWORD limit ;
@@ -1754,6 +1846,16 @@ void notris_setup_game( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo*
     niInfo->srNextPieceArea.Top = niInfo->srLevelArea.Bottom + 2 ;
     niInfo->srNextPieceArea.Bottom = niInfo->srNextPieceArea.Top + 7 ;
 
+    niInfo->srNameEntryArea.Left = niInfo->srPlayFieldArea.Left + 6 ;
+    niInfo->srNameEntryArea.Right = niInfo->srPlayFieldArea.Left + 8 ;
+    niInfo->srNameEntryArea.Top = niInfo->srPlayFieldArea.Top + 7 ;
+    niInfo->srNameEntryArea.Bottom = niInfo->srPlayFieldArea.Top + 8 ;
+
+    niInfo->coNameEntryCursor.X = niInfo->srNameEntryArea.Left ;
+    niInfo->coNameEntryCursor.Y = niInfo->srNameEntryArea.Bottom ;
+
+    niInfo->letter = 0 ;
+
     niInfo->notrisScore = 0 ;
 
     niInfo->level = 1 ;
@@ -1801,16 +1903,23 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
     nmMenu->srMenuBox.Top = ( bufferHeight / 2 ) - 3 ;
     nmMenu->srMenuBox.Bottom = ( bufferHeight / 2 ) + 4 ;
 
+    nmMenu->srScoreBox.Left = ( bufferWidth / 2 ) - 8 ;
+    nmMenu->srScoreBox.Right = ( bufferWidth / 2 ) + 8 ;
+    nmMenu->srScoreBox.Top = ( bufferHeight / 2 ) - 10 ;
+    nmMenu->srScoreBox.Bottom = ( bufferHeight / 2 ) + 10 ;
+
     nmMenu->cursorPosition.X = nmMenu->srMenuBox.Left + 1 ;
     nmMenu->cursorPosition.Y = nmMenu->srMenuBox.Top + 1 ;
 
     nmMenu->menuChoice = 1 ;
 
     nmMenu->ciNotrisMainMenu = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
+    nmMenu->ciNotrisTopScores = ( CHAR_INFO** ) malloc( bufferHeight  * sizeof( CHAR_INFO* ) ) ;
 
     for( int i = 0; i < bufferHeight; i++ )
     {
        nmMenu->ciNotrisMainMenu[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
+       nmMenu->ciNotrisTopScores[i] = ( CHAR_INFO* ) malloc( bufferWidth * sizeof( CHAR_INFO ) ) ;
     }
 
     for( int y = 0; y < bufferHeight; y++ )
@@ -1819,34 +1928,43 @@ void notris_setup_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu*
         {
             nmMenu->ciNotrisMainMenu[y][x].Char.AsciiChar = 0 ;
             nmMenu->ciNotrisMainMenu[y][x].Attributes = 0 ;
+            nmMenu->ciNotrisTopScores[y][x].Char.AsciiChar = 0 ;
+            nmMenu->ciNotrisTopScores[y][x].Attributes = 0 ;
         }
     }
 }
 
-void notris_setup_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
+void notris_setup_scores( FILE** fTopScores, struct notrisScore* nsPlayerScore )
 {       
     if( ( *fTopScores = fopen( "notris.scores", "rb+" ) ) == NULL )
     {
+        notrisScore nsTempScore ;
+
         *fTopScores = fopen( "notris.scores", "wb" ) ;
 
-        DWORD score = 444 ;
+        DWORD score = 10000 ;
         CHAR letter = 65 ;
 
         for( int i = 0; i < 10; i++ )
         {
-            nsScore->chPlayerTag[0] = letter ;
-            nsScore->chPlayerTag[1] = letter ;
-            nsScore->chPlayerTag[2] = letter ;
-            nsScore->dwScore = score ;
+            nsTempScore.chPlayerTag[0] = letter ;
+            nsTempScore.chPlayerTag[1] = letter ;
+            nsTempScore.chPlayerTag[2] = letter ;
+            nsTempScore.dwScore = score ;
 
-            score-- ;
+            score -= 500 ;
             letter++ ;
 
-            fwrite( nsScore, sizeof( struct notrisScore ), 1, *fTopScores ) ;
+            fwrite( &nsTempScore, sizeof( struct notrisScore ), 1, *fTopScores ) ;
         }
-
-        fclose( *fTopScores ) ;
     }
+
+    nsPlayerScore->chPlayerTag[0] = 65 ;
+    nsPlayerScore->chPlayerTag[1] = 65 ;
+    nsPlayerScore->chPlayerTag[2] = 65 ;
+    nsPlayerScore->dwScore = 1000 ;
+
+    fclose( *fTopScores ) ;
 }
 
 int notris_struct_score_comparator( const void * a, const void *b )
@@ -1859,7 +1977,7 @@ int notris_struct_score_comparator( const void * a, const void *b )
 
 void notris_update_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
 {
-    *fTopScores = fopen( "notris.scores", "rb" ) ;
+    *fTopScores = fopen( "notris.scores", "rb+" ) ;
 
     notrisScore nsScoreArray[11] ;
 

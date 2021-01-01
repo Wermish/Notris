@@ -34,13 +34,7 @@ SHORT siLevelChoice ;
 
 int main( void )
 {   
-    notris_setup_scores_file( &fTopScores, &nsScore );
-
-    for( int i = 0; i < 10; i++ )
-    {
-        fread( &nsScore, sizeof( struct notrisScore ), 1, fTopScores ) ;
-        fprintf( stdout, "%c%c%c, %i\n", nsScore.chPlayerTag[0], nsScore.chPlayerTag[1], nsScore.chPlayerTag[2], nsScore.dwScore ) ;
-    }
+    notris_setup_scores( &fTopScores, &nsScore );
 
     srand( ( unsigned )time( 0 ) ) ;
 
@@ -92,14 +86,17 @@ int main( void )
 
                     while( boEnteringName )
                     {
+                        if( notris_name_entry( &hInputBuffer, &niInfo, &nsScore ) )
+                        {
+                            boEnteringName = 0 ;
+                        }
+
+                        notris_draw_player_tag( &niInfo, &nsScore ) ;
+
                         display_buffer( &hScreenBuffer, &csbiInfo, niInfo.ciNotrisScreenBuffer ) ;
 
                         Sleep( 50 ) ;
                     }
-                    // Write score to file.
-                    nsScore.chPlayerTag[0] = 67 ;
-                    nsScore.chPlayerTag[1] = 72 ;
-                    nsScore.chPlayerTag[2] = 65 ;
 
                     nsScore.dwScore = niInfo.notrisScore ;
 
@@ -111,7 +108,14 @@ int main( void )
         }
         else if( siMenuChoice == 2 )
         {
-            // Display scoreboard.
+            notris_draw_top_scores( &csbiInfo, &nmMenu, &fTopScores ) ;
+
+            while( !act_on_input( &hInputBuffer ) )
+            {
+                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisTopScores ) ;
+
+                Sleep( 50 ) ;
+            }
         }
         else if( siMenuChoice == 3 )
         {

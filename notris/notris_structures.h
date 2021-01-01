@@ -43,6 +43,16 @@ typedef enum menuOption
 
 } menuOption ;
 
+typedef enum nameChar
+{
+
+    first = 0,
+    second = 1,
+    third = 2
+
+} nameChar ;
+
+
 /*
  * ciNotrisScreenBuffer: a matrix of CHAR_INFOs, each row being a horizontal segment of the screen. The screen updates by writing a row at a time.
  * ciNotrisPauseMenu: as above but displays the pause menu during play when the pause key is pressed.
@@ -69,19 +79,25 @@ typedef struct notrisInfo
     SMALL_RECT srScoreArea ;
     SMALL_RECT srLevelArea ;
     SMALL_RECT srNextPieceArea ;
+    SMALL_RECT srNameEntryArea ;
+    COORD coNameEntryCursor ;
     DWORD notrisScore ;
     enum notrisLevel level ;
     enum notrisPieceShape pieceBag[7] ;
     enum notrisPieceShape nextPiece ;
+    enum nameChar letter ;
     
 } notrisInfo ;
 
 typedef struct notrisMenu
 {
     CHAR_INFO** ciNotrisMainMenu ;
-    enum menuOption menuChoice ;
+    CHAR_INFO** ciNotrisTopScores ;
     COORD cursorPosition ;
     SMALL_RECT srMenuBox ;
+    SMALL_RECT srScoreBox ;
+    enum menuOption menuChoice ;
+
 }  notrisMenu ;
 
 typedef struct notrisPiece
