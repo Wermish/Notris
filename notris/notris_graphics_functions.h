@@ -1,5 +1,5 @@
-#ifndef NOTRIS_GRAPHICS_FUNCTIONS_H
-#define NOTRIS_GRAPHICS_FUNCTIONS_H
+#ifndef notris_GRAPHICS_FUNCTIONS_H
+#define notris_GRAPHICS_FUNCTIONS_H
 
 void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo ) ;
 
@@ -31,4 +31,4 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece ) 
 
 void notris_erase_row( struct notrisInfo* niInfo ) ;
 
-#endif /* NOTRIS_GRAPHICS_FUNCTIONS_H */
+#endif /* notris_GRAPHICS_FUNCTIONS_H */

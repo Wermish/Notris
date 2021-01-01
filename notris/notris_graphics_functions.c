@@ -9,7 +9,7 @@
 #include "notris_structures.h"
 
 /*
- * These functions don't draw to the screen directly. Instead they set values in the NotrisScreenBuffer which is then drawn.
+ * These functions don't draw to the screen directly. Instead they set values in the notrisScreenBuffer which is then drawn.
  */
 
 void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo )
@@ -20,11 +20,11 @@ void notris_clear_play_field( CHAR_INFO** buffer, struct notrisInfo* niInfo )
 
 void notris_draw_game_over( struct notrisInfo* niInfo )
 {
-  notris_clear_play_field( niInfo->ciNotrisScreenBuffer, niInfo );
+  notris_clear_play_field( niInfo->cinotrisScreenBuffer, niInfo );
                     
-  draw_string( "GAME", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, 0x0004 ) ;
-  draw_string( "OVER", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 3, niInfo->srPlayFieldArea.Top + 4, 0x0004 ) ;
-  draw_string( "NAME:", niInfo->ciNotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 1, niInfo->srPlayFieldArea.Top + 7, 0x0004 ) ;
+  draw_string( "GAME", niInfo->cinotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, 0x0004 ) ;
+  draw_string( "OVER", niInfo->cinotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 3, niInfo->srPlayFieldArea.Top + 4, 0x0004 ) ;
+  draw_string( "NAME:", niInfo->cinotrisScreenBuffer, niInfo->srPlayFieldArea.Left + 1, niInfo->srPlayFieldArea.Top + 7, 0x0004 ) ;
 }
 
 void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu, FILE** fTopScores )
@@ -37,13 +37,13 @@ void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notris
   SHORT edgePadding = 2 ;
   SHORT recordPadding = 0 ;
 
-  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+  draw_rectangle( nmMenu->cinotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
                   nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Top + 1 ) ;
-  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+  draw_rectangle( nmMenu->cinotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
                   nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Bottom, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Bottom + 1 ) ;
-  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+  draw_rectangle( nmMenu->cinotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
                   nmMenu->srScoreBox.Left, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Left + 1, nmMenu->srScoreBox.Bottom ) ;
-  draw_rectangle( nmMenu->ciNotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
+  draw_rectangle( nmMenu->cinotrisTopScores, 219, 0x001 | 0x002 | 0x004 | 0x008, 
                   nmMenu->srScoreBox.Right - 1, nmMenu->srScoreBox.Top, nmMenu->srScoreBox.Right, nmMenu->srScoreBox.Bottom ) ;
 
   *fTopScores = fopen( "notris.scores", "rb" ) ;
@@ -56,11 +56,11 @@ void notris_draw_top_scores( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notris
 
     sprintf( scoreRecord, "%i", nsScore.dwScore ) ;
 
-    draw_string( playerTag, nmMenu->ciNotrisTopScores,
+    draw_string( playerTag, nmMenu->cinotrisTopScores,
                 (nmMenu->srScoreBox.Left + edgePadding ), nmMenu->srScoreBox.Top + edgePadding + recordPadding,
                 0x0001 | 0x0002 | 0x0004 | 0x0008  ) ;
 
-    draw_string( scoreRecord, nmMenu->ciNotrisTopScores, 
+    draw_string( scoreRecord, nmMenu->cinotrisTopScores, 
                ( ( nmMenu->srScoreBox.Right - count_digits( nsScore.dwScore ) ) - edgePadding ), nmMenu->srScoreBox.Top + edgePadding + recordPadding,
                0x0001 | 0x0002 | 0x0004 | 0x0008 ) ;
 
@@ -81,11 +81,11 @@ void notris_draw_level( CHAR_INFO** buffer, struct notrisInfo* niInfo, SHORT sta
 
 void notris_draw_level_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* niInfo, struct notrisMenu* nmMenu )
 {
-  draw_rectangle(  nmMenu->ciNotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
+  draw_rectangle(  nmMenu->cinotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
 
-  draw_string( "LEVEL:", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 1, nmMenu->srMenuBox.Top + 3, 0x0004 | 0x0002 | 0x0001 | 0x0008 ) ;
+  draw_string( "LEVEL:", nmMenu->cinotrisMainMenu, nmMenu->srMenuBox.Left + 1, nmMenu->srMenuBox.Top + 3, 0x0004 | 0x0002 | 0x0001 | 0x0008 ) ;
 
-  notris_draw_level( nmMenu->ciNotrisMainMenu, niInfo, nmMenu->srMenuBox.Left + 7, nmMenu->srMenuBox.Top + 3 ) ;
+  notris_draw_level( nmMenu->cinotrisMainMenu, niInfo, nmMenu->srMenuBox.Left + 7, nmMenu->srMenuBox.Top + 3 ) ;
 }
 
 void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer, SHORT startX, SHORT startY )
@@ -164,33 +164,33 @@ void notris_draw_logo( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, CHAR_INFO** buffer,
 
 void notris_draw_menu( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu)
 {
-  notris_draw_logo( csbiInfo, nmMenu->ciNotrisMainMenu, csbiInfo->srWindow.Left + 3, csbiInfo->srWindow.Top + 3 ) ;
+  notris_draw_logo( csbiInfo, nmMenu->cinotrisMainMenu, csbiInfo->srWindow.Left + 3, csbiInfo->srWindow.Top + 3 ) ;
 
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 1, 40, 2 ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 9, 40, 10 ) ;
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 1, 40, 2 ) ;
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, csbiInfo->srWindow.Left + 1, csbiInfo->srWindow.Top + 9, 40, 10 ) ;
 
   notris_draw_menu_options( csbiInfo, nmMenu ) ;
 }
 
 void notris_draw_menu_options( CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisMenu* nmMenu )
 {
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
+  draw_rectangle( nmMenu->cinotrisMainMenu, 0, 0, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Bottom  ) ;
 
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
                   nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Top - 1, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Top ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
                   nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Bottom, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Bottom + 1  ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
                   nmMenu->srMenuBox.Left - 1, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Left, nmMenu->srMenuBox.Bottom ) ;
-  draw_rectangle( nmMenu->ciNotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
+  draw_rectangle( nmMenu->cinotrisMainMenu, 219, 0x0004| 0x0002 |0x0001 | 0x0008, 
                   nmMenu->srMenuBox.Right - 1, nmMenu->srMenuBox.Top, nmMenu->srMenuBox.Right, nmMenu->srMenuBox.Bottom ) ;
 
-  draw_string( "PLAY", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 1, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "SCORES", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 3, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
-  draw_string( "EXIT", nmMenu->ciNotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 5, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "PLAY", nmMenu->cinotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 1, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "SCORES", nmMenu->cinotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 3, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
+  draw_string( "EXIT", nmMenu->cinotrisMainMenu, nmMenu->srMenuBox.Left + 2, nmMenu->srMenuBox.Top + 5, 0x0004| 0x0002 |0x0001 | 0x0008 ) ;
 
-  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 254 ;
-  nmMenu->ciNotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
+  nmMenu->cinotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Char.AsciiChar = 254 ;
+  nmMenu->cinotrisMainMenu[nmMenu->cursorPosition.Y][nmMenu->cursorPosition.X].Attributes = 0x0004| 0x0002 |0x0001 | 0x0008 ;
 }
 
 void notris_draw_next( struct notrisInfo* niInfo )
@@ -199,8 +199,8 @@ void notris_draw_next( struct notrisInfo* niInfo )
   {
     for( int x = niInfo->srNextPieceArea.Left; x <= niInfo->srNextPieceArea.Right; x++ )
     {
-      niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
-      niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
+      niInfo->cinotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+      niInfo->cinotrisScreenBuffer[y][x].Attributes = 0 ;
     }
   }
 
@@ -213,31 +213,31 @@ void notris_draw_next( struct notrisInfo* niInfo )
 
 void notris_draw_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = piece->pieceLook.Attributes ;
-  niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 1 ;
+  niInfo->cinotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->cinotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = piece->pieceLook.Attributes ;
+  niInfo->bonotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = piece->pieceLook.Attributes ;
-  niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 1 ;
+  niInfo->cinotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->cinotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = piece->pieceLook.Attributes ;
+  niInfo->bonotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = piece->pieceLook.Attributes ;
-  niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 1 ;
+  niInfo->cinotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->cinotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = piece->pieceLook.Attributes ;
+  niInfo->bonotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 1 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
-  niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
+  niInfo->cinotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = piece->pieceLook.Char.AsciiChar ;
+  niInfo->cinotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = piece->pieceLook.Attributes ;
+  niInfo->bonotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 1 ;
 }
 
 void notris_draw_player_tag( struct notrisInfo* niInfo, struct notrisScore* nsScore )
 {
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Char.AsciiChar = nsScore->chPlayerTag[0] ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Char.AsciiChar = nsScore->chPlayerTag[1] ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Char.AsciiChar = nsScore->chPlayerTag[2] ;
-  niInfo->ciNotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Char.AsciiChar = nsScore->chPlayerTag[0] ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Char.AsciiChar = nsScore->chPlayerTag[1] ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 1].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Char.AsciiChar = nsScore->chPlayerTag[2] ;
+  niInfo->cinotrisScreenBuffer[niInfo->srNameEntryArea.Top][niInfo->srNameEntryArea.Left + 2].Attributes = 0x0004 | 0x0002 | 0x0001 | 0x0008 ;
 }
 
 void notris_draw_score( struct notrisInfo* niInfo )
@@ -246,7 +246,7 @@ void notris_draw_score( struct notrisInfo* niInfo )
 
   sprintf( score, "%i", niInfo->notrisScore ) ;
 
-  draw_string( score, niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+  draw_string( score, niInfo->cinotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top + 2, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 }
 
 void notris_draw_UI( struct notrisInfo* niInfo )
@@ -254,78 +254,78 @@ void notris_draw_UI( struct notrisInfo* niInfo )
   // Draw PlayFieldArea border
   for( int roof = niInfo->srPlayFieldArea.Left - 1; roof < niInfo->srPlayFieldArea.Right + 1 ; roof++ )
   {
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
+    niInfo->cinotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
+    niInfo->cinotrisScreenBuffer[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
 
-    niInfo->ciNotrisPauseMenu[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisPauseMenu[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
+    niInfo->cinotrisPauseMenu[niInfo->srPlayFieldArea.Top - 1][roof].Char.AsciiChar = 0 ;
+    niInfo->cinotrisPauseMenu[niInfo->srPlayFieldArea.Top - 1][roof].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
 
-    niInfo->boNotrisCollisionArray[niInfo->srPlayFieldArea.Top - 1][roof] = 1 ;                                                                                 
+    niInfo->bonotrisCollisionArray[niInfo->srPlayFieldArea.Top - 1][roof] = 1 ;                                                                                 
   }
 
   for( int floor = niInfo->srPlayFieldArea.Left - 1; floor < niInfo->srPlayFieldArea.Right + 1; floor++ )
   {
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
+    niInfo->cinotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
+    niInfo->cinotrisScreenBuffer[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
 
-    niInfo->ciNotrisPauseMenu[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisPauseMenu[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
+    niInfo->cinotrisPauseMenu[niInfo->srPlayFieldArea.Bottom][floor].Char.AsciiChar = 0 ;
+    niInfo->cinotrisPauseMenu[niInfo->srPlayFieldArea.Bottom][floor].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
 
-    niInfo->boNotrisCollisionArray[niInfo->srPlayFieldArea.Bottom][floor] = 1 ;                                                                                
+    niInfo->bonotrisCollisionArray[niInfo->srPlayFieldArea.Bottom][floor] = 1 ;                                                                                
   }
 
   for( int leftWall = niInfo->srPlayFieldArea.Top; leftWall < niInfo->srPlayFieldArea.Bottom; leftWall++ )
   {
-    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
+    niInfo->cinotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
+    niInfo->cinotrisScreenBuffer[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
 
-    niInfo->ciNotrisPauseMenu[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisPauseMenu[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
+    niInfo->cinotrisPauseMenu[leftWall][niInfo->srPlayFieldArea.Left - 1].Char.AsciiChar = 0 ;
+    niInfo->cinotrisPauseMenu[leftWall][niInfo->srPlayFieldArea.Left - 1].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
 
-    niInfo->boNotrisCollisionArray[leftWall][niInfo->srPlayFieldArea.Left - 1] = 1 ;                                                                                                                                                                          
+    niInfo->bonotrisCollisionArray[leftWall][niInfo->srPlayFieldArea.Left - 1] = 1 ;                                                                                                                                                                          
   }
 
   for( int rightWall = niInfo->srPlayFieldArea.Top; rightWall < niInfo->srPlayFieldArea.Bottom; rightWall++ )
   {
-    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
+    niInfo->cinotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
+    niInfo->cinotrisScreenBuffer[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED ;
 
-    niInfo->ciNotrisPauseMenu[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
-    niInfo->ciNotrisPauseMenu[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
+    niInfo->cinotrisPauseMenu[rightWall][niInfo->srPlayFieldArea.Right].Char.AsciiChar = 0 ;
+    niInfo->cinotrisPauseMenu[rightWall][niInfo->srPlayFieldArea.Right].Attributes = BACKGROUND_BLUE | BACKGROUND_INTENSITY ;
 
-    niInfo->boNotrisCollisionArray[rightWall][niInfo->srPlayFieldArea.Right] = 1 ;                                                                                      
+    niInfo->bonotrisCollisionArray[rightWall][niInfo->srPlayFieldArea.Right] = 1 ;                                                                                      
   }
 
-  draw_string( "SCORE", niInfo->ciNotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "SCORE", niInfo->cinotrisScreenBuffer, niInfo->srScoreArea.Left, niInfo->srScoreArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "LEVEL", niInfo->ciNotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "LEVEL", niInfo->cinotrisScreenBuffer, niInfo->srLevelArea.Left, niInfo->srLevelArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "NEXT", niInfo->ciNotrisScreenBuffer, niInfo->srNextPieceArea.Left, niInfo->srNextPieceArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
+  draw_string( "NEXT", niInfo->cinotrisScreenBuffer, niInfo->srNextPieceArea.Left, niInfo->srNextPieceArea.Top, FOREGROUND_RED | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "PAUSED", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
+  draw_string( "PAUSED", niInfo->cinotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 3, FOREGROUND_BLUE | FOREGROUND_INTENSITY ) ;
 
-  draw_string( "RESUME", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 7, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
+  draw_string( "RESUME", niInfo->cinotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 7, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
 
-  draw_string( "EXIT", niInfo->ciNotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 10, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
+  draw_string( "EXIT", niInfo->cinotrisPauseMenu, niInfo->srPlayFieldArea.Left + 2, niInfo->srPlayFieldArea.Top + 10, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN ) ;
 }  
 
 void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
 {
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = 0 ;
-  niInfo->boNotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Char.AsciiChar = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockOne.Y][piece->blockOne.X].Attributes = 0 ;
+  niInfo->bonotrisCollisionArray[piece->blockOne.Y][piece->blockOne.X] = 0 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = 0 ;
-  niInfo->boNotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Char.AsciiChar = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockTwo.Y][piece->blockTwo.X].Attributes = 0 ;
+  niInfo->bonotrisCollisionArray[piece->blockTwo.Y][piece->blockTwo.X] = 0 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = 0 ;
-  niInfo->boNotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Char.AsciiChar = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockThree.Y][piece->blockThree.X].Attributes = 0 ;
+  niInfo->bonotrisCollisionArray[piece->blockThree.Y][piece->blockThree.X] = 0 ;
 
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = 0 ;
-  niInfo->ciNotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = 0 ;
-  niInfo->boNotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Char.AsciiChar = 0 ;
+  niInfo->cinotrisScreenBuffer[piece->blockFour.Y][piece->blockFour.X].Attributes = 0 ;
+  niInfo->bonotrisCollisionArray[piece->blockFour.Y][piece->blockFour.X] = 0 ;
 }
 
 /*
@@ -333,7 +333,7 @@ void notris_erase_piece( struct notrisInfo* niInfo, struct notrisPiece* piece )
  * toErase array.
  * Rows are counted from 0y increasing. Thus the row are stored in ascending order in toErase[4].
  * toErase is iterated over. If toErase[n] has value > 0, all row values from y == toErase[n] to 0y  are shifted down, i.e. 
- * niInfo.ciNotrisScreenBuffer[y][x] = niInfo.ciNotrisScreenBuffer[y - 1][x].
+ * niInfo.cinotrisScreenBuffer[y][x] = niInfo.cinotrisScreenBuffer[y - 1][x].
  */
 
 void notris_erase_row( struct notrisInfo* niInfo )
@@ -352,7 +352,7 @@ void notris_erase_row( struct notrisInfo* niInfo )
   {
     for( int x = left; x < right; x++ )
     {
-      if( niInfo->boNotrisCollisionArray[y][x] )
+      if( niInfo->bonotrisCollisionArray[y][x] )
       {
         cellCounter++ ;
       }
@@ -377,15 +377,15 @@ void notris_erase_row( struct notrisInfo* niInfo )
           {
             if( y == ceiling )
             {
-              niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
-              niInfo->ciNotrisScreenBuffer[y][x].Attributes = 0 ;
-              niInfo->boNotrisCollisionArray[y][x] = 0 ;
+              niInfo->cinotrisScreenBuffer[y][x].Char.AsciiChar = 0 ;
+              niInfo->cinotrisScreenBuffer[y][x].Attributes = 0 ;
+              niInfo->bonotrisCollisionArray[y][x] = 0 ;
             }
             else
             {
-              niInfo->ciNotrisScreenBuffer[y][x].Char.AsciiChar = niInfo->ciNotrisScreenBuffer[y - 1][x].Char.AsciiChar ;
-              niInfo->ciNotrisScreenBuffer[y][x].Attributes = niInfo->ciNotrisScreenBuffer[y - 1][x].Attributes ;
-              niInfo->boNotrisCollisionArray[y][x] = niInfo->boNotrisCollisionArray[y - 1][x] ;
+              niInfo->cinotrisScreenBuffer[y][x].Char.AsciiChar = niInfo->cinotrisScreenBuffer[y - 1][x].Char.AsciiChar ;
+              niInfo->cinotrisScreenBuffer[y][x].Attributes = niInfo->cinotrisScreenBuffer[y - 1][x].Attributes ;
+              niInfo->bonotrisCollisionArray[y][x] = niInfo->bonotrisCollisionArray[y - 1][x] ;
             }
           }
         }

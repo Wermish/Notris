@@ -48,7 +48,7 @@ int main( void )
 
     while( boBrowsingMenu )
     {
-        display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
+        display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.cinotrisMainMenu ) ;
 
         siMenuChoice = notris_menu_selection( &hInputBuffer, &csbiInfo, &niInfo, &nmMenu, 0 ) ;
 
@@ -69,7 +69,7 @@ int main( void )
 
                 notris_draw_level_options( &csbiInfo, &niInfo, &nmMenu ) ;
 
-                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisMainMenu ) ;
+                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.cinotrisMainMenu ) ;
 
                 Sleep(50) ;
             }
@@ -93,7 +93,7 @@ int main( void )
 
                         notris_draw_player_tag( &niInfo, &nsScore ) ;
 
-                        display_buffer( &hScreenBuffer, &csbiInfo, niInfo.ciNotrisScreenBuffer ) ;
+                        display_buffer( &hScreenBuffer, &csbiInfo, niInfo.cinotrisScreenBuffer ) ;
 
                         Sleep( 50 ) ;
                     }
@@ -112,7 +112,7 @@ int main( void )
 
             while( !act_on_input( &hInputBuffer ) )
             {
-                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.ciNotrisTopScores ) ;
+                display_buffer( &hScreenBuffer, &csbiInfo, nmMenu.cinotrisTopScores ) ;
 
                 Sleep( 50 ) ;
             }

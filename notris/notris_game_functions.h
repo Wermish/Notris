@@ -1,5 +1,5 @@
-#ifndef NOTRIS_GAME_FUNCTIONS_H
-#define NOTRIS_GAME_FUNCTIONS_H
+#ifndef notris_GAME_FUNCTIONS_H
+#define notris_GAME_FUNCTIONS_H
 
 BOOL notris_check_axis_collision( struct notrisInfo* niInfo, struct notrisPiece* npPiece, SHORT offset, CHAR axis ) ;
 
@@ -44,4 +44,4 @@ void notris_update_scores_file( FILE** fTopScores, struct notrisScore* nsScore )
 BOOL play_notris( HANDLE* hScreenBuffer, HANDLE* hInputBuffer, 
                   CONSOLE_SCREEN_BUFFER_INFO* csbiInfo, struct notrisInfo* npfiInfo ) ;
 
-#endif /* NOTRIS_GAME_FUNCTIONS_H */
+#endif /* notris_GAME_FUNCTIONS_H */

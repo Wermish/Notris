@@ -108,9 +108,9 @@ int setup_console( HANDLE* hScreenBuffer, HANDLE* hInputBuffer,
         report_error( "SetConsoleOutputCP( 437 )" ) ;
     }
 
-    if( !SetConsoleTitleA( "NOTRIS" ) )
+    if( !SetConsoleTitleA( "notris" ) )
     {
-        report_error( "SetConsoleTitle( \"NOTRIS\" )" ) ;
+        report_error( "SetConsoleTitle( \"notris\" )" ) ;
     }
 
     // Update csfiInfo struct with new values.

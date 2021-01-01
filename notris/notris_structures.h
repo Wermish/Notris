@@ -1,5 +1,5 @@
-#ifndef NOTRIS_STRUCTURES_H
-#define NOTRIS_STRUCTURES_H
+#ifndef notris_STRUCTURES_H
+#define notris_STRUCTURES_H
 
 typedef enum notrisPiecePhase
 {
@@ -54,26 +54,26 @@ typedef enum nameChar
 
 
 /*
- * ciNotrisScreenBuffer: a matrix of CHAR_INFOs, each row being a horizontal segment of the screen. The screen updates by writing a row at a time.
- * ciNotrisPauseMenu: as above but displays the pause menu during play when the pause key is pressed.
- * boNotrisWriteArray: an array of BOOLs. Each item represents the state of a row of ciNotrisScreenBuffer. If 1, the row has been updated and needs to be drawn.
- * boNotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from ciNotrisScreenBuffer. 1 means the cell is occupied, or drawn.
+ * cinotrisScreenBuffer: a matrix of CHAR_INFOs, each row being a horizontal segment of the screen. The screen updates by writing a row at a time.
+ * cinotrisPauseMenu: as above but displays the pause menu during play when the pause key is pressed.
+ * bonotrisWriteArray: an array of BOOLs. Each item represents the state of a row of cinotrisScreenBuffer. If 1, the row has been updated and needs to be drawn.
+ * bonotrisCollisionArray: a matrix of BOOLs, each item representing the state of an item from cinotrisScreenBuffer. 1 means the cell is occupied, or drawn.
  * boPieceFalling: whether or not the piece has collided with floor.
  * srPlayFieldArea: a SMALL_RECT, the dimensions of the area into which the blocks fall and the action takes place.
  * srScoreArea: a SMALL_RECT, the dimensions of the area in which the score is displayed.
  * srLevelArea: a SMALL_RECT, the dimensions of the area in which the current level is displayed.
  * srNextPieceArea: a SMALL_RECT, the dimensions of the area in which the next piece to fall is displayed.
- * dwNotrisScore: DWORD storing points accrued through playing Notris.
+ * dwnotrisScore: DWORD storing points accrued through playing notris.
  * nextPiece: an enum which determines the next piece to fall, displayed to the player ahead of time via the UI.
  * level: pace at which pieces fall. 1 - 7, with 7 the fastest. More points per row deletion at greater levels.
  */
 
 typedef struct notrisInfo
 {   
-    CHAR_INFO** ciNotrisScreenBuffer ;
-    CHAR_INFO** ciNotrisPauseMenu ;
-    BOOL* boNotrisWriteArray ;
-    BOOL** boNotrisCollisionArray ;
+    CHAR_INFO** cinotrisScreenBuffer ;
+    CHAR_INFO** cinotrisPauseMenu ;
+    BOOL* bonotrisWriteArray ;
+    BOOL** bonotrisCollisionArray ;
     BOOL boPieceFalling ;
     SMALL_RECT srPlayFieldArea ;
     SMALL_RECT srScoreArea ;
@@ -91,8 +91,8 @@ typedef struct notrisInfo
 
 typedef struct notrisMenu
 {
-    CHAR_INFO** ciNotrisMainMenu ;
-    CHAR_INFO** ciNotrisTopScores ;
+    CHAR_INFO** cinotrisMainMenu ;
+    CHAR_INFO** cinotrisTopScores ;
     COORD cursorPosition ;
     SMALL_RECT srMenuBox ;
     SMALL_RECT srScoreBox ;
@@ -122,4 +122,4 @@ typedef struct notrisScore
 
 } notrisScore ;
 
-#endif /* NOTRIS_STRUCTURES_H */
+#endif /* notris_STRUCTURES_H */
