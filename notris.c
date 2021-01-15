@@ -32,6 +32,8 @@ SHORT siMenuChoice ;
 
 SHORT siLevelChoice ;
 
+//TODO: Fully comment.
+
 int main( void )
 {   
     notris_setup_scores( &fTopScores, &nsScore );
